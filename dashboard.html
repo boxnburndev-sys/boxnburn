@@ -158,6 +158,27 @@
       margin: 0;
       font-size: 14px;
     }
+    .personnel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .person-card {
+      background: #233445;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .person-card h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #0f93ff;
+    }
+    .person-card p {
+      margin: 6px 0;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -181,6 +202,8 @@
       <h2>Welkom bij Box N Burn!</h2>
       <p>We zijn blij dat je er bent. Hier kun je reserveringen maken, je status bekijken en meer.</p>
       <p><b>Random info:</b> Vandaag is een geweldige dag om te trainen 💪🔥</p>
+      <h2>Ons Team</h2>
+      <div id="personnelGrid" class="personnel-grid"></div>
     </div>
     <div id="reserveringen" class="page hidden card">
       <h2>Reserveringen</h2>
@@ -315,6 +338,26 @@
     }
   }
   fetchStatus();
+
+  // Personeel
+  const personnel = [
+    { name: "Tristan Vansonhoven", role: "IT Specialist", bio: "Unsure" },
+  ];
+  function loadPersonnel() {
+    const grid = document.getElementById("personnelGrid");
+    grid.innerHTML = "";
+    personnel.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "person-card";
+      card.innerHTML = `
+        <h3>${p.name}</h3>
+        <p><b>Rol:</b> ${p.role}</p>
+        <p><b>Bio:</b> ${p.bio}</p>
+      `;
+      grid.appendChild(card);
+    });
+  }
+  loadPersonnel();
 </script>
 </body>
 </html>
