@@ -47,7 +47,7 @@
       background: #384858;
     }
     .menu button.active {
-      background: #ff7043;
+      background: #233445;
       color: white;
       transform: scale(1.05);
     }
@@ -106,7 +106,7 @@
       text-align: left;
     }
     table th {
-      background: #ff7043;
+      background: #0f2133;
       color: white;
       font-weight: 600;
     }
@@ -126,7 +126,7 @@
       margin: 6px;
       padding: 10px 16px;
       border: none;
-      background: #ff7043;
+      background: #0f2133;
       color: white;
       border-radius: 8px;
       cursor: pointer;
@@ -134,7 +134,7 @@
       transition: all 0.2s;
     }
     form button:hover {
-      background: #ff5722;
+      background: #384858;
     }
     .status-grid {
       display: grid;
@@ -152,7 +152,7 @@
     .status-card h3 {
       margin: 0 0 8px;
       font-size: 18px;
-      color: #ff7043;
+      color: #0f93ff;
     }
     .status-card p {
       margin: 0;
@@ -193,13 +193,14 @@
         <button type="submit">➕ Toevoegen</button>
       </form>
       <form id="removeForm">
-        <input type="text" id="removeCode" placeholder="Verwijdercode" required>
+        <input type="text" id="reservationId" placeholder="Reserverings-ID" required>
+        <input type="password" id="removeCode" placeholder="Verwijdercode" required>
         <button type="submit">❌ Verwijderen</button>
       </form>
       <table>
         <thead>
           <tr>
-            <th>Code</th>
+            <th>ID</th>
             <th>Naam</th>
             <th>Les</th>
             <th>Datum</th>
@@ -237,15 +238,15 @@
   const reservationForm = document.getElementById("reservationForm");
   const reservationTable = document.getElementById("reservationTable");
   const removeForm = document.getElementById("removeForm");
-  function generateCode() {
-    return Math.random().toString(36).substr(2, 6).toUpperCase();
+  function generateId() {
+    return Math.random().toString(36).substr(2, 8).toUpperCase();
   }
   function loadReservations() {
     const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
     reservationTable.innerHTML = "";
     reservations.forEach(r => {
       const row = `<tr>
-        <td>${r.code}</td>
+        <td>${r.id}</td>
         <td>${r.naam}</td>
         <td>${r.les}</td>
         <td>${r.datum}</td>
@@ -258,7 +259,7 @@
   reservationForm?.addEventListener("submit", (e) => {
     e.preventDefault();
     const newReservation = {
-      code: generateCode(),
+      id: generateId(),
       naam: document.getElementById("naam").value,
       les: document.getElementById("les").value,
       datum: document.getElementById("datum").value,
@@ -268,21 +269,26 @@
     const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
     reservations.push(newReservation);
     localStorage.setItem("reservations", JSON.stringify(reservations));
-    alert("Reservering toegevoegd! Bewaar deze code om te verwijderen: " + newReservation.code);
+    alert("Reservering toegevoegd! Je ID is: " + newReservation.id + " (code om te verwijderen = StatusRemove)");
     reservationForm.reset();
     loadReservations();
   });
   removeForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-    const code = document.getElementById("removeCode").value.trim().toUpperCase();
+    const id = document.getElementById("reservationId").value.trim().toUpperCase();
+    const code = document.getElementById("removeCode").value.trim();
+    if (code !== "StatusRemove") {
+      alert("Ongeldige verwijdercode.");
+      return;
+    }
     let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
     const lengthBefore = reservations.length;
-    reservations = reservations.filter(r => r.code !== code);
+    reservations = reservations.filter(r => r.id !== id);
     if (reservations.length < lengthBefore) {
       localStorage.setItem("reservations", JSON.stringify(reservations));
       alert("Reservering verwijderd!");
     } else {
-      alert("Geen reservering gevonden met deze code.");
+      alert("Geen reservering gevonden met dit ID.");
     }
     removeForm.reset();
     loadReservations();
