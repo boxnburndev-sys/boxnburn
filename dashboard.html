@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -9,7 +8,10 @@
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
       background: #f5f5f5;
+      color: #333;
     }
+
+    /* Navbar */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -17,10 +19,29 @@
       padding: 12px 24px;
       background: linear-gradient(135deg, #ff7f50, #ff7043);
       color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .navbar .brand {
       font-size: 20px;
       font-weight: bold;
+    }
+    .navbar .menu {
+      display: flex;
+      gap: 16px;
+    }
+    .navbar .menu button {
+      background: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #ff7043;
+      transition: all 0.2s;
+    }
+    .navbar .menu button:hover {
+      background: #ffe0d6;
+      transform: scale(1.05);
     }
     .navbar .user-info {
       display: flex;
@@ -43,12 +64,107 @@
       font-size: 12px;
       opacity: 0.85;
     }
+
+    /* Content */
+    .content {
+      padding: 24px;
+    }
+    .hidden {
+      display: none;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    table th, table td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    table th {
+      background: #ff7043;
+      color: white;
+      font-weight: 600;
+    }
+    table tr:hover {
+      background: #fff7f5;
+    }
+
+    /* Form */
+    form input {
+      margin: 6px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+    form button {
+      margin: 6px;
+      padding: 10px 16px;
+      border: none;
+      background: #ff7043;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    form button:hover {
+      background: #ff5722;
+    }
+
+    /* Status */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .status-card {
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .status-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #ff7043;
+    }
+    .status-card p {
+      margin: 0;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
 
   <nav class="navbar">
     <div class="brand">📊 Box N Burn Dashboard</div>
+    <div class="menu">
+      <button onclick="showPage('home')">Home</button>
+      <button onclick="showPage('reserveringen')">Reserveringen</button>
+      <button onclick="showPage('status')">Status</button>
+    </div>
     <div class="user-info">
       <div class="details">
         <div class="name" id="username"></div>
@@ -58,20 +174,127 @@
     </div>
   </nav>
 
+  <div class="content">
+    <!-- Home -->
+    <div id="home" class="page card">
+      <h2>Welkom bij Box N Burn!</h2>
+      <p>We zijn blij dat je er bent. Hier kun je reserveringen maken, je status bekijken en meer.</p>
+      <p><b>Random info:</b> Vandaag is een geweldige dag om te trainen 💪🔥</p>
+    </div>
+
+    <!-- Reserveringen -->
+    <div id="reserveringen" class="page hidden card">
+      <h2>Reserveringen</h2>
+      <form id="reservationForm">
+        <input type="text" id="naam" placeholder="Naam" required>
+        <input type="text" id="les" placeholder="Les" required>
+        <input type="date" id="datum" required>
+        <input type="time" id="tijd" required>
+        <input type="text" id="contact" placeholder="Telefoonnummer/Email" required>
+        <button type="submit">➕ Toevoegen</button>
+      </form>
+      <table>
+        <thead>
+          <tr>
+            <th>Naam</th>
+            <th>Les</th>
+            <th>Datum</th>
+            <th>Tijd</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
+        <tbody id="reservationTable"></tbody>
+      </table>
+    </div>
+
+    <!-- Status -->
+    <div id="status" class="page hidden card">
+      <h2>🌐 GitHub Status</h2>
+      <div class="status-grid" id="statusGrid">
+        <p>Laden...</p>
+      </div>
+    </div>
+  </div>
+
 <script>
-  // Fetch user data from localStorage
+  // User
   const user = localStorage.getItem("loggedInUser");
   const role = localStorage.getItem("userRole");
   const pfp = localStorage.getItem("userPfp");
 
-  // If no user is logged in, redirect back to login
   if (!user) {
-    window.location.href = "index.html"; // or login.html depending on your file
+    window.location.href = "index.html";
   } else {
     document.getElementById("username").textContent = user;
     document.getElementById("role").textContent = role;
     document.getElementById("pfp").src = pfp;
   }
+
+  // Page switcher
+  function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+    document.getElementById(pageId).classList.remove("hidden");
+  }
+
+  // Reservations
+  const reservationForm = document.getElementById("reservationForm");
+  const reservationTable = document.getElementById("reservationTable");
+
+  function loadReservations() {
+    const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+    reservationTable.innerHTML = "";
+    reservations.forEach(r => {
+      const row = `<tr>
+        <td>${r.naam}</td>
+        <td>${r.les}</td>
+        <td>${r.datum}</td>
+        <td>${r.tijd}</td>
+        <td>${r.contact}</td>
+      </tr>`;
+      reservationTable.innerHTML += row;
+    });
+  }
+
+  reservationForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const newReservation = {
+      naam: document.getElementById("naam").value,
+      les: document.getElementById("les").value,
+      datum: document.getElementById("datum").value,
+      tijd: document.getElementById("tijd").value,
+      contact: document.getElementById("contact").value
+    };
+    const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+    reservations.push(newReservation);
+    localStorage.setItem("reservations", JSON.stringify(reservations));
+    reservationForm.reset();
+    loadReservations();
+  });
+
+  loadReservations();
+
+  // GitHub Status
+  async function fetchStatus() {
+    try {
+      const res = await fetch("https://www.githubstatus.com/api/v2/summary.json");
+      const data = await res.json();
+      const grid = document.getElementById("statusGrid");
+      grid.innerHTML = "";
+      data.components.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "status-card";
+        div.innerHTML = `
+          <h3>${c.name}</h3>
+          <p>Status: <b>${c.status}</b></p>
+          <p>Updated: ${new Date(c.updated_at).toLocaleString()}</p>
+        `;
+        grid.appendChild(div);
+      });
+    } catch (err) {
+      document.getElementById("statusGrid").innerHTML = "<p style='color:red'>❌ Fout bij ophalen status.</p>";
+    }
+  }
+  fetchStatus();
 </script>
 
 </body>
