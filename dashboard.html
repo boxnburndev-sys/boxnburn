@@ -214,25 +214,18 @@
       <h2>Ons Team</h2>
       <div id="personnelGrid" class="personnel-grid"></div>
     </div>
-
-    <!-- ===== LEDEN ===== -->
     <div id="leden" class="page hidden card">
       <h2>Leden</h2>
-      <form id="ledenForm">
-        <input type="text" id="lidNaam" placeholder="Naam" required>
-        <select id="lidLes" required>
-          <option value="" disabled selected>Kies les</option>
+      <form id="memberForm">
+        <input type="text" id="memberNaam" placeholder="Naam" required>
+        <select id="memberLes" required>
+          <option value="">Kies een les</option>
           <option value="Boksen">Boksen</option>
           <option value="Yoga">Yoga</option>
           <option value="Spinning">Spinning</option>
         </select>
-        <input type="text" id="lidContact" placeholder="Contact" required>
+        <input type="text" id="memberContact" placeholder="Contact" required>
         <button type="submit">➕ Toevoegen</button>
-      </form>
-      <form id="ledenRemoveForm">
-        <input type="number" id="ledenId" placeholder="Leden-ID" required>
-        <input type="password" id="ledenRemoveCode" placeholder="Verwijdercode" required>
-        <button type="submit">❌ Verwijderen</button>
       </form>
       <h3>Boksen</h3>
       <table>
@@ -250,8 +243,6 @@
         <tbody id="ledenSpinning"></tbody>
       </table>
     </div>
-
-    <!-- ===== RESERVERINGEN ===== -->
     <div id="reserveringen" class="page hidden card">
       <h2>Reserveringen</h2>
       <form id="reservationForm">
@@ -261,11 +252,6 @@
         <input type="time" id="tijd" required>
         <input type="text" id="contact" placeholder="Telefoonnummer/Email" required>
         <button type="submit">➕ Toevoegen</button>
-      </form>
-      <form id="removeForm">
-        <input type="text" id="reservationId" placeholder="Reserverings-ID" required>
-        <input type="password" id="removeCode" placeholder="Verwijdercode" required>
-        <button type="submit">❌ Verwijderen</button>
       </form>
       <table>
         <thead>
@@ -281,8 +267,6 @@
         <tbody id="reservationTable"></tbody>
       </table>
     </div>
-
-    <!-- ===== STATUS ===== -->
     <div id="status" class="page hidden card">
       <h2>Website Status</h2>
       <div class="status-grid" id="statusGrid">
@@ -290,9 +274,8 @@
       </div>
     </div>
   </div>
-
 <script>
-  // ===== LOGIN INFO =====
+  // Gebruiker info
   const user = localStorage.getItem("loggedInUser");
   const role = localStorage.getItem("userRole");
   const pfp = localStorage.getItem("userPfp");
@@ -303,7 +286,6 @@
     document.getElementById("role").textContent = role;
     document.getElementById("pfp").src = pfp;
   }
-
   function showPage(pageId, btn) {
     document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
     document.getElementById(pageId).classList.remove("hidden");
@@ -311,75 +293,43 @@
     btn.classList.add("active");
   }
 
-  // ===== LEDEN =====
-  const ledenForm = document.getElementById("ledenForm");
-  const ledenRemoveForm = document.getElementById("ledenRemoveForm");
-  const ledenBoksen = document.getElementById("ledenBoksen");
-  const ledenYoga = document.getElementById("ledenYoga");
-  const ledenSpinning = document.getElementById("ledenSpinning");
-
-  function loadLeden() {
+  // === LEDEN ===
+  const memberForm = document.getElementById("memberForm");
+  function loadMembers() {
     const leden = JSON.parse(localStorage.getItem("leden")) || [];
-    ledenBoksen.innerHTML = "";
-    ledenYoga.innerHTML = "";
-    ledenSpinning.innerHTML = "";
-    leden.forEach(l => {
-      const row = `<tr><td>${l.id}</td><td>${l.naam}</td><td>${l.contact}</td></tr>`;
-      if (l.les === "Boksen") ledenBoksen.innerHTML += row;
-      if (l.les === "Yoga") ledenYoga.innerHTML += row;
-      if (l.les === "Spinning") ledenSpinning.innerHTML += row;
+    const boksen = document.getElementById("ledenBoksen");
+    const yoga = document.getElementById("ledenYoga");
+    const spinning = document.getElementById("ledenSpinning");
+    boksen.innerHTML = ""; yoga.innerHTML = ""; spinning.innerHTML = "";
+    leden.forEach(m => {
+      const row = `<tr><td>${m.id}</td><td>${m.naam}</td><td>${m.contact}</td></tr>`;
+      if (m.les === "Boksen") boksen.innerHTML += row;
+      if (m.les === "Yoga") yoga.innerHTML += row;
+      if (m.les === "Spinning") spinning.innerHTML += row;
     });
   }
-
-  ledenForm?.addEventListener("submit", e => {
+  memberForm?.addEventListener("submit", e => {
     e.preventDefault();
     const leden = JSON.parse(localStorage.getItem("leden")) || [];
-    const newId = leden.length ? Math.max(...leden.map(l => l.id)) + 1 : 1;
-    const newLid = {
-      id: newId,
-      naam: document.getElementById("lidNaam").value,
-      les: document.getElementById("lidLes").value,
-      contact: document.getElementById("lidContact").value
+    const newMember = {
+      id: leden.length > 0 ? leden[leden.length-1].id + 1 : 1,
+      naam: document.getElementById("memberNaam").value,
+      les: document.getElementById("memberLes").value,
+      contact: document.getElementById("memberContact").value
     };
-    leden.push(newLid);
+    leden.push(newMember);
     localStorage.setItem("leden", JSON.stringify(leden));
-    alert("Lid toegevoegd! ID = " + newId);
-    ledenForm.reset();
-    loadLeden();
+    memberForm.reset();
+    loadMembers();
   });
+  loadMembers();
 
-  ledenRemoveForm?.addEventListener("submit", e => {
-    e.preventDefault();
-    const id = parseInt(document.getElementById("ledenId").value);
-    const code = document.getElementById("ledenRemoveCode").value;
-    if (code !== "LedenRemove") {
-      alert("Ongeldige verwijdercode.");
-      return;
-    }
-    let leden = JSON.parse(localStorage.getItem("leden")) || [];
-    const lengthBefore = leden.length;
-    leden = leden.filter(l => l.id !== id);
-    if (leden.length < lengthBefore) {
-      localStorage.setItem("leden", JSON.stringify(leden));
-      alert("Lid verwijderd!");
-    } else {
-      alert("Geen lid gevonden met dit ID.");
-    }
-    ledenRemoveForm.reset();
-    loadLeden();
-  });
-
-  loadLeden();
-
-  // ===== RESERVERINGEN =====
+  // === RESERVERINGEN ===
   const reservationForm = document.getElementById("reservationForm");
   const reservationTable = document.getElementById("reservationTable");
-  const removeForm = document.getElementById("removeForm");
-
   function generateId() {
     return Math.random().toString(36).substr(2, 8).toUpperCase();
   }
-
   function loadReservations() {
     const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
     reservationTable.innerHTML = "";
@@ -395,8 +345,7 @@
       reservationTable.innerHTML += row;
     });
   }
-
-  reservationForm?.addEventListener("submit", e => {
+  reservationForm?.addEventListener("submit", (e) => {
     e.preventDefault();
     const newReservation = {
       id: generateId(),
@@ -409,35 +358,13 @@
     const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
     reservations.push(newReservation);
     localStorage.setItem("reservations", JSON.stringify(reservations));
-    alert("Reservering toegevoegd! Je ID is: " + newReservation.id + " (code om te verwijderen = StatusRemove)");
+    alert("Reservering toegevoegd! Je ID is: " + newReservation.id);
     reservationForm.reset();
     loadReservations();
   });
-
-  removeForm?.addEventListener("submit", e => {
-    e.preventDefault();
-    const id = document.getElementById("reservationId").value.trim().toUpperCase();
-    const code = document.getElementById("removeCode").value.trim();
-    if (code !== "StatusRemove") {
-      alert("Ongeldige verwijdercode.");
-      return;
-    }
-    let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
-    const lengthBefore = reservations.length;
-    reservations = reservations.filter(r => r.id !== id);
-    if (reservations.length < lengthBefore) {
-      localStorage.setItem("reservations", JSON.stringify(reservations));
-      alert("Reservering verwijderd!");
-    } else {
-      alert("Geen reservering gevonden met dit ID.");
-    }
-    removeForm.reset();
-    loadReservations();
-  });
-
   loadReservations();
 
-  // ===== STATUS =====
+  // === STATUS ===
   async function fetchStatus() {
     try {
       const res = await fetch("https://www.githubstatus.com/api/v2/summary.json");
@@ -460,7 +387,7 @@
   }
   fetchStatus();
 
-  // ===== PERSONEEL =====
+  // === PERSONEEL ===
   const personnel = [
     {name:'Katrien Boeckx', role:'CEO & Founder van Box N Burn', bio:'About.', img:'https://lh3.googleusercontent.com/AtSbkeeQXJ3MWa8Rzdg0I568tq-e9KjqkIDrxa-W2IT4xpnbgsxQqzgwX5ptekRYP4ix2rL_KP9kFCnbg3d29QicJ6p2T-euQgZN=w1500'},
     {name:'Tristan Vansonhoven', role:'IT Specialist', bio:'IT Specialist Box N Burn.', img:'https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=OgNlLwyzRT8Q7kNvwGsLxNe&_nc_oc=Admf8UwaBIUqavwDYqbac2R436o1CbMtgCEWrhGB9z2a67xLlXPjSwaX4dljmERi9zDvaj4UjKGHhXjTjTE_U2VU&_nc_zt=23&_nc_ht=scontent-bru2-1.xx&_nc_gid=kWHPat1TTwVYwyG3qaqNFw&oh=00_AfaQt4OB3xZJMm1gucQvIbptb0INXvO7AdFZeDTSyM14iA&oe=68C4E732'},
