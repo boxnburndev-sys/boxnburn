@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('https://i.ibb.co/Q3SJncKg/afbeelding-2025-09-12-072012841-removebg-preview.png') no-repeat center center;
+      background-size: cover;
+    }
+    .login-box {
+      width: 380px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      color: #000;
+      border: 2px solid #ff7f50;
+      box-shadow: none;
+    }
+    .login-box img {
+      width: 120px;
+      margin-bottom: 15px;
+    }
+    .school-name {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 25px;
+      color: #333;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .input-group input {
+      flex: 1;
+      height: 45px;
+      padding: 0 45px 0 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+      color: #000;
+      line-height: 45px;
+    }
+    .input-group input::placeholder {
+      color: #555;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: #ff7f50;
+      background: #f0f0f0;
+    }
+    .input-group .icon {
+      position: absolute;
+      right: 15px;
+      font-size: 18px;
+      color: #666;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .forgot {
+      font-size: 12px;
+      color: #444;
+      margin-bottom: 20px;
+      cursor: pointer;
+      display: block;
+      text-align: left;
+      transition: color 0.2s;
+    }
+    .forgot:hover {
+      color: #000;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ff7f50, #ff7043);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
+    }
+    #error {
+      color: #d00;
+      margin-top: 10px;
+      display: none;
+      font-size: 13px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <img src="https://kogeka.be/wp-content/uploads/2020/06/logo_smg.png" alt="Logo">
+    <div class="school-name">Sint Maria Geel • Geel</div>
+
+    <div class="input-group">
+      <input type="text" id="username" placeholder="Gebruikersnaam">
+      <span class="icon">👤</span>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Wachtwoord">
+      <span class="icon" id="togglePassword">👁</span>
+    </div>
+
+    <div class="forgot">🔒 Wachtwoord vergeten?</div>
+
+    <button onclick="login()">Aanmelden</button>
+    <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
+  </div>
+
+<script>
+  // Demo users (username -> {password, role, pfp})
+  const users = {
+    "katrien.boeckx": { password: "Pianostemmer123", role: "CEO/FOUNDER", pfp: "https://i.pravatar.cc/150?u=lily" },
+    "tristan.vansonhoven": { password: "Tristanv?", role: "IT Specialist", pfp: "https://i.pravatar.cc/150?u=kiandra" }
+  };
+
+  // Make sure these base app storage keys exist (messages, grades, files)
+  if (!localStorage.getItem('app_users')) {
+    // Store the known users list for messaging UI to read (usernames only)
+    localStorage.setItem('app_users', JSON.stringify(Object.keys(users)));
+  }
+  if (!localStorage.getItem('messages')) localStorage.setItem('messages', JSON.stringify([]));
+  if (!localStorage.getItem('grades')) localStorage.setItem('grades', JSON.stringify({}));
+  if (!localStorage.getItem('files')) localStorage.setItem('files', JSON.stringify([]));
+  if (!localStorage.getItem('canteen_orders')) localStorage.setItem('canteen_orders', JSON.stringify([]));
+
+  function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const error = document.getElementById("error");
+
+    if (users[user] && users[user].password === pass) {
+      localStorage.setItem("loggedInUser", user);
+      localStorage.setItem("userRole", users[user].role);
+      localStorage.setItem("userPfp", users[user].pfp);
+      // ensure app_users stays updated (if you add accounts later)
+      const appUsers = JSON.parse(localStorage.getItem('app_users') || '[]');
+      if (!appUsers.includes(user)) {
+        appUsers.push(user);
+        localStorage.setItem('app_users', JSON.stringify(appUsers));
+      }
+      window.location.href = "dashboard.html";
+    } else {
+      error.style.display = "block";
+      setTimeout(()=> error.style.display = "none", 3500);
+    }
+  }
+
+  document.getElementById('togglePassword').addEventListener('click', () => {
+    const p = document.getElementById('password');
+    p.type = p.type === 'password' ? 'text' : 'password';
+  });
+</script>
+
+</body>
+</html>
