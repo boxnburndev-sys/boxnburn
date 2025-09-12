@@ -1,1 +1,78 @@
 
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f5f5;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #ff7f50, #ff7043);
+      color: white;
+    }
+    .navbar .brand {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .navbar .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .navbar .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    .navbar .user-info .details {
+      text-align: right;
+    }
+    .navbar .user-info .details .name {
+      font-weight: 600;
+    }
+    .navbar .user-info .details .role {
+      font-size: 12px;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="brand">📊 Box N Burn Dashboard</div>
+    <div class="user-info">
+      <div class="details">
+        <div class="name" id="username"></div>
+        <div class="role" id="role"></div>
+      </div>
+      <img id="pfp" alt="User profile picture">
+    </div>
+  </nav>
+
+<script>
+  // Fetch user data from localStorage
+  const user = localStorage.getItem("loggedInUser");
+  const role = localStorage.getItem("userRole");
+  const pfp = localStorage.getItem("userPfp");
+
+  // If no user is logged in, redirect back to login
+  if (!user) {
+    window.location.href = "index.html"; // or login.html depending on your file
+  } else {
+    document.getElementById("username").textContent = user;
+    document.getElementById("role").textContent = role;
+    document.getElementById("pfp").src = pfp;
+  }
+</script>
+
+</body>
+</html>
