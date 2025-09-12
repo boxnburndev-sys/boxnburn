@@ -5,52 +5,188 @@
   <title>Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body {margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#233445;color:white}
-    .navbar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#0f2133;color:white;box-shadow:0 4px 10px rgba(0,0,0,0.3);position:sticky;top:0;z-index:50}
-    .brand{font-size:20px;font-weight:700}
-    .menu{display:flex;gap:12px;align-items:center}
-    .menu button{background:#0f2133;border:2px solid #384858;padding:8px 16px;border-radius:20px;cursor:pointer;font-weight:600;color:white;transition:all .18s ease}
-    .menu button:hover{transform:scale(1.08);background:#384858}
-    .menu button.active{background:#233445;color:white;transform:scale(1.05)}
-    .user-info{display:flex;align-items:center;gap:12px}
-    .user-info img{width:40px;height:40px;border-radius:50%;border:2px solid white}
-    .user-info .details{text-align:right}
-    .user-info .details .name{font-weight:600}
-    .user-info .details .role{font-size:12px;opacity:.85}
-    .content{padding:24px}
-    .hidden{display:none}
-    .card{background:#384858;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.2);animation:fadeIn .4s ease}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    table{width:100%;border-collapse:collapse;margin-top:12px;background:#233445;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.3);color:white}
-    table th,table td{padding:12px;border-bottom:1px solid #384858;text-align:left}
-    table th{background:#0f2133;color:white;font-weight:600}
-    table tr:hover{background:#384858}
-    form input,form select{margin:6px;padding:10px;border-radius:8px;border:1px solid #384858;font-size:14px;background:#233445;color:white}
-    form button{margin:6px;padding:10px 16px;border:none;background:#0f2133;color:white;border-radius:8px;cursor:pointer;font-weight:bold;transition:all .2s}
-    form button:hover{background:#384858}
-    .status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-    .status-card{background:#233445;padding:16px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.2);text-align:center;color:white}
-    .status-card h3{margin:0 0 8px;font-size:18px;color:#0f93ff}
-    .status-card p{margin:0;font-size:14px}
-    .personnel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:20px}
-    .person-card{background:#233445;border-radius:12px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,0.2);text-align:center}
-    .person-card img{width:100px;height:100px;border-radius:50%;border:3px solid #0f2133;object-fit:cover;margin-bottom:10px}
-    .person-card h3{margin:0;font-size:18px;color:#0f93ff}
-    .person-card p{margin:6px 0;font-size:14px}
-    .member-menu{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#384858;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:none;z-index:100}
-    .member-menu h3{margin-top:0;color:#0f93ff}
-    .member-menu .menu-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .member-menu button{margin:8px;padding:8px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:600}
-    .member-menu .edit{background:#0f93ff;color:white}
-    .member-menu .delete{background:#ff3b3b;color:white}
-    .member-menu .close{background:#233445;color:white}
-    .member-edit-form{display:none;margin-top:10px;display:flex;flex-direction:column;gap:8px}
-    .member-edit-form input,.member-edit-form select{padding:8px;border-radius:8px;border:1px solid #384858;background:#233445;color:white}
-    .member-edit-form .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
-    .toast{position:fixed;right:20px;bottom:20px;background:#0f93ff;padding:10px 14px;border-radius:8px;color:#002033;display:none;z-index:200}
-    @media (max-width:600px){
-      .menu button{padding:6px 10px;font-size:14px}
-      .person-card img{width:80px;height:80px}
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #233445;
+      color: white;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: #0f2133;
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .brand {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .menu {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .menu button {
+      background: #0f2133;
+      border: 2px solid #384858;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+      transition: all 0.18s ease;
+    }
+    .menu button:hover {
+      transform: scale(1.08);
+      background: #384858;
+    }
+    .menu button.active {
+      background: #233445;
+      color: white;
+      transform: scale(1.05);
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    .user-info .details {
+      text-align: right;
+    }
+    .user-info .details .name {
+      font-weight: 600;
+    }
+    .user-info .details .role {
+      font-size: 12px;
+      opacity: 0.85;
+    }
+    .content {
+      padding: 24px;
+    }
+    .hidden {
+      display: none;
+    }
+    .card {
+      background: #384858;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: #233445;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      color: white;
+    }
+    table th, table td {
+      padding: 12px;
+      border-bottom: 1px solid #384858;
+      text-align: left;
+    }
+    table th {
+      background: #0f2133;
+      color: white;
+      font-weight: 600;
+    }
+    table tr:hover {
+      background: #384858;
+    }
+    form input, form select {
+      margin: 6px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #384858;
+      font-size: 14px;
+      background: #233445;
+      color: white;
+    }
+    form button {
+      margin: 6px;
+      padding: 10px 16px;
+      border: none;
+      background: #0f2133;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    form button:hover {
+      background: #384858;
+    }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .status-card {
+      background: #233445;
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      text-align: center;
+      color: white;
+    }
+    .status-card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: #0f93ff;
+    }
+    .status-card p {
+      margin: 0;
+      font-size: 14px;
+    }
+    .personnel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .person-card {
+      background: #233445;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .person-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #0f2133;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+    .person-card h3 {
+      margin: 0;
+      font-size: 18px;
+      color: #0f93ff;
+    }
+    .person-card p {
+      margin: 6px 0;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -71,7 +207,6 @@
       <img id="pfp" alt="User profile picture">
     </div>
   </nav>
-
   <div class="content">
     <div id="home" class="page card">
       <h2>Welkom bij Box N Burn!</h2>
@@ -79,7 +214,6 @@
       <h2>Ons Team</h2>
       <div id="personnelGrid" class="personnel-grid"></div>
     </div>
-
     <div id="leden" class="page hidden card">
       <h2>Leden</h2>
       <form id="memberForm">
@@ -94,13 +228,21 @@
         <button type="submit">➕ Toevoegen</button>
       </form>
       <h3>Boksen</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenBoksen"></tbody></table>
+      <table>
+        <thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead>
+        <tbody id="ledenBoksen"></tbody>
+      </table>
       <h3>Yoga</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenYoga"></tbody></table>
+      <table>
+        <thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead>
+        <tbody id="ledenYoga"></tbody>
+      </table>
       <h3>Spinning</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenSpinning"></tbody></table>
+      <table>
+        <thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead>
+        <tbody id="ledenSpinning"></tbody>
+      </table>
     </div>
-
     <div id="reserveringen" class="page hidden card">
       <h2>Reserveringen</h2>
       <form id="reservationForm">
@@ -112,249 +254,118 @@
         <button type="submit">➕ Toevoegen</button>
       </form>
       <table>
-        <thead><tr><th>ID</th><th>Naam</th><th>Les</th><th>Datum</th><th>Tijd</th><th>Contact</th></tr></thead>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Naam</th>
+            <th>Les</th>
+            <th>Datum</th>
+            <th>Tijd</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
         <tbody id="reservationTable"></tbody>
       </table>
     </div>
-
     <div id="status" class="page hidden card">
       <h2>Website Status</h2>
-      <div class="status-grid" id="statusGrid"><p>Laden...</p></div>
-    </div>
-  </div>
-
-  <div id="memberMenu" class="member-menu">
-    <h3>Acties voor <span id="menuMemberName"></span></h3>
-    <div class="menu-row">
-      <button class="edit" id="openEditBtn">✏️ Bewerken</button>
-      <button class="delete" id="confirmDeleteBtn">🗑️ Verwijderen</button>
-      <button class="close" id="closeMenuBtn">❌ Sluiten</button>
-    </div>
-    <form id="memberEditForm" class="member-edit-form">
-      <input type="text" id="editNaam" placeholder="Naam" required>
-      <select id="editLes" required>
-        <option value="">Kies een les</option>
-        <option value="Boksen">Boksen</option>
-        <option value="Yoga">Yoga</option>
-        <option value="Spinning">Spinning</option>
-      </select>
-      <input type="text" id="editContact" placeholder="Contact" required>
-      <div class="actions">
-        <button type="button" id="saveEditBtn" class="edit">Opslaan</button>
-        <button type="button" id="cancelEditBtn" class="close">Annuleren</button>
+      <div class="status-grid" id="statusGrid">
+        <p>Laden...</p>
       </div>
-    </form>
+    </div>
   </div>
-
-  <div id="toast" class="toast"></div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  function showToast(text, ms = 2500){
-    const t = document.getElementById("toast");
-    t.textContent = text;
-    t.style.display = "block";
-    clearTimeout(t._timeout);
-    t._timeout = setTimeout(()=>{ t.style.display = "none"; }, ms);
-  }
-
+<script>
+  // Gebruiker info
   const user = localStorage.getItem("loggedInUser");
   const role = localStorage.getItem("userRole");
   const pfp = localStorage.getItem("userPfp");
-  if (!user) { window.location.href = "index.html"; }
-  else {
+  if (!user) {
+    window.location.href = "index.html";
+  } else {
     document.getElementById("username").textContent = user;
     document.getElementById("role").textContent = role;
     document.getElementById("pfp").src = pfp;
   }
-
-  function showPage(id, btn){
+  function showPage(pageId, btn) {
     document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-    document.getElementById(id).classList.remove("hidden");
+    document.getElementById(pageId).classList.remove("hidden");
     document.querySelectorAll(".navbar .menu button").forEach(b => b.classList.remove("active"));
-    if(btn) btn.classList.add("active");
+    btn.classList.add("active");
   }
 
-  let selectedMemberId = null;
-  function openMemberMenuFor(m){
-    selectedMemberId = m.id;
-    document.getElementById("menuMemberName").textContent = m.naam;
-    document.getElementById("memberMenu").style.display = "block";
-    document.getElementById("memberEditForm").style.display = "none";
-  }
-  function closeMenu(){
-    selectedMemberId = null;
-    document.getElementById("memberMenu").style.display = "none";
-    document.getElementById("memberEditForm").style.display = "none";
-  }
-
-  const openEditBtn = document.getElementById("openEditBtn");
-  const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-  const closeMenuBtn = document.getElementById("closeMenuBtn");
-  const memberEditForm = document.getElementById("memberEditForm");
-  const saveEditBtn = document.getElementById("saveEditBtn");
-  const cancelEditBtn = document.getElementById("cancelEditBtn");
-
-  openEditBtn.addEventListener("click", async () => {
-    if (!selectedMemberId) return;
-    const editNaam = document.getElementById("editNaam");
-    const editLes = document.getElementById("editLes");
-    const editContact = document.getElementById("editContact");
-    const docRef = doc(db, "leden", selectedMemberId);
-    editNaam.value = "";
-    editLes.value = "";
-    editContact.value = "";
-    memberEditForm.style.display = "flex";
-    try {
-      // load current values by snapshot on the single doc is not imported; read from current UI list
-      // We'll rely on the onSnapshot-driven UI to have the values available in the DOM
-      // Try to pull values from the displayed rows:
-      const rows = [...document.querySelectorAll("#ledenBoksen tr, #ledenYoga tr, #ledenSpinning tr")];
-      const row = rows.find(r => r.firstElementChild && r.firstElementChild.textContent === selectedMemberId);
-      if (row) {
-        editNaam.value = row.children[1].textContent;
-        editContact.value = row.children[2].textContent;
-        // try to determine les from which table it's in
-        if (row.parentElement && row.parentElement.id === "ledenBoksen") editLes.value = "Boksen";
-        if (row.parentElement && row.parentElement.id === "ledenYoga") editLes.value = "Yoga";
-        if (row.parentElement && row.parentElement.id === "ledenSpinning") editLes.value = "Spinning";
-      } else {
-        editNaam.value = "";
-        editLes.value = "";
-        editContact.value = "";
-      }
-    } catch (e) {}
-  });
-
-  confirmDeleteBtn.addEventListener("click", async () => {
-    if (!selectedMemberId) return;
-    if (!confirm("Weet je zeker dat je dit lid wilt verwijderen?")) return;
-    try {
-      await deleteDoc(doc(db, "leden", selectedMemberId));
-      showToast("Lid verwijderd");
-      closeMenu();
-    } catch (e) {
-      showToast("Verwijderen mislukt");
-    }
-  });
-
-  closeMenuBtn.addEventListener("click", () => closeMenu());
-  cancelEditBtn.addEventListener("click", () => {
-    document.getElementById("memberEditForm").style.display = "none";
-  });
-
-  saveEditBtn.addEventListener("click", async () => {
-    if (!selectedMemberId) return;
-    const newName = document.getElementById("editNaam").value.trim();
-    const newLes = document.getElementById("editLes").value;
-    const newContact = document.getElementById("editContact").value.trim();
-    if (!newName || !newLes || !newContact) {
-      showToast("Vul alle velden in");
-      return;
-    }
-    try {
-      await updateDoc(doc(db, "leden", selectedMemberId), { naam: newName, les: newLes, contact: newContact });
-      showToast("Lid bijgewerkt");
-      document.getElementById("memberEditForm").style.display = "none";
-      closeMenu();
-    } catch (e) {
-      showToast("Bewerken mislukt");
-    }
-  });
-
+  // === LEDEN ===
   const memberForm = document.getElementById("memberForm");
-  memberForm?.addEventListener("submit", async e => {
-    e.preventDefault();
-    const naam = document.getElementById("memberNaam").value.trim();
-    const les = document.getElementById("memberLes").value;
-    const contact = document.getElementById("memberContact").value.trim();
-    if (!naam || !les || !contact) {
-      showToast("Vul alle velden in");
-      return;
-    }
-    try {
-      await addDoc(collection(db, "leden"), { naam, les, contact });
-      memberForm.reset();
-      showToast("Lid toegevoegd");
-    } catch (err) {
-      showToast("Kon lid niet toevoegen");
-    }
-  });
-
-  function loadMembers(){
+  function loadMembers() {
+    const leden = JSON.parse(localStorage.getItem("leden")) || [];
     const boksen = document.getElementById("ledenBoksen");
     const yoga = document.getElementById("ledenYoga");
     const spinning = document.getElementById("ledenSpinning");
-    const q = query(collection(db, "leden"), orderBy("naam"));
-    onSnapshot(q, (snapshot) => {
-      boksen.innerHTML = "";
-      yoga.innerHTML = "";
-      spinning.innerHTML = "";
-      snapshot.forEach(docSnap => {
-        const m = { id: docSnap.id, ...docSnap.data() };
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${m.id}</td><td>${m.naam}</td><td>${m.contact}</td>`;
-        row.style.cursor = "pointer";
-        row.addEventListener("click", () => openMemberMenuFor(m));
-        if (m.les === "Boksen") boksen.appendChild(row);
-        else if (m.les === "Yoga") yoga.appendChild(row);
-        else if (m.les === "Spinning") spinning.appendChild(row);
-      });
+    boksen.innerHTML = ""; yoga.innerHTML = ""; spinning.innerHTML = "";
+    leden.forEach(m => {
+      const row = `<tr><td>${m.id}</td><td>${m.naam}</td><td>${m.contact}</td></tr>`;
+      if (m.les === "Boksen") boksen.innerHTML += row;
+      if (m.les === "Yoga") yoga.innerHTML += row;
+      if (m.les === "Spinning") spinning.innerHTML += row;
     });
   }
+  memberForm?.addEventListener("submit", e => {
+    e.preventDefault();
+    const leden = JSON.parse(localStorage.getItem("leden")) || [];
+    const newMember = {
+      id: leden.length > 0 ? leden[leden.length-1].id + 1 : 1,
+      naam: document.getElementById("memberNaam").value,
+      les: document.getElementById("memberLes").value,
+      contact: document.getElementById("memberContact").value
+    };
+    leden.push(newMember);
+    localStorage.setItem("leden", JSON.stringify(leden));
+    memberForm.reset();
+    loadMembers();
+  });
   loadMembers();
 
+  // === RESERVERINGEN ===
   const reservationForm = document.getElementById("reservationForm");
-  reservationForm?.addEventListener("submit", async e => {
-    e.preventDefault();
-    const naam = document.getElementById("naam").value.trim();
-    const les = document.getElementById("les").value.trim();
-    const datum = document.getElementById("datum").value;
-    const tijd = document.getElementById("tijd").value;
-    const contact = document.getElementById("contact").value.trim();
-    if (!naam || !les || !datum || !tijd || !contact) {
-      showToast("Vul alle velden in");
-      return;
-    }
-    try {
-      await addDoc(collection(db, "reserveringen"), { naam, les, datum, tijd, contact });
-      reservationForm.reset();
-      showToast("Reservering toegevoegd");
-    } catch (err) {
-      showToast("Kon reservering niet toevoegen");
-    }
-  });
-
-  function loadReservations(){
-    const table = document.getElementById("reservationTable");
-    const q = query(collection(db, "reserveringen"), orderBy("datum"));
-    onSnapshot(q, (snapshot) => {
-      table.innerHTML = "";
-      snapshot.forEach(docSnap => {
-        const r = { id: docSnap.id, ...docSnap.data() };
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${r.id}</td><td>${r.naam}</td><td>${r.les}</td><td>${r.datum}</td><td>${r.tijd}</td><td>${r.contact}</td>`;
-        table.appendChild(tr);
-      });
+  const reservationTable = document.getElementById("reservationTable");
+  function generateId() {
+    return Math.random().toString(36).substr(2, 8).toUpperCase();
+  }
+  function loadReservations() {
+    const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+    reservationTable.innerHTML = "";
+    reservations.forEach(r => {
+      const row = `<tr>
+        <td>${r.id}</td>
+        <td>${r.naam}</td>
+        <td>${r.les}</td>
+        <td>${r.datum}</td>
+        <td>${r.tijd}</td>
+        <td>${r.contact}</td>
+      </tr>`;
+      reservationTable.innerHTML += row;
     });
   }
+  reservationForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const newReservation = {
+      id: generateId(),
+      naam: document.getElementById("naam").value,
+      les: document.getElementById("les").value,
+      datum: document.getElementById("datum").value,
+      tijd: document.getElementById("tijd").value,
+      contact: document.getElementById("contact").value
+    };
+    const reservations = JSON.parse(localStorage.getItem("reservations")) || [];
+    reservations.push(newReservation);
+    localStorage.setItem("reservations", JSON.stringify(reservations));
+    alert("Reservering toegevoegd! Je ID is: " + newReservation.id);
+    reservationForm.reset();
+    loadReservations();
+  });
   loadReservations();
 
-  async function fetchStatus(){
+  // === STATUS ===
+  async function fetchStatus() {
     try {
       const res = await fetch("https://www.githubstatus.com/api/v2/summary.json");
       const data = await res.json();
@@ -363,27 +374,41 @@
       data.components.forEach(c => {
         const div = document.createElement("div");
         div.className = "status-card";
-        div.innerHTML = `<h3>${c.name}</h3><p>Status: <b>${c.status}</b></p><p>Updated: ${new Date(c.updated_at).toLocaleString()}</p>`;
+        div.innerHTML = `
+          <h3>${c.name}</h3>
+          <p>Status: <b>${c.status}</b></p>
+          <p>Updated: ${new Date(c.updated_at).toLocaleString()}</p>
+        `;
         grid.appendChild(div);
       });
-    } catch (e) {
+    } catch (err) {
       document.getElementById("statusGrid").innerHTML = "<p style='color:red'>❌ Fout bij ophalen status.</p>";
     }
   }
   fetchStatus();
 
+  // === PERSONEEL ===
   const personnel = [
     {name:'Katrien Boeckx', role:'CEO & Founder van Box N Burn', bio:'About.', img:'https://lh3.googleusercontent.com/AtSbkeeQXJ3MWa8Rzdg0I568tq-e9KjqkIDrxa-W2IT4xpnbgsxQqzgwX5ptekRYP4ix2rL_KP9kFCnbg3d29QicJ6p2T-euQgZN=w1500'},
-    {name:"Tristan Vansonhoven", role:"IT Specialist", bio:"IT Specialist Box N Burn.", img:"https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=OgNlLwyzRT8Q7kNvwGsLxNe&_nc_oc=Admf8UwaBIUqavwDYqbac2R436o1CbMtgCEWrhGB9z2a67xLlXPjSwaX4dljmERi9zDvaj4UjKGHhXjTjTE_U2VU&_nc_zt=23&_nc_ht=scontent-bru2-1.xx&_nc_gid=kWHPat1TTwVYwyG3qaqNFw&oh=00_AfaQt4OB3xZJMm1gucQvIbptb0INXvO7AdFZeDTSyM14iA&oe=68C4E732"},
-    {name:"Mil T'Seyen", role:"Huis DJ / Technische Ondersteuning", bio:"", img:"https://scontent.fbru2-1.fna.fbcdn.net/v/t1.6435-9/40441548_1802350659833865_3033661819232190464_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=F20ZXvE70msQ7kNvwGK2JPB&_nc_oc=AdnIqvWrZuHpOElM9IDVwyzUlpYQrAs8vNKKLQ6Fw3oFTgkn2UDSWGfmWlI-INtv_ZzGbIM7XH2iNgiOJq4yb3T6&_nc_zt=23&_nc_ht=scontent.fbru2-1.fna&_nc_gid=e0GAxe11U5kdcWwlKopW_w&oh=00_AfaBs2Wn5CMy4E0X_aduBGs63_9M4UikhZdFFaa0KgpSQQ&oe=68EB70B6"}
+    {name:'Tristan Vansonhoven', role:'IT Specialist', bio:'IT Specialist Box N Burn.', img:'https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=OgNlLwyzRT8Q7kNvwGsLxNe&_nc_oc=Admf8UwaBIUqavwDYqbac2R436o1CbMtgCEWrhGB9z2a67xLlXPjSwaX4dljmERi9zDvaj4UjKGHhXjTjTE_U2VU&_nc_zt=23&_nc_ht=scontent-bru2-1.xx&_nc_gid=kWHPat1TTwVYwyG3qaqNFw&oh=00_AfaQt4OB3xZJMm1gucQvIbptb0INXvO7AdFZeDTSyM14iA&oe=68C4E732'},
+    {name:'Mil TSeyen', role:'Huis DJ / Technische Ondersteuning', bio:'About.', img:'https://scontent.fbru2-1.fna.fbcdn.net/v/t1.6435-9/40441548_1802350659833865_3033661819232190464_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=F20ZXvE70msQ7kNvwGK2JPB&_nc_oc=AdnIqvWrZuHpOElM9IDVwyzUlpYQrAs8vNKKLQ6Fw3oFTgkn2UDSWGfmWlI-INtv_ZzGbIM7XH2iNgiOJq4yb3T6&_nc_zt=23&_nc_ht=scontent.fbru2-1.fna&_nc_gid=e0GAxe11U5kdcWwlKopW_w&oh=00_AfaBs2Wn5CMy4E0X_aduBGs63_9M4UikhZdFFaa0KgpSQQ&oe=68EB70B6'}
   ];
-  const personnelGrid = document.getElementById("personnelGrid");
-  personnel.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "person-card";
-    card.innerHTML = `<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p><b>Rol:</b> ${p.role}</p><p><b>Bio:</b> ${p.bio}</p>`;
-    personnelGrid.appendChild(card);
-  });
+  function loadPersonnel() {
+    const grid = document.getElementById("personnelGrid");
+    grid.innerHTML = "";
+    personnel.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "person-card";
+      card.innerHTML = `
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p><b>Rol:</b> ${p.role}</p>
+        <p><b>Bio:</b> ${p.bio}</p>
+      `;
+      grid.appendChild(card);
+    });
+  }
+  loadPersonnel();
 </script>
 </body>
 </html>
