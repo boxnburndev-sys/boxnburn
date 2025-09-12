@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Box N Burn - Jobs</title>
+  <meta name="description" content="Box N Burn: Bekijk openstaande jobs en solliciteer eenvoudig online." />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
+      --radius:14px; --max-w:1200px; --transition:250ms cubic-bezier(.2,.9,.3,1);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:Roboto,system-ui,Arial;
+      background:linear-gradient(135deg,#071021 0%,#071833 60%);
+      color:#e6eef8;
+    }
+    .container{max-width:var(--max-w);margin:110px auto 60px;padding:24px}
+
+    header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;
+      padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));
+      border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200}
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+    .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
+    nav{display:flex;gap:8px}
+    .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none}
+    .nav-links a.active, .nav-links a:hover{background:var(--glass);color:#fff}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
+
+    .jobs{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:22px}
+    .job-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,0.03)}
+    .job-card h3{margin:0 0 8px}
+    .job-card p{color:var(--muted)}
+
+    details{margin-top:12px}
+    details[open]{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px}
+    form{margin-top:12px;display:flex;flex-direction:column}
+    input{width:100%;padding:10px;border-radius:8px;background:transparent;
+      border:1px solid rgba(255,255,255,0.08);color:#e6eef8;margin-bottom:8px}
+    input:focus{outline:none;border-color:var(--accent)}
+
+    .message{font-size:14px;margin-top:6px}
+    .message.success{color:#4ade80}
+    .message.error{color:#f87171}
+
+    footer{margin-top:28px;text-align:center;color:var(--muted);padding:28px}
+    @media (max-width:760px){.jobs{grid-template-columns:1fr}.container{margin-top:96px;padding:12px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn logo">
+      <div>
+        <div class="title">Box N Burn Jobs</div>
+        <div class="small muted">Bekijk openstaande posities</div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-links">
+        <a href="#jobs" class="active">Jobs</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="jobs">
+      <h2>Openstaande Vacatures</h2>
+      <div class="jobs">
+        <div class="job-card">
+          <h3>Boks Instructeur</h3>
+          <p>Als een box instructeur geef je box lessen.</p>
+          <details>
+            <summary>Contact opening</summary>
+            <form data-job="Box Instructeur">
+              <input type="text" name="name" placeholder="Naam" required>
+              <input type="number" name="age" placeholder="Leeftijd" required>
+              <input type="email" name="email" placeholder="E-mail" required>
+              <input type="tel" name="phone" placeholder="Telefoonnummer" required>
+              <button type="submit" class="btn primary">Verstuur</button>
+              <div class="message"></div>
+            </form>
+          </details>
+        </div>
+
+    </section>
+
+    <section id="contact" style="margin-top:40px">
+      <h2>Algemeen Contact</h2>
+      <p class="muted">Heb je vragen over vacatures of wil je spontaan solliciteren? Vul het formulier in.</p>
+      <form data-job="Algemeen Contact">
+        <input type="text" name="name" placeholder="Naam" required>
+        <input type="number" name="age" placeholder="Leeftijd" required>
+        <input type="email" name="email" placeholder="E-mail" required>
+        <input type="tel" name="phone" placeholder="Telefoonnummer" required>
+        <button type="submit" class="btn primary">Verstuur</button>
+        <div class="message"></div>
+      </form>
+    </section>
+
+    <footer>
+      <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
+      <div class="muted">Jobs Portal</div>
+    </footer>
+  </main>
+
+  <script>
+    const endpoint = "https://formspree.io/f/xzzayobb";
+
+    document.querySelectorAll("form").forEach(form=>{
+      form.addEventListener("submit",async e=>{
+        e.preventDefault();
+        const msg = form.querySelector(".message");
+        msg.textContent = "Bezig met versturen...";
+        msg.className = "message";
+
+        const data = Object.fromEntries(new FormData(form).entries());
+        data.job = form.getAttribute("data-job") || "Onbekend";
+
+        try{
+          const res = await fetch(endpoint,{
+            method:"POST",
+            headers:{"Accept":"application/json"},
+            body: JSON.stringify(data)
+          });
+          if(res.ok){
+            msg.textContent = "Bedankt! Je aanvraag is verzonden.";
+            msg.classList.add("success");
+            form.reset();
+          } else {
+            msg.textContent = "Er ging iets mis. Probeer later opnieuw.";
+            msg.classList.add("error");
+          }
+        }catch(err){
+          msg.textContent = "Fout bij verzenden.";
+          msg.classList.add("error");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
