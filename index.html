@@ -523,9 +523,15 @@ document.addEventListener('click', e=>{
 
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
-    e.preventDefault(); const target = a.getAttribute('data-page'); history.pushState({page:target},'',`#${target}`); showPage(target);
+    const target = a.getAttribute('data-page');
+    if (target) {
+      e.preventDefault();
+      history.pushState({page:target},'',`#${target}`);
+      showPage(target);
+    }
   });
 });
+
 
 function showPage(page){ 
   $$('.nav-links a').forEach(x=>x.classList.remove('active')); 
