@@ -158,33 +158,6 @@
   .click:active{transform:scale(.98)}
 </style>
 </head>
-<div id="cookie-banner" style="
-  position:fixed;bottom:0;left:0;width:100%;
-  background:#0b1220;color:#fff;padding:16px;
-  display:none;z-index:5000;box-shadow:0 -2px 6px rgba(0,0,0,.4);
-">
-  <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:12px;">
-    <p>
-      Wij gebruiken cookies om onze site goed te laten werken (functioneel), en – met jouw toestemming – 
-      voor analyse en marketing. Kies zelf waarmee je akkoord gaat.
-      <a href="#privacy" style="color:#06b6d4;">Lees meer</a>
-    </p>
-
-    <!-- Instellingen -->
-    <div id="cookie-settings" style="display:none;">
-      <label><input type="checkbox" checked disabled> Functioneel (altijd aan)</label><br>
-      <label><input type="checkbox" id="cookie-analytics"> Analytisch</label><br>
-      <label><input type="checkbox" id="cookie-marketing"> Marketing</label>
-    </div>
-
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button id="cookie-accept" class="btn primary">Alles accepteren</button>
-      <button id="cookie-reject" class="btn ghost">Alles weigeren</button>
-      <button id="cookie-customize" class="btn ghost">Instellingen</button>
-      <button id="cookie-save" class="btn primary" style="display:none;">Opslaan</button>
-    </div>
-  </div>
-</div>
 <body>
   <header role="banner">
     <div class="brand">
@@ -692,72 +665,6 @@ function init(){
 }
 
 document.addEventListener('DOMContentLoaded', init);
-<script>
-function showCookieBanner(){
-  if(!localStorage.getItem("cookieConsent")){
-    document.getElementById("cookie-banner").style.display="block";
-  }
-}
-
-function hideCookieBanner(){
-  document.getElementById("cookie-banner").style.display="none";
-}
-
-function saveConsent(consent){
-  localStorage.setItem("cookieConsent", JSON.stringify(consent));
-  hideCookieBanner();
-  applyConsent(consent);
-}
-
-// Pas cookies/scripts toe op basis van keuze
-function applyConsent(consent){
-  if(consent.analytics){
-    // 👉 hier je Google Analytics code
-    console.log("Analytics ingeschakeld");
-  }
-  if(consent.marketing){
-    // 👉 hier je marketing/pixel scripts
-    console.log("Marketing ingeschakeld");
-  }
-}
-
-// Buttons
-document.getElementById("cookie-accept").onclick = ()=>{
-  saveConsent({functional:true, analytics:true, marketing:true});
-};
-document.getElementById("cookie-reject").onclick = ()=>{
-  saveConsent({functional:true, analytics:false, marketing:false});
-};
-document.getElementById("cookie-customize").onclick = ()=>{
-  document.getElementById("cookie-settings").style.display="block";
-  document.getElementById("cookie-save").style.display="inline-block";
-};
-document.getElementById("cookie-save").onclick = ()=>{
-  const analytics = document.getElementById("cookie-analytics").checked;
-  const marketing = document.getElementById("cookie-marketing").checked;
-  saveConsent({functional:true, analytics, marketing});
-};
-
-// Mogelijkheid om later te wijzigen
-window.resetCookies = function(){
-  localStorage.removeItem("cookieConsent");
-  showCookieBanner();
-};
-
-// Start
-document.addEventListener("DOMContentLoaded", ()=>{
-  const stored = localStorage.getItem("cookieConsent");
-  if(stored){
-    applyConsent(JSON.parse(stored));
-  } else {
-    showCookieBanner();
-  }
-});
 </script>
-
-<footer>
-  <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
-  <div class="muted"><a href="javascript:resetCookies()">Cookie-instellingen aanpassen</a></div>
-</footer>
 </body>
 </html>
