@@ -2,7 +2,8 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Staff Login</title>
+  <title>Personeel Login</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     body {
       margin: 0;
@@ -16,71 +17,50 @@
     }
     .login-box {
       width: 360px;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 40px 30px;
-      border-radius: 18px;
+      background: rgba(0,0,0,0.85);
+      padding: 36px 28px;
+      border-radius: 16px;
       text-align: center;
       color: #fff;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.45);
       backdrop-filter: blur(6px);
     }
-    .login-box img {
-      width: 110px;
-      margin-bottom: 15px;
-    }
-    .school-name {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 25px;
-      color: #ff7f50;
-    }
+    .login-box img { width: 110px; margin-bottom: 12px; }
+    .school-name { font-size: 18px; font-weight: 600; margin-bottom: 18px; color: #ff8a5a; }
     button {
       width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #ff7f50, #ff7043);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      padding: 13px;
+      background: linear-gradient(135deg,#ff7f50,#ff7043);
+      color: white; border: none; border-radius: 10px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: transform .12s, box-shadow .12s;
     }
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0px 8px 18px rgba(0,0,0,0.3);
-    }
-    #error {
-      color: #ff4b4b;
-      margin-top: 15px;
-      font-size: 14px;
-      display: none;
-    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.28); }
+    #error { color:#ff6b6b; margin-top:12px; font-size:14px; display:none; text-align:center; }
+    #debug { font-size:12px; color:#bbb; margin-top:10px; display:none; white-space:pre-wrap; text-align:left; }
   </style>
 </head>
 <body>
-
   <div class="login-box">
     <img src="https://i.ibb.co/Q3SJncKg/afbeelding-2025-09-12-072012841-removebg-preview.png" alt="Logo">
-    <div class="school-name">Box N Burn • Staff Dashboard</div>
-    <button onclick="login()">Log in met je Google account</button>
-    <p id="error">Je hebt geen toegang tot dit dashboard.</p>
+    <div class="school-name">Box N Burn • Personeel Dashboard</div>
+    <button id="googleBtn">🔑 Log in met Google</button>
+    <p id="error">❌ Je hebt geen toegang tot dit dashboard.</p>
+    <pre id="debug" aria-hidden="true"></pre>
   </div>
 
-  <!-- Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyDRJ8VNNtkliEUCWDUyED27niyTjtTIA6w",
-      authDomain: "box-n-burn.firebaseapp.com",
-      projectId: "box-n-burn",
-      storageBucket: "box-n-burn.firebasestorage.app",
-      messagingSenderId: "349419283461",
-      appId: "1:349419283461:web:66e931d1beeff6f643686c"
+      apiKey: "VUL_HIER_JE_API_KEY_IN",
+      authDomain: "VUL_HIER_JE_AUTHDOMAIN_IN",
+      projectId: "VUL_HIER_JE_PROJECTID_IN",
+      storageBucket: "VUL_HIER_JE_STORAGEBUCKET_IN",
+      messagingSenderId: "VUL_HIER_JE_MSGSENDERID_IN",
+      appId: "VUL_HIER_JE_APPID_IN"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -88,31 +68,62 @@
     const db = getFirestore(app);
     const provider = new GoogleAuthProvider();
 
-    async function login() {
+    const googleBtn = document.getElementById('googleBtn');
+    const errorEl = document.getElementById('error');
+    const debugEl = document.getElementById('debug');
+
+    function showError(text, debugText) {
+      errorEl.textContent = text;
+      errorEl.style.display = 'block';
+      if (debugText) { debugEl.textContent = debugText; debugEl.style.display = 'block'; }
+    }
+
+    googleBtn.addEventListener('click', async () => {
+      errorEl.style.display = 'none';
+      debugEl.style.display = 'none';
       try {
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
+        if (!user || !user.email) {
+          showError('⚠️ Geen e-mailadres gevonden op deze login.');
+          return;
+        }
 
-        // Check of e-mail bestaat in staff collectie
         const staffRef = doc(db, "staff", user.email);
         const staffSnap = await getDoc(staffRef);
 
         if (staffSnap.exists()) {
-          localStorage.setItem("loggedInUser", staffSnap.data().name);
-          localStorage.setItem("userRole", staffSnap.data().role);
-          localStorage.setItem("userPfp", staffSnap.data().pfp);
+          const data = staffSnap.data();
+          localStorage.setItem("loggedInUser", data.name || user.displayName || user.email);
+          localStorage.setItem("userRole", data.role || '');
+          localStorage.setItem("userPfp", data.pfp || user.photoURL || '');
           window.location.href = "dashboard.html";
         } else {
-          document.getElementById("error").style.display = "block";
+          showError('❌ Dit Google-account is niet toegestaan. Neem contact op met beheerder.');
         }
-      } catch (err) {
-        console.error("Login fout:", err.message);
-        document.getElementById("error").textContent = "Inloggen mislukt!";
-        document.getElementById("error").style.display = "block";
-      }
-    }
-    window.login = login;
-  </script>
 
+      } catch (err) {
+        // Specifieke fouten en uitleg in het NL
+        let message = '⚠️ Inloggen mislukt. Probeer opnieuw.';
+        let debug = `Code: ${err.code || 'unknown'}\nMessage: ${err.message || err.toString()}`;
+
+        if (err.code === 'auth/unauthorized-domain') {
+          message = 'Domein niet toegestaan. Voeg uw domein toe of contacteer support.';
+          debug += '\nActie: Voeg "localhost" en/of uw domein toe aan Authorized domains.';
+        } else if (err.code === 'auth/popup-closed-by-user') {
+          message = 'Popup gesloten. Probeer opnieuw en voltooi de Google login.';
+        } else if (err.code === 'auth/cancelled-popup-request' || err.code === 'auth/popup-blocked') {
+          message = 'De popup is geblokkeerd of er is al een popup actief. Sta popups toe of probeer opnieuw.';
+        } else if (err.code === 'auth/network-request-failed') {
+          message = 'Netwerkfout. Controleer je internetverbinding.';
+        } else if (err.code === 'auth/operation-not-allowed') {
+          message = 'Google login niet ingeschakeld in Firebase Auth (enable Google in Sign-in method).';
+        }
+
+        console.error('Login fout:', err);
+        showError(message, debug);
+      }
+    });
+  </script>
 </body>
 </html>
