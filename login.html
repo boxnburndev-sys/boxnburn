@@ -64,8 +64,8 @@
   <div class="login-box">
     <img src="https://i.ibb.co/Q3SJncKg/afbeelding-2025-09-12-072012841-removebg-preview.png" alt="Logo">
     <div class="school-name">Box N Burn • Staff Dashboard</div>
-    <button onclick="login()">🔑 Log in met Google</button>
-    <p id="error">❌ Je hebt geen toegang tot dit dashboard.</p>
+    <button onclick="login()">Log in met je Google account</button>
+    <p id="error">Je hebt geen toegang tot dit dashboard.</p>
   </div>
 
   <!-- Firebase -->
@@ -107,7 +107,7 @@
         }
       } catch (err) {
         console.error(err);
-        document.getElementById("error").textContent = "⚠️ Inloggen mislukt!";
+        document.getElementById("error").textContent = "Inloggen mislukt!";
         document.getElementById("error").style.display = "block";
       }
     }
