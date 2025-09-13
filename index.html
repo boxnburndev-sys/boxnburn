@@ -608,14 +608,14 @@ function updateLiveInfo(){
   if (todaysItems.length > 0){
     const anyOpen = todaysItems.some(it => it.spots > 0);
     if (anyOpen){
-      openBarText.innerHTML = `We zijn open vandaag — er zijn lessen gepland. <span class="small muted">Bekijk het schema</span>`;
+      openBarText.innerHTML = `We zijn open vandaag er zijn lessen gepland. <span class="small muted">Bekijk het schema</span>`;
       openBarText.style.color = '';
     } else {
       openBarText.innerHTML = `We zijn open vandaag maar alle plekken zijn vol. <span class="small muted">Check andere dagen of meld je aan voor de wachtlijst</span>`;
       openBarText.style.color = '';
     }
   } else {
-    openBarText.innerHTML = `Vandaag gesloten — er staan geen resterende lessen in de agenda.`;
+    openBarText.innerHTML = `Nu gesloten — er staan geen resterende lessen in de agenda.`;
     openBarText.style.color = '';
   }
 
