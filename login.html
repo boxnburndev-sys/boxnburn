@@ -93,7 +93,7 @@
         const result = await signInWithPopup(auth, provider);
         const user = result.user;
 
-        // Check whitelist in Firestore (by email)
+        // Check of e-mail bestaat in staff collectie
         const staffRef = doc(db, "staff", user.email);
         const staffSnap = await getDoc(staffRef);
 
@@ -106,7 +106,7 @@
           document.getElementById("error").style.display = "block";
         }
       } catch (err) {
-        console.error(err);
+        console.error("Login fout:", err.message);
         document.getElementById("error").textContent = "Inloggen mislukt!";
         document.getElementById("error").style.display = "block";
       }
