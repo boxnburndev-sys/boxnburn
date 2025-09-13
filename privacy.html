@@ -36,9 +36,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,.05);
       margin-bottom: 1.5rem;
-      transition: transform 0.2s;
     }
-    .card:hover { transform: translateY(-3px); }
     h2 {
       color: var(--primary);
       border-left: 4px solid var(--accent);
@@ -88,7 +86,54 @@
     }
     #accept-all { background: var(--accent); color: #fff; }
     #accept-essential { background: #e5e7eb; color: var(--text); }
-    #settings { background: var(--primary); color: #fff; }
+    #settings-btn { background: var(--primary); color: #fff; }
+
+    /* Settings modal */
+    #cookie-settings {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1100;
+    }
+    #cookie-settings .modal {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    }
+    #cookie-settings h3 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+    .toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0;
+    }
+    .toggle label {
+      font-weight: 500;
+    }
+    .modal-buttons {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+    .modal-buttons button {
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    #save-settings { background: var(--accent); color: #fff; }
+    #close-settings { background: #e5e7eb; color: var(--text); }
   </style>
 </head>
 <body>
@@ -98,76 +143,10 @@
   </header>
 
   <div class="container">
-
-    <div class="card">
-      <h2>Wie zijn wij?</h2>
-      <p>Deze website wordt beheerd door <strong>Box n Burn</strong>, gevestigd in Westerlo.<br>
-      Contact: <a href="mailto:info@boxnburn">info@boxnburn</a> — Tel. placeholder.</p>
-    </div>
-
-    <div class="card">
-      <h2>Welke gegevens verzamelen wij?</h2>
-      <p>Wij verzamelen enkel de volgende persoonsgegevens:</p>
-      <ul>
-        <li>Naam</li>
-        <li>E-mailadres</li>
-        <li>Telefoonnummer</li>
-      </ul>
-      <p>Deze gegevens worden uitsluitend gebruikt om uw verzoek of vraag te beantwoorden.</p>
-    </div>
-
     <div class="card">
       <h2>Cookies</h2>
-      <p>Onze website gebruikt cookies. We onderscheiden:</p>
-      <table>
-        <thead>
-          <tr><th>Type cookie</th><th>Doel</th><th>Toestemming</th><th>Bewaartermijn</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Essentiële cookies</td>
-            <td>Nodig voor de werking van de site (bijv. sessie, navigatie).</td>
-            <td>Nee</td>
-            <td>Session / max. 1 jaar</td>
-          </tr>
-          <tr>
-            <td>Analytische cookies</td>
-            <td>Statistieken en gebruiksanalyse (bv. Google Analytics met IP-anonymisatie).</td>
-            <td>Ja</td>
-            <td>Max. 13 maanden</td>
-          </tr>
-          <tr>
-            <td>Marketing cookies</td>
-            <td>Personalisatie en advertenties.</td>
-            <td>Ja</td>
-            <td>Max. 6 maanden</td>
-          </tr>
-        </tbody>
-      </table>
-      <p>Niet-essentiële cookies worden pas geplaatst na toestemming via onze cookie-banner.</p>
+      <p>Niet-essentiële cookies worden pas geplaatst na toestemming via onze cookie-banner. U kunt uw voorkeuren achteraf wijzigen via <a href="#" id="open-settings-link">cookie-instellingen</a>.</p>
     </div>
-
-    <div class="card">
-      <h2>Uw rechten</h2>
-      <p>U heeft recht op inzage, correctie, wissing, beperking, overdraagbaarheid van uw gegevens en het recht bezwaar te maken.  
-      Verzoeken: <a href="mailto:info@boxnburn">info@boxnburn</a>. Reactie binnen één maand.</p>
-    </div>
-
-    <div class="card">
-      <h2>Beveiliging</h2>
-      <p>Wij nemen passende maatregelen zoals HTTPS, toegangsbeperkingen en beveiligde opslag.</p>
-    </div>
-
-    <div class="card">
-      <h2>Klachten</h2>
-      <p>Neem contact met ons op of dien een klacht in bij de <a href="https://www.gegevensbeschermingsautoriteit.be">Gegevensbeschermingsautoriteit</a>.</p>
-    </div>
-
-    <div class="card">
-      <h2>Wijzigingen</h2>
-      <p>Wij kunnen deze verklaring aanpassen. Controleer deze pagina voor de meest recente versie.</p>
-    </div>
-
   </div>
 
   <footer>
@@ -176,53 +155,113 @@
 
   <!-- Cookie banner -->
   <div id="cookie-banner">
-    <p>Wij gebruiken cookies om onze website goed te laten werken en om uw ervaring te verbeteren. Kies uw voorkeur:</p>
+    <p>Wij gebruiken cookies om onze website goed te laten werken en uw ervaring te verbeteren.</p>
     <div class="buttons">
       <button id="accept-all">Alles accepteren</button>
       <button id="accept-essential">Alleen noodzakelijke</button>
-      <button id="settings">Instellingen</button>
+      <button id="settings-btn">Instellingen</button>
+    </div>
+  </div>
+
+  <!-- Cookie settings modal -->
+  <div id="cookie-settings">
+    <div class="modal">
+      <h3>Cookie-instellingen</h3>
+      <div class="toggle">
+        <label for="analytics">Analytische cookies</label>
+        <input type="checkbox" id="analytics">
+      </div>
+      <div class="toggle">
+        <label for="marketing">Marketing cookies</label>
+        <input type="checkbox" id="marketing">
+      </div>
+      <div class="modal-buttons">
+        <button id="close-settings">Annuleren</button>
+        <button id="save-settings">Opslaan</button>
+      </div>
     </div>
   </div>
 
   <script>
     const banner = document.getElementById('cookie-banner');
-    const acceptAllBtn = document.getElementById('accept-all');
-    const acceptEssentialBtn = document.getElementById('accept-essential');
+    const settingsModal = document.getElementById('cookie-settings');
+    const openSettingsLink = document.getElementById('open-settings-link');
+    const settingsBtn = document.getElementById('settings-btn');
+    const closeSettings = document.getElementById('close-settings');
+    const saveSettings = document.getElementById('save-settings');
+    const analyticsCheckbox = document.getElementById('analytics');
+    const marketingCheckbox = document.getElementById('marketing');
 
-    // Toon banner alleen als er nog geen keuze is gemaakt
-    if (!localStorage.getItem('cookieConsent')) {
-      banner.style.display = 'block';
+    function loadConsent() {
+      const consent = JSON.parse(localStorage.getItem('cookieConsent')) || {};
+      analyticsCheckbox.checked = consent.analytics || false;
+      marketingCheckbox.checked = consent.marketing || false;
+      return consent;
     }
 
-    acceptAllBtn.addEventListener('click', () => {
-      localStorage.setItem('cookieConsent', 'all');
-      banner.style.display = 'none';
-      enableAnalytics();
-      enableMarketing();
-    });
-
-    acceptEssentialBtn.addEventListener('click', () => {
-      localStorage.setItem('cookieConsent', 'essential');
-      banner.style.display = 'none';
-    });
+    function saveConsent(consent) {
+      localStorage.setItem('cookieConsent', JSON.stringify(consent));
+    }
 
     function enableAnalytics() {
-      // Plaats hier je analytics script, bv:
-      // const ga = document.createElement("script");
-      // ga.src = "https://www.googletagmanager.com/gtag/js?id=UA-XXXXX";
-      // document.head.appendChild(ga);
+      // Voeg hier je Analytics script toe
+      console.log("Analytics ingeschakeld");
     }
 
     function enableMarketing() {
-      // Plaats hier je marketing scripts (Facebook Pixel, etc.)
+      // Voeg hier je Marketing script toe
+      console.log("Marketing ingeschakeld");
     }
 
-    // Activeer cookies opnieuw bij herladen
-    const consent = localStorage.getItem('cookieConsent');
-    if (consent === 'all') {
+    // Initial load
+    const consent = loadConsent();
+    if (!localStorage.getItem('cookieConsent')) {
+      banner.style.display = 'block';
+    } else {
+      if (consent.analytics) enableAnalytics();
+      if (consent.marketing) enableMarketing();
+    }
+
+    // Banner buttons
+    document.getElementById('accept-all').addEventListener('click', () => {
+      const c = { analytics: true, marketing: true };
+      saveConsent(c);
+      banner.style.display = 'none';
       enableAnalytics();
       enableMarketing();
-    }
+    });
+
+    document.getElementById('accept-essential').addEventListener('click', () => {
+      const c = { analytics: false, marketing: false };
+      saveConsent(c);
+      banner.style.display = 'none';
+    });
+
+    settingsBtn.addEventListener('click', () => {
+      settingsModal.style.display = 'flex';
+    });
+
+    openSettingsLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      settingsModal.style.display = 'flex';
+    });
+
+    closeSettings.addEventListener('click', () => {
+      settingsModal.style.display = 'none';
+    });
+
+    saveSettings.addEventListener('click', () => {
+      const c = {
+        analytics: analyticsCheckbox.checked,
+        marketing: marketingCheckbox.checked
+      };
+      saveConsent(c);
+      settingsModal.style.display = 'none';
+      banner.style.display = 'none';
+
+      if (c.analytics) enableAnalytics();
+      if (c.marketing) enableMarketing();
+    });
   </script>
 </body>
 </html>
