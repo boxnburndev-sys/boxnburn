@@ -277,10 +277,10 @@
 <script type="module">
   // === Firebase Setup ===
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
 
-  // Your Firebase config (replace with your actual values from Firebase Console)
+  // Your Firebase config (replace with your own values!)
   const firebaseConfig = {
     apiKey: "AIzaSyDRJ8VNNtkliEUCWDUyED27niyTjtTIA6w",
     authDomain: "box-n-burn.firebaseapp.com",
@@ -308,25 +308,31 @@
     document.getElementById("pfp").src = pfp;
   }
 
-  function showPage(pageId, btn) {
+  // === Navbar page switching ===
+  window.showPage = function(pageId, btn) {
     document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
     document.getElementById(pageId).classList.remove("hidden");
     document.querySelectorAll(".navbar .menu button").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-  }
+    if (btn) btn.classList.add("active");
+  };
 
-  // === LEDEN ===
+  // Set default page to Home
+  window.addEventListener("DOMContentLoaded", () => {
+    const defaultBtn = document.querySelector(".navbar .menu button.active");
+    showPage("home", defaultBtn);
+  });
+
+  // === LEDEN (real-time) ===
   const memberForm = document.getElementById("memberForm");
+  const ledenCol = collection(db, "leden");
 
-  async function loadMembers() {
-    const ledenCol = collection(db, "leden");
-    const ledenSnapshot = await getDocs(ledenCol);
+  function renderMembers(snapshot) {
     const boksen = document.getElementById("ledenBoksen");
     const yoga = document.getElementById("ledenYoga");
     const spinning = document.getElementById("ledenSpinning");
     boksen.innerHTML = ""; yoga.innerHTML = ""; spinning.innerHTML = "";
 
-    ledenSnapshot.forEach(doc => {
+    snapshot.forEach(doc => {
       const m = doc.data();
       const row = `<tr><td>${doc.id}</td><td>${m.naam}</td><td>${m.contact}</td></tr>`;
       if (m.les === "Boksen") boksen.innerHTML += row;
@@ -335,29 +341,26 @@
     });
   }
 
+  onSnapshot(ledenCol, renderMembers);
+
   memberForm?.addEventListener("submit", async e => {
     e.preventDefault();
-    await addDoc(collection(db, "leden"), {
+    await addDoc(ledenCol, {
       naam: document.getElementById("memberNaam").value,
       les: document.getElementById("memberLes").value,
       contact: document.getElementById("memberContact").value
     });
     memberForm.reset();
-    loadMembers();
   });
 
-  loadMembers();
-
-  // === RESERVERINGEN ===
+  // === RESERVERINGEN (real-time) ===
   const reservationForm = document.getElementById("reservationForm");
   const reservationTable = document.getElementById("reservationTable");
+  const reservationsCol = collection(db, "reservations");
 
-  async function loadReservations() {
-    const reservationsCol = collection(db, "reservations");
-    const reservationsSnapshot = await getDocs(reservationsCol);
+  function renderReservations(snapshot) {
     reservationTable.innerHTML = "";
-
-    reservationsSnapshot.forEach(doc => {
+    snapshot.forEach(doc => {
       const r = doc.data();
       const row = `<tr>
         <td>${doc.id}</td>
@@ -371,6 +374,8 @@
     });
   }
 
+  onSnapshot(reservationsCol, renderReservations);
+
   reservationForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const newReservation = {
@@ -380,13 +385,10 @@
       tijd: document.getElementById("tijd").value,
       contact: document.getElementById("contact").value
     };
-    await addDoc(collection(db, "reservations"), newReservation);
+    await addDoc(reservationsCol, newReservation);
     alert("✅ Reservering toegevoegd!");
     reservationForm.reset();
-    loadReservations();
   });
-
-  loadReservations();
 
   // === STATUS ===
   async function fetchStatus() {
@@ -414,8 +416,8 @@
   // === PERSONEEL ===
   const personnel = [
     {name:'Katrien Boeckx', role:'CEO & Founder van Box N Burn', bio:'About.', img:'https://lh3.googleusercontent.com/AtSbkeeQXJ3MWa8Rzdg0I568tq-e9KjqkIDrxa-W2IT4xpnbgsxQqzgwX5ptekRYP4ix2rL_KP9kFCnbg3d29QicJ6p2T-euQgZN=w1500'},
-    {name:'Tristan Vansonhoven', role:'IT Specialist', bio:'IT Specialist Box N Burn.', img:'https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=OgNlLwyzRT8Q7kNvwGsLxNe&_nc_oc=Admf8UwaBIUqavwDYqbac2R436o1CbMtgCEWrhGB9z2a67xLlXPjSwaX4dljmERi9zDvaj4UjKGHhXjTjTE_U2VU&_nc_zt=23&_nc_ht=scontent-bru2-1.xx&_nc_gid=kWHPat1TTwVYwyG3qaqNFw&oh=00_AfaQt4OB3xZJMm1gucQvIbptb0INXvO7AdFZeDTSyM14iA&oe=68C4E732'},
-    {name:'Mil TSeyen', role:'Huis DJ / Technische Ondersteuning', bio:'About.', img:'https://scontent.fbru2-1.fna.fbcdn.net/v/t1.6435-9/40441548_1802350659833865_3033661819232190464_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=F20ZXvE70msQ7kNvwGK2JPB&_nc_oc=AdnIqvWrZuHpOElM9IDVwyzUlpYQrAs8vNKKLQ6Fw3oFTgkn2UDSWGfmWlI-INtv_ZzGbIM7XH2iNgiOJq4yb3T6&_nc_zt=23&_nc_ht=scontent.fbru2-1.fna&_nc_gid=e0GAxe11U5kdcWwlKopW_w&oh=00_AfaBs2Wn5CMy4E0X_aduBGs63_9M4UikhZdFFaa0KgpSQQ&oe=68EB70B6'}
+    {name:'Tristan Vansonhoven', role:'IT Specialist', bio:'IT Specialist Box N Burn.', img:'https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?...'},
+    {name:'Mil TSeyen', role:'Huis DJ / Technische Ondersteuning', bio:'About.', img:'https://scontent.fbru2-1.fna.fbcdn.net/v/t1.6435-9/40441548_1802350659833865_3033661819232190464_n.jpg?...'}
   ];
 
   function loadPersonnel() {
@@ -435,6 +437,5 @@
   }
   loadPersonnel();
 </script>
-
 </body>
 </html>
