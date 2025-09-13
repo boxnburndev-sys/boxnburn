@@ -158,6 +158,11 @@
   .click:active{transform:scale(.98)}
 </style>
 </head>
+  <div id="cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; background:rgba(0,0,0,0.9); color:#fff; padding:14px; text-align:center; z-index:3000; font-size:14px;">
+  Deze website gebruikt cookies voor een betere ervaring. 
+  <a href="privacy.html" style="color:#06b6d4; text-decoration:underline;">Meer info</a>.
+  <button id="accept-cookies" style="margin-left:12px; background:#06b6d4; color:#000; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">Akkoord</button>
+  </div>
 <body>
   <header role="banner">
     <div class="brand">
@@ -666,5 +671,18 @@ function init(){
 
 document.addEventListener('DOMContentLoaded', init);
 </script>
+  <script>
+  // Check of gebruiker al akkoord heeft gegeven
+  if (!localStorage.getItem("cookiesAccepted")) {
+    document.getElementById("cookie-banner").style.display = "block";
+  }
+
+  // Als gebruiker op "Akkoord" klikt
+  document.getElementById("accept-cookies").addEventListener("click", function() {
+    localStorage.setItem("cookiesAccepted", "true");
+    document.getElementById("cookie-banner").style.display = "none";
+  });
+</script>
+
 </body>
 </html>
