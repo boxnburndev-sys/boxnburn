@@ -300,6 +300,7 @@
 const SCHEDULE = [
   {id:1, day:'Maandag', time:'18:00 - 19:00', class:'Yoga', trainer:'Katrien Boeckx', spots:0},
   {id:4, day:'Dinsdag', time:'18:00 - 19:00', class:'Box Les', trainer:'Katrien Boeckx', spots:0},
+  {id:5, day:'Dinsdag', time:'12:00 - 14:00', class:'Info Moment', trainer:'', spots:0},
   {id:7, day:'Woensdag', time:'18:00 - 19:00', class:'Spinning', trainer:'Katrien Boeckx', spots:0},
   {id:10, day:'Donderdag', time:'18:00 - 19:00', class:'Yoga', trainer:'Katrien Boeckx', spots:0},
   {id:13, day:'Vrijdag', time:'18:00 - 19:00', class:'Box', trainer:'Katrien Boeckx', spots:0},
@@ -326,13 +327,13 @@ function formatDate(d=new Date()){return d.toLocaleDateString('nl-NL',{weekday:'
 function formatTime(d=new Date()){ return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':') }
 
 const DUTCH_TO_DAY = {
-  'Zondag': 0,
   'Maandag': 1,
   'Dinsdag': 2,
   'Woensdag': 3,
   'Donderdag': 4,
   'Vrijdag': 5,
-  'Zaterdag': 6
+  'Zaterdag': 6,
+  'Zondag': 7
 };
 
 function parseTimes(timeString){
