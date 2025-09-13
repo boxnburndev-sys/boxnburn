@@ -2,127 +2,117 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <title>Staff Login</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       background: url('https://i.ibb.co/9HqVTqkv/Boxing-Spinning-Yoga.png') no-repeat center center;
       background-size: cover;
+      font-family: 'Segoe UI', Arial, sans-serif;
     }
     .login-box {
-      width: 380px;
-      background: radial-gradient(circle, black 0%, #080808 50%, red 70%);
-      border-radius: 20px;
+      width: 360px;
+      background: rgba(0, 0, 0, 0.8);
       padding: 40px 30px;
+      border-radius: 18px;
       text-align: center;
       color: #fff;
-      border: 2px solid #222;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      backdrop-filter: blur(6px);
     }
-    .login-box img { width: 120px; margin-bottom: 15px; }
-    .school-name { font-size: 16px; font-weight: 500; margin-bottom: 25px; color: #ccc; }
-    .input-group { position: relative; margin-bottom: 20px; display: flex; align-items: center; }
-    .input-group input {
-      flex: 1; height: 45px; padding: 0 45px 0 15px;
-      border: 1px solid #ccc; border-radius: 10px; font-size: 15px;
-      background: #fff; color: #000; line-height: 45px;
+    .login-box img {
+      width: 110px;
+      margin-bottom: 15px;
     }
-    .input-group input::placeholder { color: #555; }
-    .input-group input:focus { outline: none; border-color: #ff7f50; background: #f0f0f0; }
-    .input-group .icon {
-      position: absolute; right: 15px; font-size: 18px; color: #666; cursor: pointer;
+    .school-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #ff7f50;
     }
-    .forgot { font-size: 12px; color: #aaa; margin-bottom: 20px; display: block; text-align: left; }
     button {
-      width: 100%; padding: 14px; background: linear-gradient(135deg, #ff7f50, #ff7043);
-      color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;
-      cursor: pointer; margin-bottom: 15px; transition: transform 0.2s, box-shadow 0.2s;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ff7f50, #ff7043);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    button:hover { transform: translateY(-2px); box-shadow: 0px 8px 20px rgba(0,0,0,0.3); }
-    #error { color: #d00; margin-top: 10px; display: none; font-size: 13px; text-align: center; }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0px 8px 18px rgba(0,0,0,0.3);
+    }
+    #error {
+      color: #ff4b4b;
+      margin-top: 15px;
+      font-size: 14px;
+      display: none;
+    }
   </style>
 </head>
 <body>
 
   <div class="login-box">
     <img src="https://i.ibb.co/Q3SJncKg/afbeelding-2025-09-12-072012841-removebg-preview.png" alt="Logo">
-    <div class="school-name">Box N Burn • Dashboard</div>
-
-    <div class="input-group">
-      <input type="email" id="email" placeholder="E-mailadres">
-      <span class="icon">👤</span>
-    </div>
-
-    <div class="input-group">
-      <input type="password" id="password" placeholder="Wachtwoord">
-      <span class="icon" id="togglePassword">👁</span>
-    </div>
-
-    <div class="forgot">🔒 Wachtwoord vergeten?</div>
-
-    <button id="loginBtn">Aanmelden</button>
-    <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
+    <div class="school-name">Box N Burn • Staff Dashboard</div>
+    <button onclick="login()">🔑 Log in met Google</button>
+    <p id="error">❌ Je hebt geen toegang tot dit dashboard.</p>
   </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
+    const firebaseConfig = {
+      apiKey: "YOUR_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_ID",
+      appId: "YOUR_ID"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
 
-  document.getElementById("loginBtn").addEventListener("click", async () => {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const errorBox = document.getElementById("error");
+    async function login() {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
 
-    try {
-      const userCred = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCred.user;
+        // Check whitelist in Firestore (by email)
+        const staffRef = doc(db, "staff", user.email);
+        const staffSnap = await getDoc(staffRef);
 
-      // load staff profile from Firestore (collection: staff, docId = user.uid)
-      const docRef = doc(db, "staff", user.uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const staffData = docSnap.data();
-        localStorage.setItem("loggedInUser", staffData.name || user.email);
-        localStorage.setItem("userRole", staffData.role || "Staff");
-        localStorage.setItem("userPfp", staffData.pfp || "default.png");
-      } else {
-        localStorage.setItem("loggedInUser", user.email);
-        localStorage.setItem("userRole", "Staff");
-        localStorage.setItem("userPfp", "default.png");
+        if (staffSnap.exists()) {
+          localStorage.setItem("loggedInUser", staffSnap.data().name);
+          localStorage.setItem("userRole", staffSnap.data().role);
+          localStorage.setItem("userPfp", staffSnap.data().pfp);
+          window.location.href = "dashboard.html";
+        } else {
+          document.getElementById("error").style.display = "block";
+        }
+      } catch (err) {
+        console.error(err);
+        document.getElementById("error").textContent = "⚠️ Inloggen mislukt!";
+        document.getElementById("error").style.display = "block";
       }
-
-      window.location.href = "dashboard.html";
-    } catch (err) {
-      errorBox.style.display = "block";
-      errorBox.textContent = "❌ Login mislukt: " + err.message;
-      setTimeout(() => errorBox.style.display = "none", 4000);
     }
-  });
-
-  document.getElementById("togglePassword").addEventListener("click", () => {
-    const p = document.getElementById("password");
-    p.type = p.type === "password" ? "text" : "password";
-  });
-</script>
+    window.login = login;
+  </script>
 
 </body>
 </html>
