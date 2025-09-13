@@ -3,97 +3,226 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Privacyverklaring</title>
+  <title>Privacyverklaring - Box n Burn</title>
   <style>
-    body { font-family: Arial, sans-serif; line-height:1.6; color:#222; margin:0; padding:20px; background:#f7f7f9; }
-    .container { max-width:800px; margin:0 auto; background:#fff; padding:24px; border-radius:8px; box-shadow: 0 4px 12px rgba(0,0,0,.05);}
-    h1,h2 { color:#0b2545; }
-    a { color:#0b61d1; }
-    .muted { color:#555; font-size:0.9rem; }
-    table { border-collapse:collapse; width:100%; margin-top:8px; }
-    th,td { border:1px solid #ddd; padding:8px; text-align:left; }
-    th { background:#f0f0f0; }
+    :root {
+      --primary: #0b2545;
+      --accent: #f97316;
+      --bg: #f5f6fa;
+      --text: #222;
+      --muted: #555;
+      --card-bg: #fff;
+    }
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      line-height: 1.7;
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+    }
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 2rem;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 2rem; }
+    header p { margin: 0.2rem 0 0; font-size: 0.95rem; color: #d1d5db; }
+    .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    .card {
+      background: var(--card-bg);
+      padding: 1.5rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+      margin-bottom: 1.5rem;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); }
+    h2 {
+      color: var(--primary);
+      border-left: 4px solid var(--accent);
+      padding-left: 0.5rem;
+      margin-top: 0;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; font-size: 0.95rem; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background: var(--primary); color: #fff; }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* Cookie banner */
+    #cookie-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border-top: 3px solid var(--accent);
+      box-shadow: 0 -2px 10px rgba(0,0,0,.1);
+      padding: 1rem 1.5rem;
+      display: none;
+      z-index: 1000;
+    }
+    #cookie-banner p {
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+    }
+    #cookie-banner .buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    #cookie-banner button {
+      border: none;
+      border-radius: 6px;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    #accept-all { background: var(--accent); color: #fff; }
+    #accept-essential { background: #e5e7eb; color: var(--text); }
+    #settings { background: var(--primary); color: #fff; }
   </style>
 </head>
 <body>
-  <div class="container">
+  <header>
     <h1>Privacyverklaring</h1>
-    <p class="muted">Laatst bijgewerkt: 13 september 2025</p>
+    <p>Laatst bijgewerkt: 13 september 2025</p>
+  </header>
 
-    <h2>Wie zijn wij?</h2>
-    <p>Deze website wordt beheerd door <strong>[[Bedrijfsnaam]]</strong>, gevestigd op [[Adres, Stad]].  
-    Contact: <a href="mailto:privacy@voorbeeld.be">privacy@voorbeeld.be</a> — Tel. [[telefoonnummer]].</p>
+  <div class="container">
 
-    <h2>Welke gegevens verzamelen wij?</h2>
-    <p>Wij verzamelen enkel de volgende persoonsgegevens:</p>
-    <ul>
-      <li>Naam</li>
-      <li>E-mailadres</li>
-      <li>Telefoonnummer</li>
-    </ul>
-    <p>Deze gegevens worden uitsluitend gebruikt om uw verzoek of vraag te beantwoorden.</p>
+    <div class="card">
+      <h2>Wie zijn wij?</h2>
+      <p>Deze website wordt beheerd door <strong>Box n Burn</strong>, gevestigd in Westerlo.<br>
+      Contact: <a href="mailto:info@boxnburn">info@boxnburn</a> — Tel. placeholder.</p>
+    </div>
 
-    <h2>Cookies</h2>
-    <p>Onze website gebruikt cookies. Een cookie is een klein tekstbestand dat bij een bezoek aan onze site wordt opgeslagen op uw apparaat. We onderscheiden:</p>
+    <div class="card">
+      <h2>Welke gegevens verzamelen wij?</h2>
+      <p>Wij verzamelen enkel de volgende persoonsgegevens:</p>
+      <ul>
+        <li>Naam</li>
+        <li>E-mailadres</li>
+        <li>Telefoonnummer</li>
+      </ul>
+      <p>Deze gegevens worden uitsluitend gebruikt om uw verzoek of vraag te beantwoorden.</p>
+    </div>
 
-    <table>
-      <thead>
-        <tr><th>Type cookie</th><th>Doel</th><th>Toestemming</th><th>Bewaartermijn</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Essentiële cookies</td>
-          <td>Nodig voor de werking van de site (bijv. sessie, navigatie).</td>
-          <td>Nee</td>
-          <td>Session / max. 1 jaar</td>
-        </tr>
-        <tr>
-          <td>Analytische cookies</td>
-          <td>Statistieken en gebruiksanalyse (bv. Google Analytics met IP-anonymisatie).</td>
-          <td>Ja</td>
-          <td>Max. 13 maanden</td>
-        </tr>
-        <tr>
-          <td>Marketing cookies</td>
-          <td>Personalisatie en advertenties.</td>
-          <td>Ja</td>
-          <td>Max. 6 maanden</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <h2>Cookies</h2>
+      <p>Onze website gebruikt cookies. We onderscheiden:</p>
+      <table>
+        <thead>
+          <tr><th>Type cookie</th><th>Doel</th><th>Toestemming</th><th>Bewaartermijn</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Essentiële cookies</td>
+            <td>Nodig voor de werking van de site (bijv. sessie, navigatie).</td>
+            <td>Nee</td>
+            <td>Session / max. 1 jaar</td>
+          </tr>
+          <tr>
+            <td>Analytische cookies</td>
+            <td>Statistieken en gebruiksanalyse (bv. Google Analytics met IP-anonymisatie).</td>
+            <td>Ja</td>
+            <td>Max. 13 maanden</td>
+          </tr>
+          <tr>
+            <td>Marketing cookies</td>
+            <td>Personalisatie en advertenties.</td>
+            <td>Ja</td>
+            <td>Max. 6 maanden</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Niet-essentiële cookies worden pas geplaatst na toestemming via onze cookie-banner.</p>
+    </div>
 
-    <p>Niet-essentiële cookies (analytisch/marketing) worden pas geplaatst nadat u hiervoor toestemming heeft gegeven via onze cookie-banner. U kunt uw voorkeuren op elk moment wijzigen via de instellingen in de banner of uw browser.</p>
+    <div class="card">
+      <h2>Uw rechten</h2>
+      <p>U heeft recht op inzage, correctie, wissing, beperking, overdraagbaarheid van uw gegevens en het recht bezwaar te maken.  
+      Verzoeken: <a href="mailto:info@boxnburn">info@boxnburn</a>. Reactie binnen één maand.</p>
+    </div>
 
-    <h2>Waarom verwerken wij deze gegevens?</h2>
-    <ul>
-      <li>Om te reageren op uw bericht (contactformulier).</li>
-      <li>Om onze website technisch te laten functioneren (essentiële cookies).</li>
-      <li>Met uw toestemming: analyse en verbetering van de website (analytische cookies).</li>
-      <li>Met uw toestemming: marketing en gepersonaliseerde inhoud (marketing cookies).</li>
-    </ul>
+    <div class="card">
+      <h2>Beveiliging</h2>
+      <p>Wij nemen passende maatregelen zoals HTTPS, toegangsbeperkingen en beveiligde opslag.</p>
+    </div>
 
-    <h2>Hoe lang bewaren wij uw gegevens?</h2>
-    <ul>
-      <li>Contactgegevens: tot uw vraag is afgehandeld en maximaal 12 maanden daarna.</li>
-      <li>Cookies: zie bewaartermijnen in de tabel hierboven.</li>
-    </ul>
+    <div class="card">
+      <h2>Klachten</h2>
+      <p>Neem contact met ons op of dien een klacht in bij de <a href="https://www.gegevensbeschermingsautoriteit.be">Gegevensbeschermingsautoriteit</a>.</p>
+    </div>
 
-    <h2>Delen met derden</h2>
-    <p>Wij delen uw gegevens niet met derden, behalve met dienstverleners die de website hosten of analyseren, en alleen wanneer dat noodzakelijk is. Met deze partijen sluiten wij verwerkersovereenkomsten.</p>
+    <div class="card">
+      <h2>Wijzigingen</h2>
+      <p>Wij kunnen deze verklaring aanpassen. Controleer deze pagina voor de meest recente versie.</p>
+    </div>
 
-    <h2>Uw rechten</h2>
-    <p>U heeft recht op inzage, correctie, wissing, beperking, overdraagbaarheid van uw gegevens en het recht bezwaar te maken tegen verwerking.  
-    U kunt uw toestemming voor cookies op elk moment intrekken.  
-    Dien verzoeken in via <a href="mailto:info@boxnburn">info@boxnburn</a>. Wij reageren binnen één maand.</p>
-
-    <h2>Beveiliging</h2>
-    <p>Wij nemen passende maatregelen om uw persoonsgegevens te beschermen, zoals HTTPS, toegangsbeperkingen en beveiligde opslag.</p>
-
-    <h2>Klachten</h2>
-    <p>Heeft u een klacht? Neem contact met ons op. U heeft ook het recht een klacht in te dienen bij de <a href="https://www.gegevensbeschermingsautoriteit.be">Gegevensbeschermingsautoriteit</a>.</p>
-
-    <h2>Wijzigingen</h2>
-    <p>Wij kunnen deze verklaring aanpassen. Controleer deze pagina voor de meest recente versie.</p>
   </div>
+
+  <footer>
+    &copy; 2025 Box n Burn — Privacyverklaring
+  </footer>
+
+  <!-- Cookie banner -->
+  <div id="cookie-banner">
+    <p>Wij gebruiken cookies om onze website goed te laten werken en om uw ervaring te verbeteren. Kies uw voorkeur:</p>
+    <div class="buttons">
+      <button id="accept-all">Alles accepteren</button>
+      <button id="accept-essential">Alleen noodzakelijke</button>
+      <button id="settings">Instellingen</button>
+    </div>
+  </div>
+
+  <script>
+    const banner = document.getElementById('cookie-banner');
+    const acceptAllBtn = document.getElementById('accept-all');
+    const acceptEssentialBtn = document.getElementById('accept-essential');
+
+    // Toon banner alleen als er nog geen keuze is gemaakt
+    if (!localStorage.getItem('cookieConsent')) {
+      banner.style.display = 'block';
+    }
+
+    acceptAllBtn.addEventListener('click', () => {
+      localStorage.setItem('cookieConsent', 'all');
+      banner.style.display = 'none';
+      enableAnalytics();
+      enableMarketing();
+    });
+
+    acceptEssentialBtn.addEventListener('click', () => {
+      localStorage.setItem('cookieConsent', 'essential');
+      banner.style.display = 'none';
+    });
+
+    function enableAnalytics() {
+      // Plaats hier je analytics script, bv:
+      // const ga = document.createElement("script");
+      // ga.src = "https://www.googletagmanager.com/gtag/js?id=UA-XXXXX";
+      // document.head.appendChild(ga);
+    }
+
+    function enableMarketing() {
+      // Plaats hier je marketing scripts (Facebook Pixel, etc.)
+    }
+
+    // Activeer cookies opnieuw bij herladen
+    const consent = localStorage.getItem('cookieConsent');
+    if (consent === 'all') {
+      enableAnalytics();
+      enableMarketing();
+    }
+  </script>
 </body>
 </html>
