@@ -8,34 +8,40 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
-      --radius:14px; --max-w:1200px; --transition:250ms cubic-bezier(.2,.9,.3,1);
+      --bg:#0f1724; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
+      --radius:14px; --max-w:1200px; --ease:cubic-bezier(.4,.9,.3,1);
     }
     *{box-sizing:border-box}
     body{
       margin:0;font-family:Roboto,system-ui,Arial;
       background:linear-gradient(135deg,#071021 0%,#071833 60%);
-      color:#e6eef8;overflow-x:hidden;
+      color:#e6eef8;overflow-x:hidden;opacity:0;transition:opacity .5s var(--ease);
     }
-    .container{max-width:var(--max-w);margin:110px auto 60px;padding:24px;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+    body.loaded{opacity:1}
+
+    .container{max-width:var(--max-w);margin:110px auto 60px;padding:24px;opacity:0;transform:translateY(15px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+    .container.visible{opacity:1;transform:translateY(0)}
 
     header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;
       padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));
-      border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200;opacity:0;transform:translateY(-20px);transition:opacity .6s ease,transform .6s ease}
+      border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200;opacity:0;transform:translateY(-15px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+    header.visible{opacity:1;transform:translateY(0)}
+
     .brand{display:flex;gap:12px;align-items:center}
     .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
     .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
     nav{display:flex;gap:8px}
-    .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none;transition:all .3s}
+    .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none;transition:all .3s var(--ease)}
     .nav-links a.active, .nav-links a:hover{background:var(--glass);color:#fff;transform:translateY(-2px)}
 
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0;transition:transform .2s, box-shadow .2s}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,0.4)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0;transition:transform .2s var(--ease), box-shadow .2s var(--ease)}
+    .btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 4px 12px rgba(0,0,0,0.35)}
     .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
 
     .jobs{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:22px}
     .job-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+      padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(25px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+    .job-card.visible{opacity:1;transform:translateY(0)}
     .job-card h3{margin:0 0 8px}
     .job-card p{color:var(--muted)}
 
@@ -50,21 +56,32 @@
     .message.success{color:#4ade80}
     .message.error{color:#f87171}
 
-    footer{margin-top:28px;text-align:center;color:var(--muted);padding:28px;opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+    footer{margin-top:28px;text-align:center;color:var(--muted);padding:28px;opacity:0;transform:translateY(15px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+    footer.visible{opacity:1;transform:translateY(0)}
 
     @media (max-width:760px){.jobs{grid-template-columns:1fr}.container{margin-top:96px;padding:12px}}
 
     /* Preloader */
     #preloader{
       position:fixed;inset:0;background:#071021;display:flex;align-items:center;justify-content:center;z-index:2000;
-      color:var(--accent);font-weight:700;font-size:20px;letter-spacing:2px;animation:fadeOut 1s ease 2s forwards;
+      flex-direction:column;gap:20px;color:#fff;font-weight:700;font-size:18px;letter-spacing:2px;
+      transition:opacity .6s var(--ease), visibility .6s var(--ease);
     }
-    @keyframes fadeOut{to{opacity:0;visibility:hidden}}
+    #preloader.fade{opacity:0;visibility:hidden}
+    .loader{
+      width:70px;height:70px;border:5px solid rgba(255,255,255,0.15);border-top:5px solid var(--accent);
+      border-radius:50%;animation:spin 1s linear infinite;
+      box-shadow:0 0 20px rgba(255,107,107,0.6);
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
   <!-- Preloader -->
-  <div id="preloader">Box N Burn...</div>
+  <div id="preloader">
+    <div class="loader"></div>
+    Laden...
+  </div>
 
   <header>
     <div class="brand">
@@ -158,21 +175,32 @@
       });
     });
 
-    // Reveal animations
+    // Preloader and reveals
     window.addEventListener("load",()=>{
-      document.querySelector("header").style.opacity=1;
-      document.querySelector("header").style.transform="translateY(0)";
-      document.querySelector(".container").style.opacity=1;
-      document.querySelector(".container").style.transform="translateY(0)";
-      document.querySelector("footer").style.opacity=1;
-      document.querySelector("footer").style.transform="translateY(0)";
+      const preloader=document.getElementById("preloader");
+      setTimeout(()=>{
+        preloader.classList.add("fade");
+        document.body.classList.add("loaded");
+        document.querySelector("header").classList.add("visible");
+        document.querySelector(".container").classList.add("visible");
+        document.querySelector("footer").classList.add("visible");
 
-      // Job cards staggered
-      document.querySelectorAll(".job-card").forEach((card,i)=>{
-        setTimeout(()=>{
-          card.style.opacity=1;
-          card.style.transform="translateY(0)";
-        },300*i);
+        // Stagger job cards
+        document.querySelectorAll(".job-card").forEach((card,i)=>{
+          setTimeout(()=>{
+            card.classList.add("visible");
+          },200*i+200);
+        });
+      },1000); // quicker transition
+    });
+
+    // Smooth page fade on navigation
+    document.querySelectorAll("a[href]").forEach(a=>{
+      a.addEventListener("click",e=>{
+        if(a.getAttribute("href").startsWith("#")) return;
+        e.preventDefault();
+        document.body.style.opacity=0;
+        setTimeout(()=>{window.location=a.href},400);
       });
     });
   </script>
