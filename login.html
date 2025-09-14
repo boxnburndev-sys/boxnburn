@@ -9,20 +9,19 @@
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       background: url('https://i.ibb.co/5XkVnKjY/Boxing-Spinning-Yoga.png') no-repeat center center fixed;
       background-size: cover;
       position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
     }
     body::before {
       content: "";
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.45);
       backdrop-filter: blur(10px);
       z-index: 0;
@@ -43,6 +42,7 @@
       transition: background 0.2s;
     }
     .back-btn:hover {background: #005a9e;}
+
     .login-container {
       position: relative;
       z-index: 1;
@@ -106,18 +106,11 @@
       font-size: 14px;
       text-align: center;
     }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-    @keyframes popIn {
-      0% {opacity: 0; transform: scale(0.7);}
-      100% {opacity: 1; transform: scale(1);}
-    }
+
+    /* Welcome overlay */
     .welcome-screen {
       position: fixed;
-      top:0; left:0;
-      width:100%; height:100%;
+      inset:0;
       background:#0078d7;
       color:#fff;
       display:flex;
@@ -155,9 +148,34 @@
       background:#fff;
       animation: loadAnim 2.5s forwards;
     }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes popIn {
+      0% {opacity: 0; transform: scale(0.7);}
+      100% {opacity: 1; transform: scale(1);}
+    }
     @keyframes loadAnim {
       from {width:0;}
       to {width:100%;}
+    }
+
+    /* Responsive tweaks */
+    @media (max-width:768px){
+      .login-container {padding:16px}
+      .login-container img {width:90px;height:90px}
+      .welcome {font-size:16px}
+      button {font-size:15px;padding:12px}
+    }
+    @media (max-width:480px){
+      .back-btn {font-size:12px;padding:6px 10px}
+      .login-container img {width:75px;height:75px}
+      .welcome {font-size:14px}
+      input {font-size:14px}
+      button {font-size:14px}
     }
   </style>
 </head>
@@ -175,15 +193,18 @@
     <button id="loginBtn" onclick="login()">Aanmelden</button>
     <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
   </div>
+
   <div class="welcome-screen" id="welcomeScreen" style="display:none;">
     <img id="welcomePfp" src="">
     <h2 id="welcomeMessage"></h2>
     <div class="loading-bar"><div class="loading-fill"></div></div>
   </div>
+
 <script>
   const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48"; 
   const API_KEY = "AIzaSyDIo56Keur-KzkIECQ0bih0fia9DVkpkng";
   let users = {};
+
   async function fetchUsers() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Users!A2:E?key=${API_KEY}`;
     const res = await fetch(url);
@@ -195,6 +216,7 @@
       users[username] = { password, role, bio, pfp };
     });
   }
+
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
   const passwordGroup = document.getElementById("passwordGroup");
@@ -202,6 +224,7 @@
   const pfp = document.getElementById("pfp");
   const welcomeText = document.getElementById("welcomeText");
   const error = document.getElementById("error");
+
   usernameInput.addEventListener("input", () => {
     const name = usernameInput.value.trim();
     if (users[name]) {
@@ -218,6 +241,7 @@
       loginBtn.style.display = "none";
     }
   });
+
   function login() {
     const user = usernameInput.value.trim();
     const pass = passwordInput.value.trim();
@@ -226,6 +250,7 @@
       localStorage.setItem("userRole", users[user].role);
       localStorage.setItem("userBio", users[user].bio);
       localStorage.setItem("userPfp", users[user].pfp);
+
       document.querySelector(".login-container").style.display = "none";
       const ws = document.getElementById("welcomeScreen");
       document.getElementById("welcomePfp").src = users[user].pfp;
@@ -237,6 +262,7 @@
       setTimeout(() => error.style.display = "none", 3000);
     }
   }
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
@@ -244,6 +270,7 @@
       }
     }
   });
+
   fetchUsers();
 </script>
 </body>
