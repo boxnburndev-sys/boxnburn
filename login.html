@@ -3,6 +3,7 @@
 <head>
   <script src="favicon.js"></script>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Box N Burn Login</title>
   <style>
     * {margin: 0; padding: 0; box-sizing: border-box;}
@@ -26,17 +27,35 @@
       backdrop-filter: blur(10px);
       z-index: 0;
     }
+    .back-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(0,120,215,0.9);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .back-btn:hover {background: #005a9e;}
     .login-container {
       position: relative;
       z-index: 1;
-      width: 400px;
+      width: 90%;
+      max-width: 400px;
       text-align: center;
       color: #fff;
       animation: fadeIn 0.8s ease-out;
+      padding: 20px;
     }
     .login-container img {
-      width: 130px;
-      height: 130px;
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
       margin: 0 auto 15px;
       border: 3px solid #fff;
@@ -45,11 +64,11 @@
       animation: popIn 0.4s ease-in-out;
     }
     .welcome {
-      font-size: 20px;
+      font-size: 18px;
       margin-bottom: 15px;
       display: none;
     }
-    .input-group {margin-bottom: 20px;}
+    .input-group {margin-bottom: 15px;}
     .input-group input {
       width: 100%;
       height: 45px;
@@ -107,20 +126,23 @@
       align-items:center;
       z-index:9999;
       animation: fadeIn 0.5s ease-in-out;
+      padding:20px;
+      text-align:center;
     }
     .welcome-screen img {
-      width:100px; height:100px;
+      width:90px; height:90px;
       border-radius:50%;
       margin-bottom:20px;
       border:3px solid #fff;
       object-fit:cover;
     }
     .welcome-screen h2 {
-      font-size:24px;
+      font-size:20px;
       margin-bottom:20px;
     }
     .loading-bar {
-      width:200px;
+      width:70%;
+      max-width:200px;
       height:8px;
       background:rgba(255,255,255,0.3);
       border-radius:5px;
@@ -140,6 +162,7 @@
   </style>
 </head>
 <body>
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Terug</button>
   <div class="login-container">
     <img id="pfp" src="" alt="Profile Picture">
     <div class="welcome" id="welcomeText"></div>
@@ -152,18 +175,15 @@
     <button id="loginBtn" onclick="login()">Aanmelden</button>
     <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
   </div>
-
   <div class="welcome-screen" id="welcomeScreen" style="display:none;">
     <img id="welcomePfp" src="">
     <h2 id="welcomeMessage"></h2>
     <div class="loading-bar"><div class="loading-fill"></div></div>
   </div>
-
 <script>
   const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48"; 
   const API_KEY = "AIzaSyDIo56Keur-KzkIECQ0bih0fia9DVkpkng";
   let users = {};
-
   async function fetchUsers() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Users!A2:E?key=${API_KEY}`;
     const res = await fetch(url);
@@ -175,7 +195,6 @@
       users[username] = { password, role, bio, pfp };
     });
   }
-
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
   const passwordGroup = document.getElementById("passwordGroup");
@@ -183,7 +202,6 @@
   const pfp = document.getElementById("pfp");
   const welcomeText = document.getElementById("welcomeText");
   const error = document.getElementById("error");
-
   usernameInput.addEventListener("input", () => {
     const name = usernameInput.value.trim();
     if (users[name]) {
@@ -200,7 +218,6 @@
       loginBtn.style.display = "none";
     }
   });
-
   function login() {
     const user = usernameInput.value.trim();
     const pass = passwordInput.value.trim();
@@ -220,7 +237,6 @@
       setTimeout(() => error.style.display = "none", 3000);
     }
   }
-
   document.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
@@ -228,7 +244,6 @@
       }
     }
   });
-
   fetchUsers();
 </script>
 </body>
