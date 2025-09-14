@@ -35,10 +35,32 @@
 </head>
 <body>
   <nav class="navbar">
-    <div class="brand">
-      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn Logo">
-      Box N Burn Dashboard
-    </div>
+    <head>
+  <style>
+    .brand-logo {
+      width: 60px;         /* Adjust size as needed */
+      height: 60px;        /* Keep it square for circle */
+      border-radius: 50%;  /* Makes the image circular */
+      object-fit: cover;   /* Crops nicely inside the circle */
+    }
+
+    .brand {
+      display: flex;
+      align-items: center; /* Vertically center text with logo */
+      gap: 10px;           /* Space between logo and text */
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="brand">
+    <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn Logo" class="brand-logo">
+    Box N Burn Dashboard
+  </div>
+</body>
+
 
     <div class="menu" id="menuButtons">
       <button onclick="showPage('home', this)" class="active">Home</button>
