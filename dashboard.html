@@ -44,6 +44,7 @@
       <button onclick="showPage('leden', this)">Leden</button>
       <button onclick="showPage('reserveringen', this)">Reserveringen</button>
       <button onclick="showPage('status', this)">Status</button>
+      <button id="testBtn" onclick="showPage('test', this)" style="display:none;">Test</button>
     </div>
     <div class="user-info">
       <div class="details">
@@ -84,13 +85,17 @@
       <h2>Website Status</h2>
       <div class="status-grid" id="statusGrid"><p>Laden...</p></div>
     </div>
+
+    <div id="test" class="page hidden card">
+      <h2>🔧 Test Page (IT Specialist Only)</h2>
+      <p>Alleen zichtbaar voor de rol <b>IT Specialist</b>.</p>
+    </div>
   </div>
 
 <script>
   const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
   const API_KEY = "AIzaSyDIo56Keur-KzkIECQ0bih0fia9DVkpkng";
 
-  // Navigation
   window.showPage = function(pageId, btn) {
     document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
     document.getElementById(pageId).classList.remove("hidden");
@@ -98,7 +103,6 @@
     if (btn) btn.classList.add("active");
   };
 
-  // Google Sheets fetch
   async function fetchSheetData(sheetId, range) {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${API_KEY}`;
     const res = await fetch(url);
@@ -131,7 +135,6 @@
     });
   }
 
-  // Status
   async function fetchStatus() {
     try {
       const res = await fetch("https://www.githubstatus.com/api/v2/summary.json");
@@ -149,7 +152,6 @@
     }
   }
 
-  // Personnel
   const personnel = [
     {name:'Katrien Boeckx', role:'CEO & Founder', bio:'', img:'https://lh3.googleusercontent.com/AtSbkeeQXJ3MWa8Rzdg0I568tq-e9KjqkIDrxa-W2IT4xpnbgsxQqzgwX5ptekRYP4ix2rL_KP9kFCnbg3d29QicJ6p2T-euQgZN=w1500'},
     {name:'Tristan Vansonhoven', role:'IT Specialist', bio:'', img:'https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=a4xLxDmSr6AQ7kNvwFw8qLW&_nc_oc=Admkh9FCuybPIq81rH5N3T5ZvNncEKznhFbw6kD0vtI0sZcvREvg4k63MIWyDwOElDc_8AQ6gbrJXMm9owKqMuT6&_nc_zt=23&_nc_ht=scontent-bru2-1.xx&_nc_gid=gTs_ypYoiXUUmPH5tCbsaA&oh=00_AfYw75JWzkZONRXVS2QIcOkLCooS6hzr793U3kwA5qmj1w&oe=68CCD032'},
@@ -166,24 +168,29 @@
     });
   }
 
-  // User info from localStorage
   function loadUserInfo() {
     const user = localStorage.getItem("loggedInUser");
     const role = localStorage.getItem("userRole");
     const pfp = localStorage.getItem("userPfp");
 
     if (!user) {
-      // not logged in, redirect back
-      window.location.href = "index.html";
+      window.location.href = "login.html";
       return;
     }
 
     document.getElementById("username").textContent = user;
     document.getElementById("role").textContent = role;
     document.getElementById("pfp").src = pfp;
+
+    if (role === "IT Specialist") {
+      document.getElementById("testBtn").style.display = "inline-block";
+    } else {
+      if (window.location.hash.includes("test") || document.querySelector("#test:not(.hidden)")) {
+        window.location.href = "home.html";
+      }
+    }
   }
 
-  // Initial load
   loadLedenFromSheet();
   loadReserveringenFromSheet();
   fetchStatus();
