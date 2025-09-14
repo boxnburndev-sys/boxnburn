@@ -3,250 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard - Box N Burn</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    * {margin:0;padding:0;box-sizing:border-box;}
-    body {
-      font-family:'Segoe UI',Arial,sans-serif;
-      background:#f5f7fb;
-      color:#333;
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
-    header {
-      background:#0078d7;
-      color:#fff;
-      padding:15px 25px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      box-shadow:0 2px 5px rgba(0,0,0,0.2);
-      position:sticky;
-      top:0;
-      z-index:1000;
-    }
-    .logo {font-size:22px;font-weight:bold;letter-spacing:1px;}
-    nav a {
-      color:#fff;
-      margin:0 12px;
-      text-decoration:none;
-      font-weight:500;
-      transition:opacity 0.2s;
-    }
-    nav a:hover {opacity:0.8;}
-    .user-info {display:flex;align-items:center;gap:12px;}
-    .user-info img {
-      width:42px;height:42px;
-      border-radius:50%;object-fit:cover;
-      border:2px solid #fff;
-    }
-    .user-info span {font-size:14px;}
-    .logout-btn {
-      background:#ff4d4d;border:none;
-      padding:8px 14px;color:#fff;
-      border-radius:6px;cursor:pointer;
-      font-size:14px;transition:background 0.2s;
-    }
-    .logout-btn:hover {background:#d93636;}
-    .container {flex:1;padding:25px;}
-    h2 {margin-bottom:15px;color:#222;}
-    .card {
-      background:#fff;border-radius:12px;
-      box-shadow:0 3px 8px rgba(0,0,0,0.1);
-      padding:20px;margin-bottom:20px;
-    }
-    .grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-      gap:20px;
-    }
-    .person-card {
-      text-align:center;padding:18px;
-      background:#fff;border-radius:12px;
-      box-shadow:0 2px 6px rgba(0,0,0,0.1);
-      transition:transform 0.2s,box-shadow 0.2s;
-    }
-    .person-card:hover {
-      transform:translateY(-5px);
-      box-shadow:0 6px 14px rgba(0,0,0,0.15);
-    }
-    .person-card img {
-      width:100px;height:100px;
-      border-radius:50%;object-fit:cover;
-      margin-bottom:12px;border:3px solid #0078d7;
-    }
-    .person-card h3 {margin:10px 0 6px;font-size:18px;color:#111;}
-    .person-card p {margin:4px 0;font-size:14px;color:#555;}
-    table {
-      width:100%;border-collapse:collapse;
-      background:#fff;border-radius:10px;
-      overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.1);
-    }
-    table th,table td {
-      padding:12px;text-align:left;
-      border-bottom:1px solid #eee;
-    }
-    table th {background:#0078d7;color:#fff;font-weight:600;}
-    table tr:hover {background:#f1f5fb;}
-    .section {animation:fadeIn 0.4s ease;}
-    @keyframes fadeIn {
-      from{opacity:0;transform:translateY(10px);}
-      to{opacity:1;transform:translateY(0);}
-    }
-    footer {
-      background:#0078d7;color:#fff;
-      text-align:center;padding:12px;
-      font-size:13px;margin-top:auto;
-    }
+    * {margin:0; padding:0; box-sizing:border-box;}
+    body {font-family:'Segoe UI', Arial, sans-serif; background:#121212; color:#f1f1f1; min-height:100vh;}
+    .navbar {display:flex; justify-content:space-between; align-items:center; padding:14px 28px; background:#0a0a0a; box-shadow:0 4px 14px rgba(0,0,0,0.6); position:sticky; top:0; z-index:50;}
+    .brand {font-size:22px; font-weight:700; color:#0f93ff;}
+    .menu {display:flex; gap:14px; align-items:center;}
+    .menu button {background:#1c1c1c; border:2px solid #2a2a2a; padding:9px 18px; border-radius:20px; cursor:pointer; font-weight:600; color:#f1f1f1; transition:all 0.2s ease;}
+    .menu button:hover {transform:scale(1.08); background:#2a2a2a;}
+    .menu button.active {background:#0f93ff; color:#fff; border-color:#0f93ff;}
+    .user-info {display:flex; align-items:center; gap:14px;}
+    .user-info img {width:44px; height:44px; border-radius:50%; border:2px solid #0f93ff; object-fit:cover;}
+    .user-info .details {text-align:right;}
+    .user-info .details .name {font-weight:600;}
+    .user-info .details .role {font-size:13px; opacity:0.85;}
+    .content {padding:28px;}
+    .hidden {display:none;}
+    .card {background:#1c1c1c; border-radius:14px; padding:22px; margin-bottom:24px; box-shadow:0 4px 14px rgba(0,0,0,0.6);}
+    table {width:100%; border-collapse:collapse; margin-top:12px; background:#121212; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.6);}
+    table th, table td {padding:12px; border-bottom:1px solid #2a2a2a; text-align:left;}
+    table th {background:#0a0a0a; font-weight:600; color:#0f93ff;}
+    table tr:hover {background:#1c1c1c;}
+    .personnel-grid {display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:18px; margin-top:22px;}
+    .person-card {background:#121212; border-radius:14px; padding:18px; box-shadow:0 4px 12px rgba(0,0,0,0.6); text-align:center;}
+    .person-card img {width:110px; height:110px; border-radius:50%; border:3px solid #0f93ff; object-fit:cover; margin-bottom:12px;}
+    .person-card h3 {margin:0; font-size:18px; color:#0f93ff;}
+    .person-card p {margin:6px 0; font-size:14px; color:#ccc;}
+    .loading-screen {position:fixed; top:0; left:0; width:100%; height:100%; background:url('https://i.ibb.co/5XkVnKjY/Boxing-Spinning-Yoga.png') no-repeat center center fixed; background-size:cover; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:2000;}
+    .loading-overlay {position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); backdrop-filter:blur(8px);}
+    .loading-content {position:relative; z-index:1; text-align:center; color:#fff;}
+    .loading-content img {width:110px; height:110px; border-radius:50%; border:3px solid #0f93ff; object-fit:cover; margin-bottom:18px;}
+    .loading-content h2 {font-size:26px; margin-bottom:22px;}
+    .loading-bar {width:320px; height:12px; background:rgba(255,255,255,0.2); border-radius:20px; overflow:hidden; margin:0 auto;}
+    .loading-fill {height:100%; width:0; background:#0f93ff; animation:fill 2s forwards;}
+    @keyframes fill {from{width:0;} to{width:100%;}}
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">Box N Burn Dashboard</div>
-    <nav>
-      <a href="#" onclick="showSection('home')">Home</a>
-      <a href="#" onclick="showSection('team')">Ons Team</a>
-      <a href="#" onclick="showSection('leden')">Leden</a>
-      <a href="#" onclick="showSection('reserveringen')">Reserveringen</a>
-    </nav>
-    <div class="user-info">
-      <span><b id="username"></b> (<span id="role"></span>)</span>
-      <img id="pfp" src="" alt="pfp">
-      <button class="logout-btn" onclick="logout()">Log uit</button>
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-overlay"></div>
+    <div class="loading-content">
+      <img id="loadingPfp" src="" alt="Profile">
+      <h2 id="loadingText">Welkom...</h2>
+      <div class="loading-bar"><div class="loading-fill"></div></div>
     </div>
-  </header>
-
-  <div class="container">
-    <section id="home" class="section">
-      <div class="card">
-        <h2>Welkom bij Box N Burn</h2>
-        <p>Dit is je persoonlijke dashboard. Gebruik de navigatie om verder te gaan.</p>
-      </div>
-    </section>
-
-    <section id="team" class="section" style="display:none;">
-      <h2>Ons Team</h2>
-      <div class="grid" id="personnelGrid"></div>
-    </section>
-
-    <section id="leden" class="section" style="display:none;">
-      <h2>Leden</h2>
-      <div class="card">
-        <h3>Boksen</h3>
-        <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenBoksen"></tbody></table>
-        <h3>Yoga</h3>
-        <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenYoga"></tbody></table>
-        <h3>Spinning</h3>
-        <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenSpinning"></tbody></table>
-      </div>
-    </section>
-
-    <section id="reserveringen" class="section" style="display:none;">
-      <h2>Reserveringen</h2>
-      <div class="card">
-        <table>
-          <thead><tr><th>ID</th><th>Naam</th><th>Les</th><th>Datum</th><th>Tijd</th><th>Contact</th></tr></thead>
-          <tbody id="reservationTable"></tbody>
-        </table>
-      </div>
-    </section>
   </div>
 
-  <footer>
-    &copy; 2025 Box N Burn. Alle rechten voorbehouden.
-  </footer>
+  <div class="navbar">
+    <div class="brand">Box N Burn</div>
+    <div class="menu">
+      <button onclick="showTab('team')" id="btnTeam">Ons Team</button>
+      <button onclick="showTab('leden')" id="btnLeden">Leden</button>
+      <button onclick="showTab('reserveringen')" id="btnReserveringen">Reserveringen</button>
+    </div>
+    <div class="user-info">
+      <div class="details">
+        <div class="name" id="navName"></div>
+        <div class="role" id="navRole"></div>
+      </div>
+      <img id="navPfp" src="" alt="pfp">
+    </div>
+  </div>
+
+  <div class="content">
+    <div id="teamTab" class="tab">
+      <h2>Ons Team</h2>
+      <div class="personnel-grid" id="teamGrid"></div>
+    </div>
+    <div id="ledenTab" class="tab hidden">
+      <h2>Leden</h2>
+      <div class="card"><h3>Boksen</h3><table id="boksenTable"></table></div>
+      <div class="card"><h3>Yoga</h3><table id="yogaTable"></table></div>
+      <div class="card"><h3>Spinning</h3><table id="spinningTable"></table></div>
+    </div>
+    <div id="reserveringenTab" class="tab hidden">
+      <h2>Reserveringen</h2>
+      <div class="card"><table id="reserveringenTable"></table></div>
+    </div>
+  </div>
 
   <script>
     const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
     const API_KEY = "AIzaSyDIo56Keur-KzkIECQ0bih0fia9DVkpkng";
 
-    async function fetchSheetData(sheetId, range) {
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${API_KEY}`;
+    const navName = document.getElementById("navName");
+    const navRole = document.getElementById("navRole");
+    const navPfp = document.getElementById("navPfp");
+    const teamGrid = document.getElementById("teamGrid");
+    const boksenTable = document.getElementById("boksenTable");
+    const yogaTable = document.getElementById("yogaTable");
+    const spinningTable = document.getElementById("spinningTable");
+    const reserveringenTable = document.getElementById("reserveringenTable");
+    const loadingScreen = document.getElementById("loadingScreen");
+    const loadingText = document.getElementById("loadingText");
+    const loadingPfp = document.getElementById("loadingPfp");
+
+    const loggedInUser = localStorage.getItem("loggedInUser");
+
+    async function fetchSheet(range) {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
       const res = await fetch(url);
-      const data = await res.json();
-      return data.values || [];
+      return await res.json();
     }
 
-    async function loadUserInfo() {
-      const loggedUser = localStorage.getItem("loggedInUser");
-      if (!loggedUser) {
-        window.location.href = "login.html";
-        return;
+    function showTab(tab) {
+      document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
+      document.getElementById(tab + "Tab").classList.remove("hidden");
+      document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
+      document.getElementById("btn" + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add("active");
+    }
+
+    function renderTable(element, headers, rows) {
+      let html = "<thead><tr>";
+      headers.forEach(h => html += `<th>${h}</th>`);
+      html += "</tr></thead><tbody>";
+      rows.forEach(r => {
+        html += "<tr>";
+        headers.forEach((_, i) => {
+          html += `<td>${r[i] || ""}</td>`;
+        });
+        html += "</tr>";
+      });
+      html += "</tbody>";
+      element.innerHTML = html;
+    }
+
+    async function init() {
+      const usersData = await fetchSheet("Users!A2:E");
+      if (usersData.values) {
+        const users = {};
+        usersData.values.forEach(row => {
+          const [username, password, role, bio, pfp] = row;
+          users[username] = {role, bio, pfp};
+          const card = document.createElement("div");
+          card.className = "person-card";
+          card.innerHTML = `<img src="${pfp}" alt="${username}">
+                            <h3>${username}</h3>
+                            <p><strong>${role}</strong></p>
+                            <p>${bio}</p>`;
+          teamGrid.appendChild(card);
+        });
+        if (users[loggedInUser]) {
+          navName.textContent = loggedInUser;
+          navRole.textContent = users[loggedInUser].role;
+          navPfp.src = users[loggedInUser].pfp;
+          loadingText.textContent = `Welkom, ${loggedInUser}`;
+          loadingPfp.src = users[loggedInUser].pfp;
+        }
       }
-      const rows = await fetchSheetData(SHEET_ID, "Users!A2:E");
-      const match = rows.find(r => r[0] === loggedUser);
-      if (match) {
-        const [username,,role,bio,pfp] = match;
-        document.getElementById("username").textContent = username;
-        document.getElementById("role").textContent = role;
-        document.getElementById("pfp").src = pfp;
-        localStorage.setItem("userRole", role);
-        localStorage.setItem("userPfp", pfp);
-        localStorage.setItem("userBio", bio);
-      } else { logout(); }
+
+      const ledenData = await fetchSheet("Leden!A1:D");
+      if (ledenData.values) {
+        const headers = ledenData.values[0]; 
+        const rows = ledenData.values.slice(1); 
+        renderTable(boksenTable, headers, rows.filter(r => r[2] === "Boksen"));
+        renderTable(yogaTable, headers, rows.filter(r => r[2] === "Yoga"));
+        renderTable(spinningTable, headers, rows.filter(r => r[2] === "Spinning"));
+      }
+
+      const resData = await fetchSheet("Reserveringen!A1:F");
+      if (resData.values) {
+        const headers = resData.values[0]; 
+        const rows = resData.values.slice(1); 
+        renderTable(reserveringenTable, headers, rows);
+      }
+
+      setTimeout(() => loadingScreen.style.display = "none", 2200);
+      showTab("team");
     }
 
-    async function loadPersonnelFromUsers() {
-      const rows = await fetchSheetData(SHEET_ID, "Users!A2:E");
-      const grid = document.getElementById("personnelGrid");
-      grid.innerHTML = "";
-      rows.forEach(r => {
-        const [username,,role,bio,pfp] = r;
-        const card = document.createElement("div");
-        card.className = "person-card";
-        card.innerHTML = `
-          <img src="${pfp}" alt="${username}">
-          <h3>${username}</h3>
-          <p><b>Rol:</b> ${role}</p>
-          <p><b>Bio:</b> ${bio || ""}</p>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    async function loadLedenFromSheet() {
-      const rows = await fetchSheetData(SHEET_ID, "Leden!A2:D");
-      const boksen = document.getElementById("ledenBoksen");
-      const yoga = document.getElementById("ledenYoga");
-      const spinning = document.getElementById("ledenSpinning");
-      boksen.innerHTML="";yoga.innerHTML="";spinning.innerHTML="";
-      rows.forEach(r => {
-        const [id,naam,les,contact] = r;
-        const row = `<tr><td>${id}</td><td>${naam}</td><td>${contact}</td></tr>`;
-        if(les==="Boksen") boksen.innerHTML+=row;
-        if(les==="Yoga") yoga.innerHTML+=row;
-        if(les==="Spinning") spinning.innerHTML+=row;
-      });
-    }
-
-    async function loadReserveringenFromSheet() {
-      const rows = await fetchSheetData(SHEET_ID, "Reserveringen!A2:F");
-      const table = document.getElementById("reservationTable");
-      table.innerHTML="";
-      rows.forEach(r => {
-        const [id,naam,les,datum,tijd,contact] = r;
-        table.innerHTML += `<tr><td>${id}</td><td>${naam}</td><td>${les}</td><td>${datum}</td><td>${tijd}</td><td>${contact}</td></tr>`;
-      });
-    }
-
-    function showSection(id) {
-      document.querySelectorAll(".section").forEach(sec=>sec.style.display="none");
-      document.getElementById(id).style.display="block";
-    }
-
-    function logout() {
-      localStorage.clear();
-      window.location.href = "login.html";
-    }
-
-    loadUserInfo();
-    loadPersonnelFromUsers();
-    loadLedenFromSheet();
-    loadReserveringenFromSheet();
-    setInterval(()=>{
-      loadLedenFromSheet();
-      loadReserveringenFromSheet();
-    },30000);
+    init();
   </script>
 </body>
 </html>
