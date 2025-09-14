@@ -2,10 +2,9 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <title>PC Login</title>
   <style>
     * {margin: 0; padding: 0; box-sizing: border-box;}
-
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       height: 100vh;
@@ -15,54 +14,51 @@
       background: url('https://i.ibb.co/9HqVTqkv/Boxing-Spinning-Yoga.png') no-repeat center center fixed;
       background-size: cover;
       position: relative;
+      overflow: hidden;
     }
-
     body::before {
       content: "";
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
       background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
       z-index: 0;
     }
-
     .login-container {
       position: relative;
       z-index: 1;
-      width: 380px;
-      background: rgba(20, 20, 20, 0.6);
-      border-radius: 20px;
-      padding: 50px 40px;
+      width: 400px;
       text-align: center;
       color: #fff;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      animation: fadeIn 0.8s ease-out;
     }
-
     .login-container img {
-      width: 110px;
-      height: 110px;
+      width: 130px;
+      height: 130px;
       border-radius: 50%;
       margin-bottom: 15px;
       border: 3px solid #fff;
-      display: none; /* initially hidden */
+      display: none;
+      animation: fadeIn 0.5s ease-in;
     }
-
     .school-name {
       font-size: 18px;
-      font-weight: 600;
       margin-bottom: 25px;
       color: #eee;
     }
-
+    .welcome {
+      font-size: 20px;
+      margin-bottom: 15px;
+      display: none;
+    }
     .input-group {margin-bottom: 20px;}
     .input-group input {
       width: 100%;
       height: 45px;
       padding: 0 15px;
-      border: 1px solid #555;
-      border-radius: 10px;
+      border: none;
+      border-radius: 6px;
       font-size: 15px;
       background: rgba(255,255,255,0.9);
       color: #000;
@@ -70,107 +66,100 @@
     .input-group input::placeholder {color: #666;}
     .input-group input:focus {
       outline: none;
-      border-color: #ff7043;
+      box-shadow: 0 0 0 2px #0078d7;
       background: #fff;
     }
-
-    .forgot {
-      font-size: 12px;
-      color: #ddd;
-      margin-bottom: 20px;
-      cursor: pointer;
-      display: block;
-      text-align: right;
-      transition: color 0.2s;
-    }
-    .forgot:hover {color: #fff;}
-
     button {
       width: 100%;
       padding: 14px;
-      background: linear-gradient(135deg, #ff7f50, #ff7043);
+      background: #0078d7;
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 6px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      margin-bottom: 15px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: background 0.2s;
+      display: none;
     }
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
-    }
-
+    button:hover {background: #005a9e;}
     #error {
       color: #ff4d4d;
       margin-top: 10px;
       display: none;
-      font-size: 13px;
+      font-size: 14px;
       text-align: center;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
-
   <div class="login-container">
     <img id="pfp" src="" alt="Profile Picture">
-    <div class="school-name">Box N Burn • Dashboard</div>
-
+    <div class="welcome" id="welcomeText"></div>
     <div class="input-group">
       <input type="text" id="username" placeholder="Gebruikersnaam">
     </div>
-
-    <div class="input-group">
+    <div class="input-group" id="passwordGroup" style="display:none;">
       <input type="password" id="password" placeholder="Wachtwoord">
     </div>
-
-    <div class="forgot">🔒 Wachtwoord vergeten?</div>
-
-    <button onclick="login()">Aanmelden</button>
+    <button id="loginBtn" onclick="login()">Aanmelden</button>
     <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
   </div>
-
 <script>
-  // Demo users
   const users = {
     "Katrien Boeckx": { password: "Pianostemmer123", role: "CEO/FOUNDER", pfp: "https://lh3.googleusercontent.com/AtSbkeeQXJ3MWa8Rzdg0I568tq-e9KjqkIDrxa-W2IT4xpnbgsxQqzgwX5ptekRYP4ix2rL_KP9kFCnbg3d29QicJ6p2T-euQgZN=w1500" },
-    "Tristan Vansonhoven": { password: "Tristanv?", role: "IT Specialist", pfp: "https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=OgNlLwyzRT8Q7kNvwGsLxNe&_nc_oc=Admf8UwaBIUqavwDYqbac2R436o1CbMtgCEWrhGB9z2a67xLlXPjSwaX4dljmERi9zDvaj4UjKGHhXjTjTE_U2VU&_nc_zt=23&_nc_ht=scontent-bru2-1.xx&_nc_gid=kWHPat1TTwVYwyG3qaqNFw&oh=00_AfaQt4OB3xZJMm1gucQvIbptb0INXvO7AdFZeDTSyM14iA&oe=68C4E732" },
-    "Mil T'Seyen": { password: "Lily1606", role: "Huis DJ", pfp: "https://scontent.fbru2-1.fna.fbcdn.net/v/t1.6435-9/40441548_1802350659833865_3033661819232190464_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=F20ZXvE70msQ7kNvwGK2JPB&_nc_oc=AdnIqvWrZuHpOElM9IDVwyzUlpYQrAs8vNKKLQ6Fw3oFTgkn2UDSWGfmWlI-INtv_ZzGbIM7XH2iNgiOJq4yb3T6&_nc_zt=23&_nc_ht=scontent.fbru2-1.fna&_nc_gid=e0GAxe11U5kdcWwlKopW_w&oh=00_AfaBs2Wn5CMy4E0X_aduBGs63_9M4UikhZdFFaa0KgpSQQ&oe=68EB70B6" }
+    "Tristan Vansonhoven": { password: "Tristanv?", role: "IT Specialist", pfp: "https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg" },
+    "Mil T'Seyen": { password: "Lily1606", role: "Huis DJ", pfp: "https://scontent.fbru2-1.fna.fbcdn.net/v/t1.6435-9/40441548_1802350659833865_3033661819232190464_n.jpg" }
   };
-
   const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const passwordGroup = document.getElementById("passwordGroup");
+  const loginBtn = document.getElementById("loginBtn");
   const pfp = document.getElementById("pfp");
-
-  // Show/Hide PFP based on username
+  const welcomeText = document.getElementById("welcomeText");
+  const error = document.getElementById("error");
   usernameInput.addEventListener("input", () => {
     const name = usernameInput.value.trim();
     if (users[name]) {
       pfp.src = users[name].pfp;
       pfp.style.display = "block";
+      welcomeText.textContent = `Welkom, ${name}`;
+      welcomeText.style.display = "block";
+      passwordGroup.style.display = "block";
+      loginBtn.style.display = "block";
     } else {
       pfp.style.display = "none";
-      pfp.src = "";
+      welcomeText.style.display = "none";
+      passwordGroup.style.display = "none";
+      loginBtn.style.display = "none";
     }
   });
-
   function login() {
     const user = usernameInput.value.trim();
-    const pass = document.getElementById("password").value.trim();
-    const error = document.getElementById("error");
-
+    const pass = passwordInput.value.trim();
     if (users[user] && users[user].password === pass) {
       localStorage.setItem("loggedInUser", user);
       localStorage.setItem("userRole", users[user].role);
       localStorage.setItem("userPfp", users[user].pfp);
-      window.location.href = "dashboard.html";
+      document.body.style.transition = "opacity 0.7s";
+      document.body.style.opacity = "0";
+      setTimeout(()=> window.location.href = "dashboard.html", 700);
     } else {
       error.style.display = "block";
-      setTimeout(() => error.style.display = "none", 3500);
+      setTimeout(() => error.style.display = "none", 3000);
     }
   }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
+        login();
+      }
+    }
+  });
 </script>
-
 </body>
 </html>
