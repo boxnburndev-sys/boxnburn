@@ -12,9 +12,9 @@
       --bg:#0f1724; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
       --radius:14px; --max-w:1200px; --ease:cubic-bezier(.4,.9,.3,1);
     }
-    *{box-sizing:border-box}
+    *{box-sizing:border-box;margin:0;padding:0}
     body{
-      margin:0;font-family:Roboto,system-ui,Arial;
+      font-family:Roboto,system-ui,Arial;
       background:linear-gradient(135deg,#071021 0%,#071833 60%);
       color:#e6eef8;overflow-x:hidden;opacity:0;transition:opacity .5s var(--ease);
     }
@@ -23,23 +23,33 @@
     .container{max-width:var(--max-w);margin:110px auto 60px;padding:24px;opacity:0;transform:translateY(15px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
     .container.visible{opacity:1;transform:translateY(0)}
 
-    header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;
-      padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));
-      border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200;opacity:0;transform:translateY(-15px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+    header{
+      position:fixed;inset:0 0 auto 0;height:70px;display:flex;align-items:center;justify-content:space-between;
+      padding:12px 20px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));
+      border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200;opacity:0;transform:translateY(-15px);transition:opacity .5s var(--ease),transform .5s var(--ease)
+    }
     header.visible{opacity:1;transform:translateY(0)}
 
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand img{width:42px;height:42px;border-radius:10px;object-fit:cover}
     .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
-    nav{display:flex;gap:8px}
+
+    nav{display:flex;gap:10px;align-items:center}
+    .nav-links{display:flex;gap:8px}
     .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none;transition:all .3s var(--ease)}
     .nav-links a.active, .nav-links a:hover{background:var(--glass);color:#fff;transform:translateY(-2px)}
 
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0;transition:transform .2s var(--ease), box-shadow .2s var(--ease)}
-    .btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 4px 12px rgba(0,0,0,0.35)}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
+    /* Hamburger for mobile */
+    .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer}
+    .hamburger span{width:24px;height:3px;background:#fff;border-radius:2px;transition:.3s}
+    .nav-links.mobile{position:absolute;top:70px;left:0;right:0;background:#071021;flex-direction:column;align-items:center;gap:16px;padding:16px;display:none}
+    .nav-links.mobile.show{display:flex}
 
-    .jobs{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:22px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:999px;font-weight:700;cursor:pointer;border:0;transition:transform .2s var(--ease), box-shadow .2s var(--ease)}
+    .btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 4px 12px rgba(0,0,0,0.35)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022;width:100%}
+
+    .jobs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:22px}
     .job-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
       padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,0.03);opacity:0;transform:translateY(25px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
     .job-card.visible{opacity:1;transform:translateY(0)}
@@ -49,8 +59,8 @@
     details{margin-top:12px}
     details[open]{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px}
     form{margin-top:12px;display:flex;flex-direction:column}
-    input{width:100%;padding:10px;border-radius:8px;background:transparent;
-      border:1px solid rgba(255,255,255,0.08);color:#e6eef8;margin-bottom:8px}
+    input{width:100%;padding:12px;border-radius:8px;background:transparent;
+      border:1px solid rgba(255,255,255,0.08);color:#e6eef8;margin-bottom:10px;font-size:16px}
     input:focus{outline:none;border-color:var(--accent)}
 
     .message{font-size:14px;margin-top:6px}
@@ -59,8 +69,6 @@
 
     footer{margin-top:28px;text-align:center;color:var(--muted);padding:28px;opacity:0;transform:translateY(15px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
     footer.visible{opacity:1;transform:translateY(0)}
-
-    @media (max-width:760px){.jobs{grid-template-columns:1fr}.container{margin-top:96px;padding:12px}}
 
     /* Preloader */
     #preloader{
@@ -75,6 +83,22 @@
       box-shadow:0 0 20px rgba(255,107,107,0.6);
     }
     @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Responsive adjustments */
+    @media (max-width:1024px){
+      header{padding:10px 16px}
+      .brand img{width:38px;height:38px}
+    }
+    @media (max-width:768px){
+      .nav-links{display:none}
+      .hamburger{display:flex}
+      .container{margin-top:90px;padding:16px}
+    }
+    @media (max-width:480px){
+      .brand .title{font-size:16px}
+      h2{font-size:20px}
+      .btn{font-size:15px}
+    }
   </style>
 </head>
 <body>
@@ -96,6 +120,14 @@
       <div class="nav-links">
         <a href="index.html">Home</a>
         <a href="#jobs" class="active">Jobs</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="nav-links mobile" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="#jobs">Jobs</a>
         <a href="#contact">Contact</a>
       </div>
     </nav>
@@ -192,7 +224,7 @@
             card.classList.add("visible");
           },200*i+200);
         });
-      },1000); // quicker transition
+      },800);
     });
 
     // Smooth page fade on navigation
@@ -204,6 +236,11 @@
         setTimeout(()=>{window.location=a.href},400);
       });
     });
+
+    // Mobile nav toggle
+    const hamburger=document.getElementById("hamburger");
+    const mobileMenu=document.getElementById("mobileMenu");
+    hamburger.addEventListener("click",()=>{mobileMenu.classList.toggle("show")});
   </script>
 </body>
 </html>
