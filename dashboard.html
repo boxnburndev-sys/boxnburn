@@ -20,7 +20,7 @@
     .user-info .details .name{font-weight:600}
     .user-info .details .role{font-size:12px;opacity:0.85}
     .content{padding:24px}
-    .hidden{display:none !important}
+    .hidden{display:none}
     .card{background:#384858;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.2);animation:fadeIn 0.4s ease;overflow-x:auto}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     table{width:100%;border-collapse:collapse;margin-top:12px;background:#233445;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
@@ -54,9 +54,6 @@
       .person-card h3{font-size:16px}
       .person-card p{font-size:12px}
     }
-    .modal-box{background:#233445;padding:20px;border-radius:12px;max-width:500px;width:95%;box-shadow:0 4px 12px rgba(0,0,0,0.3);position:relative}
-    .close-btn{position:absolute;top:10px;right:12px;background:none;border:none;color:white;font-size:20px;cursor:pointer}
-    .modal-box input{width:100%;margin-bottom:12px;padding:10px;border-radius:6px;border:none}
   </style>
 </head>
 <body>
@@ -118,34 +115,13 @@
         </div>
       </div>
       <button class="refresh-btn" onclick="refreshProfile()">Ververs Profiel</button>
-      <button class="refresh-btn" onclick="openPasswordModal()">Request Password Change</button>
     </div>
   </div>
-
-  <div id="passwordModal" class="hidden" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;z-index:999;">
-    <div class="modal-box">
-      <button class="close-btn" onclick="closePasswordModal()">×</button>
-      <h3>Request Password Change</h3>
-      <form id="passwordForm">
-        <input type="hidden" id="pwUser" name="username">
-        <label>Current Password</label>
-        <input type="password" id="currentPw" name="current_password" required>
-        <label>New Password</label>
-        <input type="password" id="newPw1" name="new_password_1" required>
-        <label>Confirm New Password</label>
-        <input type="password" id="newPw2" name="new_password_2" required>
-        <div style="display:flex;gap:10px;margin-top:12px;justify-content:flex-end">
-          <button type="button" onclick="closePasswordModal()" class="refresh-btn" style="background:#888">Cancel</button>
-          <button type="submit" class="refresh-btn">Submit</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
 <script>
   const SHEET_ID="1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
   const API_KEY="AIzaSyDIo56Keur-KzkIECQ0bih0fia9DVkpkng";
 
+  // Show specific page
   window.showPage=function(pageId,btn){
     document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
     document.getElementById(pageId).classList.remove("hidden");
@@ -153,18 +129,29 @@
     if(btn)btn.classList.add("active")
   };
 
+  // Go back to main
   function goMain(){window.location.href="index.html"}
-  function logout(){localStorage.removeItem("loggedInUser");window.location.href="login.html"}
 
+  // Logout user
+  function logout(){
+    localStorage.removeItem("loggedInUser");
+    window.location.href="login.html"
+  }
+
+  // Fetch data from Google Sheets
   async function fetchSheetData(sheetId,range){
     try{
       const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${API_KEY}`;
       const res=await fetch(url);
       const data=await res.json();
       return data.values||[]
-    }catch(e){return[]}
+    }catch(e){
+      console.error("Fout bij ophalen van gegevens:",e);
+      return[]
+    }
   }
 
+  // Load leden
   async function loadLedenFromSheet(){
     const rows=await fetchSheetData(SHEET_ID,"Leden!A2:D");
     const boksen=document.getElementById("ledenBoksen");
@@ -180,6 +167,7 @@
     })
   }
 
+  // Load reserveringen
   async function loadReserveringenFromSheet(){
     const rows=await fetchSheetData(SHEET_ID,"Reserveringen!A2:F");
     const table=document.getElementById("reservationTable");
@@ -190,6 +178,7 @@
     })
   }
 
+  // Load personnel
   async function loadPersonnel(){
     const rows=await fetchSheetData(SHEET_ID,"Users!A2:E");
     const grid=document.getElementById("personnelGrid");
@@ -203,6 +192,7 @@
     })
   }
 
+  // Load user info
   async function loadUserInfo(){
     const user=localStorage.getItem("loggedInUser");
     if(!user){window.location.href="login.html";return}
@@ -217,31 +207,29 @@
       document.getElementById("profileRole").textContent=role;
       document.getElementById("profileBio").textContent=bio;
       document.getElementById("profilePic").src=pfp;
-      document.getElementById("pwUser").value=username;
     }
   }
 
+  // Refresh profile
   async function refreshProfile(){await loadUserInfo()}
-  function openPasswordModal(){document.getElementById("passwordModal").classList.remove("hidden")}
-  function closePasswordModal(){document.getElementById("passwordModal").classList.add("hidden")}
 
-  document.getElementById("passwordForm").addEventListener("submit",async e=>{
-    e.preventDefault();
-    const user=document.getElementById("pwUser").value;
-    const current=document.getElementById("currentPw").value;
-    const new1=document.getElementById("newPw1").value;
-    const new2=document.getElementById("newPw2").value;
-    if(new1!==new2){alert("New passwords do not match");return}
-    const formData=new FormData();
-    formData.append("username",user);
-    formData.append("current_password",current);
-    formData.append("new_password_1",new1);
-    formData.append("new_password_2",new2);
-    await fetch("https://formspree.io/f/xyzdazeg",{method:"POST",body:formData,headers:{"Accept":"application/json"}});
-    alert("Password change request sent for approval");
-    closePasswordModal()
-  });
+  // Search function
+  function searchTable(tableId,query){
+    const rows=document.querySelectorAll(`#${tableId} tr`);
+    rows.forEach(row=>{
+      const text=row.innerText.toLowerCase();
+      row.style.display=text.includes(query.toLowerCase())?"":"none"
+    })
+  }
 
+  // Auto refresh
+  setInterval(()=>{
+    loadLedenFromSheet();
+    loadReserveringenFromSheet();
+    loadPersonnel()
+  },60000);
+
+  // Init
   loadLedenFromSheet();
   loadReserveringenFromSheet();
   loadPersonnel();
