@@ -16,7 +16,7 @@
     }
     body {
       font-family: "Segoe UI", Roboto, sans-serif;
-      line-height: 1.7;
+      line-height: 1.6;
       color: var(--text);
       margin: 0;
       padding: 0;
@@ -25,18 +25,19 @@
     header {
       background: var(--primary);
       color: #fff;
-      padding: 2rem;
+      padding: 2rem 1rem;
       text-align: center;
+      position: relative;
     }
-    header h1 { margin: 0; font-size: 2rem; }
-    header p { margin: 0.2rem 0 0; font-size: 0.95rem; color: #d1d5db; }
-    .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+    header h1 { margin: 0; font-size: 1.8rem; }
+    header p { margin: 0.4rem 0 0; font-size: 0.9rem; color: #d1d5db; }
+    .container { max-width: 900px; margin: 1.5rem auto; padding: 0 1rem; }
     .card {
       background: var(--card-bg);
-      padding: 1.5rem 2rem;
+      padding: 1.2rem 1.5rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,.05);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       transition: transform 0.2s;
     }
     .card:hover { transform: translateY(-3px); }
@@ -45,20 +46,26 @@
       border-left: 4px solid var(--accent);
       padding-left: 0.5rem;
       margin-top: 0;
+      font-size: 1.3rem;
     }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    table { border-collapse: collapse; width: 100%; margin-top: 1rem; font-size: 0.95rem; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      display: block;
+    }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     th { background: var(--primary); color: #fff; }
     footer {
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
       font-size: 0.85rem;
       color: var(--muted);
     }
-
-    /* Cookie banner */
     #cookie-banner {
       position: fixed;
       bottom: 0;
@@ -67,13 +74,13 @@
       background: var(--card-bg);
       border-top: 3px solid var(--accent);
       box-shadow: 0 -2px 10px rgba(0,0,0,.1);
-      padding: 1rem 1.5rem;
+      padding: 1rem;
       display: none;
       z-index: 1000;
     }
     #cookie-banner p {
       margin: 0 0 0.5rem;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     #cookie-banner .buttons {
       display: flex;
@@ -85,21 +92,41 @@
       border-radius: 6px;
       padding: 0.6rem 1rem;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     #accept-all { background: var(--accent); color: #fff; }
     #accept-essential { background: #e5e7eb; color: var(--text); }
     #settings { background: var(--primary); color: #fff; }
+    .back-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(249,115,22,0.9);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: #c2410c; }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.5rem; }
+      .card { padding: 1rem; }
+      h2 { font-size: 1.1rem; }
+    }
   </style>
 </head>
 <body>
   <header>
+    <button class="back-btn" onclick="window.location.href='index.html'">⬅ Terug</button>
     <h1>Privacyverklaring</h1>
     <p>Laatst bijgewerkt: 13 september 2025</p>
   </header>
 
   <div class="container">
-
     <div class="card">
       <h2>Wie zijn wij?</h2>
       <p>Deze website wordt beheerd door <strong>Box n Burn</strong>, gevestigd in Westerlo.<br>
@@ -168,14 +195,12 @@
       <h2>Wijzigingen</h2>
       <p>Wij kunnen deze verklaring aanpassen. Controleer deze pagina voor de meest recente versie.</p>
     </div>
-
   </div>
 
   <footer>
     &copy; 2025 Box n Burn — Privacyverklaring
   </footer>
 
-  <!-- Cookie banner -->
   <div id="cookie-banner">
     <p>Wij gebruiken cookies om onze website goed te laten werken en om uw ervaring te verbeteren. Kies uw voorkeur:</p>
     <div class="buttons">
@@ -189,36 +214,21 @@
     const banner = document.getElementById('cookie-banner');
     const acceptAllBtn = document.getElementById('accept-all');
     const acceptEssentialBtn = document.getElementById('accept-essential');
-
-    // Toon banner alleen als er nog geen keuze is gemaakt
     if (!localStorage.getItem('cookieConsent')) {
       banner.style.display = 'block';
     }
-
     acceptAllBtn.addEventListener('click', () => {
       localStorage.setItem('cookieConsent', 'all');
       banner.style.display = 'none';
       enableAnalytics();
       enableMarketing();
     });
-
     acceptEssentialBtn.addEventListener('click', () => {
       localStorage.setItem('cookieConsent', 'essential');
       banner.style.display = 'none';
     });
-
-    function enableAnalytics() {
-      // Plaats hier je analytics script, bv:
-      // const ga = document.createElement("script");
-      // ga.src = "https://www.googletagmanager.com/gtag/js?id=UA-XXXXX";
-      // document.head.appendChild(ga);
-    }
-
-    function enableMarketing() {
-      // Plaats hier je marketing scripts (Facebook Pixel, etc.)
-    }
-
-    // Activeer cookies opnieuw bij herladen
+    function enableAnalytics() {}
+    function enableMarketing() {}
     const consent = localStorage.getItem('cookieConsent');
     if (consent === 'all') {
       enableAnalytics();
