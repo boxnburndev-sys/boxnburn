@@ -29,8 +29,8 @@
       text-align: center;
       position: relative;
     }
-    header h1 { margin: 0; font-size: 1.8rem; }
-    header p { margin: 0.4rem 0 0; font-size: 0.9rem; color: #d1d5db; }
+    header h1 { margin: 0; font-size: 2rem; }
+    header p { margin: 0.4rem 0 0; font-size: 1rem; color: #d1d5db; }
     .container { max-width: 900px; margin: 1.5rem auto; padding: 0 1rem; }
     .card {
       background: var(--card-bg);
@@ -46,7 +46,7 @@
       border-left: 4px solid var(--accent);
       padding-left: 0.5rem;
       margin-top: 0;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
     }
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -55,8 +55,8 @@
       width: 100%;
       margin-top: 1rem;
       font-size: 0.9rem;
-      overflow-x: auto;
       display: block;
+      overflow-x: auto;
     }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
     th { background: var(--primary); color: #fff; }
@@ -92,11 +92,16 @@
       border-radius: 6px;
       padding: 0.6rem 1rem;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      flex: 1 1 auto;
+      transition: background 0.2s ease;
     }
     #accept-all { background: var(--accent); color: #fff; }
+    #accept-all:hover { background: #c2410c; }
     #accept-essential { background: #e5e7eb; color: var(--text); }
+    #accept-essential:hover { background: #d1d5db; }
     #settings { background: var(--primary); color: #fff; }
+    #settings:hover { background: #06172a; }
     .back-btn {
       position: absolute;
       top: 15px;
@@ -106,16 +111,25 @@
       border: none;
       padding: 8px 14px;
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
     }
     .back-btn:hover { background: #c2410c; }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      header h1 { font-size: 1.7rem; }
+      .container { padding: 0 0.8rem; }
+    }
     @media (max-width: 600px) {
-      header h1 { font-size: 1.5rem; }
+      header h1 { font-size: 1.4rem; }
+      header p { font-size: 0.85rem; }
       .card { padding: 1rem; }
       h2 { font-size: 1.1rem; }
+      #cookie-banner .buttons { flex-direction: column; }
+      #cookie-banner button { width: 100%; }
     }
   </style>
 </head>
