@@ -201,12 +201,13 @@
   </div>
 
 <script>
-  const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48"; 
-  const API_KEY = "AIzaSyDIo56Keur-KzkIECQ0bih0fia9DVkpkng";
+  // Only the user sheet is needed here
+  const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; 
+  const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
   let users = {};
 
   async function fetchUsers() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Users!A2:E?key=${API_KEY}`;
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${USER_SHEET_ID}/values/Users!A2:E?key=${API_KEY}`;
     const res = await fetch(url);
     const data = await res.json();
     if (!data.values) return;
