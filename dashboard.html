@@ -5,166 +5,35 @@
   <title>Dashboard</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #233445;
-      color: white;
-    }
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 24px;
-      background: #0f2133;
-      color: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .brand {
-      font-size: 20px;
-      font-weight: 700;
-    }
-    .menu {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-    .menu button {
-      background: #0f2133;
-      border: 2px solid #384858;
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 600;
-      color: white;
-      transition: all 0.18s ease;
-    }
-    .menu button:hover {
-      transform: scale(1.08);
-      background: #384858;
-    }
-    .menu button.active {
-      background: #233445;
-      color: white;
-      transform: scale(1.05);
-    }
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .user-info img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 2px solid white;
-    }
-    .user-info .details {
-      text-align: right;
-    }
-    .user-info .details .name {
-      font-weight: 600;
-    }
-    .user-info .details .role {
-      font-size: 12px;
-      opacity: 0.85;
-    }
-    .content {
-      padding: 24px;
-    }
-    .hidden {
-      display: none;
-    }
-    .card {
-      background: #384858;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      animation: fadeIn 0.4s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      background: #233445;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      color: white;
-    }
-    table th, table td {
-      padding: 12px;
-      border-bottom: 1px solid #384858;
-      text-align: left;
-    }
-    table th {
-      background: #0f2133;
-      color: white;
-      font-weight: 600;
-    }
-    table tr:hover {
-      background: #384858;
-    }
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-    }
-    .status-card {
-      background: #233445;
-      padding: 16px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      text-align: center;
-      color: white;
-    }
-    .status-card h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      color: #0f93ff;
-    }
-    .status-card p {
-      margin: 0;
-      font-size: 14px;
-    }
-    .personnel-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-    .person-card {
-      background: #233445;
-      border-radius: 12px;
-      padding: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    .person-card img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid #0f2133;
-      object-fit: cover;
-      margin-bottom: 10px;
-    }
-    .person-card h3 {
-      margin: 0;
-      font-size: 18px;
-      color: #0f93ff;
-    }
-    .person-card p {
-      margin: 6px 0;
-      font-size: 14px;
-    }
+    body { margin:0; font-family:'Segoe UI', Arial, sans-serif; background:#233445; color:white; }
+    .navbar { display:flex; justify-content:space-between; align-items:center; padding:12px 24px; background:#0f2133; box-shadow:0 4px 10px rgba(0,0,0,0.3); position:sticky; top:0; z-index:50; }
+    .brand { font-size:20px; font-weight:700; }
+    .menu { display:flex; gap:12px; align-items:center; }
+    .menu button { background:#0f2133; border:2px solid #384858; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:600; color:white; transition:all 0.18s ease; }
+    .menu button:hover { transform:scale(1.08); background:#384858; }
+    .menu button.active { background:#233445; transform:scale(1.05); }
+    .user-info { display:flex; align-items:center; gap:12px; }
+    .user-info img { width:40px; height:40px; border-radius:50%; border:2px solid white; }
+    .user-info .details { text-align:right; }
+    .user-info .details .name { font-weight:600; }
+    .user-info .details .role { font-size:12px; opacity:0.85; }
+    .content { padding:24px; }
+    .hidden { display:none; }
+    .card { background:#384858; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 4px 12px rgba(0,0,0,0.2); animation:fadeIn 0.4s ease; }
+    @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+    table { width:100%; border-collapse:collapse; margin-top:12px; background:#233445; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.3); }
+    table th, table td { padding:12px; border-bottom:1px solid #384858; text-align:left; }
+    table th { background:#0f2133; font-weight:600; }
+    table tr:hover { background:#384858; }
+    .status-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px; }
+    .status-card { background:#233445; padding:16px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.2); text-align:center; }
+    .status-card h3 { margin:0 0 8px; font-size:18px; color:#0f93ff; }
+    .status-card p { margin:0; font-size:14px; }
+    .personnel-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; margin-top:20px; }
+    .person-card { background:#233445; border-radius:12px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.2); text-align:center; }
+    .person-card img { width:100px; height:100px; border-radius:50%; border:3px solid #0f2133; object-fit:cover; margin-bottom:10px; }
+    .person-card h3 { margin:0; font-size:18px; color:#0f93ff; }
+    .person-card p { margin:6px 0; font-size:14px; }
   </style>
 </head>
 <body>
@@ -178,10 +47,10 @@
     </div>
     <div class="user-info">
       <div class="details">
-        <div class="name">Dashboard</div>
-        <div class="role">Google Sheets</div>
+        <div class="name" id="username"></div>
+        <div class="role" id="role"></div>
       </div>
-      <img id="pfp" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User profile picture">
+      <img id="pfp" alt="User profile picture">
     </div>
   </nav>
 
@@ -196,31 +65,17 @@
     <div id="leden" class="page hidden card">
       <h2>Leden</h2>
       <h3>Boksen</h3>
-      <table>
-        <thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead>
-        <tbody id="ledenBoksen"></tbody>
-      </table>
+      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenBoksen"></tbody></table>
       <h3>Yoga</h3>
-      <table>
-        <thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead>
-        <tbody id="ledenYoga"></tbody>
-      </table>
+      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenYoga"></tbody></table>
       <h3>Spinning</h3>
-      <table>
-        <thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead>
-        <tbody id="ledenSpinning"></tbody>
-      </table>
+      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenSpinning"></tbody></table>
     </div>
 
     <div id="reserveringen" class="page hidden card">
       <h2>Reserveringen</h2>
       <table>
-        <thead>
-          <tr>
-            <th>ID</th><th>Naam</th><th>Les</th>
-            <th>Datum</th><th>Tijd</th><th>Contact</th>
-          </tr>
-        </thead>
+        <thead><tr><th>ID</th><th>Naam</th><th>Les</th><th>Datum</th><th>Tijd</th><th>Contact</th></tr></thead>
         <tbody id="reservationTable"></tbody>
       </table>
     </div>
@@ -231,7 +86,7 @@
     </div>
   </div>
 
-<script type="module">
+<script>
   const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
   const API_KEY = "AIzaSyDIo56Keur-KzkIECQ0bih0fia9DVkpkng";
 
@@ -242,10 +97,6 @@
     document.querySelectorAll(".navbar .menu button").forEach(b => b.classList.remove("active"));
     if (btn) btn.classList.add("active");
   };
-  window.addEventListener("DOMContentLoaded", () => {
-    const defaultBtn = document.querySelector(".navbar .menu button.active");
-    showPage("home", defaultBtn);
-  });
 
   // Google Sheets fetch
   async function fetchSheetData(sheetId, range) {
@@ -261,7 +112,6 @@
     const yoga = document.getElementById("ledenYoga");
     const spinning = document.getElementById("ledenSpinning");
     boksen.innerHTML = ""; yoga.innerHTML = ""; spinning.innerHTML = "";
-
     rows.forEach(r => {
       const [id, naam, les, contact] = r;
       const row = `<tr><td>${id}</td><td>${naam}</td><td>${contact}</td></tr>`;
@@ -275,17 +125,13 @@
     const rows = await fetchSheetData(SHEET_ID, "Reserveringen!A2:F");
     const table = document.getElementById("reservationTable");
     table.innerHTML = "";
-
     rows.forEach(r => {
       const [id, naam, les, datum, tijd, contact] = r;
-      table.innerHTML += `<tr>
-        <td>${id}</td><td>${naam}</td><td>${les}</td>
-        <td>${datum}</td><td>${tijd}</td><td>${contact}</td>
-      </tr>`;
+      table.innerHTML += `<tr><td>${id}</td><td>${naam}</td><td>${les}</td><td>${datum}</td><td>${tijd}</td><td>${contact}</td></tr>`;
     });
   }
 
-  // Status (GitHub API as example)
+  // Status
   async function fetchStatus() {
     try {
       const res = await fetch("https://www.githubstatus.com/api/v2/summary.json");
@@ -295,19 +141,15 @@
       data.components.forEach(c => {
         const div = document.createElement("div");
         div.className = "status-card";
-        div.innerHTML = `
-          <h3>${c.name}</h3>
-          <p>Status: <b>${c.status}</b></p>
-          <p>Updated: ${new Date(c.updated_at).toLocaleString()}</p>
-        `;
+        div.innerHTML = `<h3>${c.name}</h3><p>Status: <b>${c.status}</b></p><p>Updated: ${new Date(c.updated_at).toLocaleString()}</p>`;
         grid.appendChild(div);
       });
-    } catch (err) {
+    } catch {
       document.getElementById("statusGrid").innerHTML = "<p style='color:red'>❌ Fout bij ophalen status.</p>";
     }
   }
 
-  // Load personnel
+  // Personnel
   const personnel = [
     {name:'Katrien Boeckx', role:'CEO & Founder', bio:'', img:'https://lh3.googleusercontent.com/AtSbkeeQXJ3MWa8Rzdg0I568tq-e9KjqkIDrxa-W2IT4xpnbgsxQqzgwX5ptekRYP4ix2rL_KP9kFCnbg3d29QicJ6p2T-euQgZN=w1500'},
     {name:'Tristan Vansonhoven', role:'IT Specialist', bio:'', img:'https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg'},
@@ -319,12 +161,7 @@
     personnel.forEach(p => {
       const card = document.createElement("div");
       card.className = "person-card";
-      card.innerHTML = `
-        <img src="${p.img}" alt="${p.name}">
-        <h3>${p.name}</h3>
-        <p><b>Rol:</b> ${p.role}</p>
-        <p><b>Bio:</b> ${p.bio}</p>
-      `;
+      card.innerHTML = `<img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><p><b>Rol:</b> ${p.role}</p><p><b>Bio:</b> ${p.bio}</p>`;
       grid.appendChild(card);
     });
   }
@@ -335,7 +172,6 @@
   fetchStatus();
   loadPersonnel();
 
-  // Auto refresh every 30s
   setInterval(() => {
     loadLedenFromSheet();
     loadReserveringenFromSheet();
