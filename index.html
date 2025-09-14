@@ -264,8 +264,8 @@
           <select name="plan">
             <option value="">Kies een plan (optioneel)</option>
             <option value="proefles">Proefles</option>
-            <option value="maand">Maand</option>
-            <option value="jaar">Jaar</option>
+            <option value="1 Keer">1 Keer</option>
+            <option value="Maand">Maandelijks</option>
           </select>
         </div>
         <div style="margin-top:8px">
@@ -314,7 +314,7 @@ const INSTRUCTORS = [
 ];
 
 const PLANS = [
-  {id:'trial', title:'Proef Les', desc:'1 les naar keuze', price:10, period:'eenmalig'},
+  {id:'trial', title:'Proef Les', desc:'1 les naar keuze (1ste keer gratis)', price:10, period:'eenmalig'},
   {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
   {id:'Maand', title:'Maan Abonnement', desc:'Maandelijks Abonnoment', price:40, period:'Maandelijks'}
 ];
@@ -495,7 +495,7 @@ $('#modal-confirm').addEventListener('click', ()=>{
   if(item) item.spots -= qty;
   renderSchedule();
   if(activeBooking.type==='proefles' || activeBooking.type==='lesson'){
-    fetch('https://formspree.io/f/mldwawvd', {
+    fetch('https://formspree.io/f/xyzdazgz', {
       method:'POST',
       headers:{'Accept':'application/json'},
       body: JSON.stringify({
