@@ -118,8 +118,10 @@
     </div>
   </div>
 <script>
-  const SHEET_ID="1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
-  const API_KEY="AIzaSyDIo56Keur-KzkIECQ0bih0fia9DVkpkng";
+  // Two different sheets
+  const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48"; // leden + reserveringen
+  const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; // users, login, profile
+  const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4"; // your API key
 
   // Show specific page
   window.showPage=function(pageId,btn){
@@ -129,16 +131,14 @@
     if(btn)btn.classList.add("active")
   };
 
-  // Go back to main
   function goMain(){window.location.href="index.html"}
 
-  // Logout user
   function logout(){
     localStorage.removeItem("loggedInUser");
     window.location.href="login.html"
   }
 
-  // Fetch data from Google Sheets
+  // Fetch data helper
   async function fetchSheetData(sheetId,range){
     try{
       const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${API_KEY}`;
@@ -151,7 +151,7 @@
     }
   }
 
-  // Load leden
+  // Load leden (main sheet)
   async function loadLedenFromSheet(){
     const rows=await fetchSheetData(SHEET_ID,"Leden!A2:D");
     const boksen=document.getElementById("ledenBoksen");
@@ -167,7 +167,7 @@
     })
   }
 
-  // Load reserveringen
+  // Load reserveringen (main sheet)
   async function loadReserveringenFromSheet(){
     const rows=await fetchSheetData(SHEET_ID,"Reserveringen!A2:F");
     const table=document.getElementById("reservationTable");
@@ -178,9 +178,9 @@
     })
   }
 
-  // Load personnel
+  // Load personnel (user sheet)
   async function loadPersonnel(){
-    const rows=await fetchSheetData(SHEET_ID,"Users!A2:E");
+    const rows=await fetchSheetData(USER_SHEET_ID,"Users!A2:E");
     const grid=document.getElementById("personnelGrid");
     grid.innerHTML="";
     rows.forEach(r=>{
@@ -192,11 +192,11 @@
     })
   }
 
-  // Load user info
+  // Load logged-in user info (user sheet)
   async function loadUserInfo(){
     const user=localStorage.getItem("loggedInUser");
     if(!user){window.location.href="login.html";return}
-    const rows=await fetchSheetData(SHEET_ID,"Users!A2:E");
+    const rows=await fetchSheetData(USER_SHEET_ID,"Users!A2:E");
     const found=rows.find(r=>r[0]===user);
     if(found){
       const[username,,role,bio,pfp]=found;
@@ -210,17 +210,7 @@
     }
   }
 
-  // Refresh profile
   async function refreshProfile(){await loadUserInfo()}
-
-  // Search function
-  function searchTable(tableId,query){
-    const rows=document.querySelectorAll(`#${tableId} tr`);
-    rows.forEach(row=>{
-      const text=row.innerText.toLowerCase();
-      row.style.display=text.includes(query.toLowerCase())?"":"none"
-    })
-  }
 
   // Auto refresh
   setInterval(()=>{
