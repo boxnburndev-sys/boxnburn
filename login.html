@@ -1,129 +1,183 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Personeel Login</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Login</title>
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       background: url('https://i.ibb.co/9HqVTqkv/Boxing-Spinning-Yoga.png') no-repeat center center;
       background-size: cover;
-      font-family: 'Segoe UI', Arial, sans-serif;
     }
     .login-box {
-      width: 360px;
-      background: rgba(0,0,0,0.85);
-      padding: 36px 28px;
-      border-radius: 16px;
+      width: 380px;
+      background: radial-gradient(circle, black 0%, #080808 40%, red 100%);
+      border-radius: 20px;
+      padding: 40px 30px;
       text-align: center;
       color: #fff;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.45);
-      backdrop-filter: blur(6px);
+      border: 2px solid #222222;
+      box-shadow: none;
+
     }
-    .login-box img { width: 110px; margin-bottom: 12px; }
-    .school-name { font-size: 18px; font-weight: 600; margin-bottom: 18px; color: #ff8a5a; }
+    .login-box img {
+      width: 120px;
+      margin-bottom: 15px;
+    }
+    .school-name {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 25px;
+      color: #333;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .input-group input {
+      flex: 1;
+      height: 45px;
+      padding: 0 45px 0 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+      color: #000;
+      line-height: 45px;
+    }
+    .input-group input::placeholder {
+      color: #555;
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: #ff7f50;
+      background: #f0f0f0;
+    }
+    .input-group .icon {
+      position: absolute;
+      right: 15px;
+      font-size: 18px;
+      color: #666;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .forgot {
+      font-size: 12px;
+      color: #444;
+      margin-bottom: 20px;
+      cursor: pointer;
+      display: block;
+      text-align: left;
+      transition: color 0.2s;
+    }
+    .forgot:hover {
+      color: #000;
+    }
     button {
       width: 100%;
-      padding: 13px;
-      background: linear-gradient(135deg,#ff7f50,#ff7043);
-      color: white; border: none; border-radius: 10px;
-      font-size: 15px; font-weight: 700; cursor: pointer;
-      transition: transform .12s, box-shadow .12s;
+      padding: 14px;
+      background: linear-gradient(135deg, #ff7f50, #ff7043);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    button:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.28); }
-    #error { color:#ff6b6b; margin-top:12px; font-size:14px; display:none; text-align:center; }
-    #debug { font-size:12px; color:#bbb; margin-top:10px; display:none; white-space:pre-wrap; text-align:left; }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.3);
+    }
+    #error {
+      color: #d00;
+      margin-top: 10px;
+      display: none;
+      font-size: 13px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
+
   <div class="login-box">
     <img src="https://i.ibb.co/Q3SJncKg/afbeelding-2025-09-12-072012841-removebg-preview.png" alt="Logo">
-    <div class="school-name">Box N Burn • Personeel Dashboard</div>
-    <button id="googleBtn">Log in met Google</button>
-    <p id="error">Je hebt geen toegang tot dit dashboard.</p>
-    <pre id="debug" aria-hidden="true"></pre>
+    <div class="school-name">Box N Burn • Dashboard</div>
+
+    <div class="input-group">
+      <input type="text" id="username" placeholder="Gebruikersnaam">
+      <span class="icon">👤</span>
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Wachtwoord">
+      <span class="icon" id="togglePassword">👁</span>
+    </div>
+
+    <div class="forgot">🔒 Wachtwoord vergeten?</div>
+
+    <button onclick="login()">Aanmelden</button>
+    <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+<script>
+  // Demo users (username -> {password, role, pfp})
+  const users = {
+    "Katrien Boeckx": { password: "Pianostemmer123", role: "CEO/FOUNDER", pfp: "https://lh3.googleusercontent.com/AtSbkeeQXJ3MWa8Rzdg0I568tq-e9KjqkIDrxa-W2IT4xpnbgsxQqzgwX5ptekRYP4ix2rL_KP9kFCnbg3d29QicJ6p2T-euQgZN=w1500" },
+    "Tristan Vansonhoven": { password: "Tristanv?", role: "IT Specialist", pfp: "https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=OgNlLwyzRT8Q7kNvwGsLxNe&_nc_oc=Admf8UwaBIUqavwDYqbac2R436o1CbMtgCEWrhGB9z2a67xLlXPjSwaX4dljmERi9zDvaj4UjKGHhXjTjTE_U2VU&_nc_zt=23&_nc_ht=scontent-bru2-1.xx&_nc_gid=kWHPat1TTwVYwyG3qaqNFw&oh=00_AfaQt4OB3xZJMm1gucQvIbptb0INXvO7AdFZeDTSyM14iA&oe=68C4E732" },
+    "Mil TSeyen": { password: "Lily1606", role: "Huis DJ", pfp: "https://scontent.fbru2-1.fna.fbcdn.net/v/t1.6435-9/40441548_1802350659833865_3033661819232190464_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=F20ZXvE70msQ7kNvwGK2JPB&_nc_oc=AdnIqvWrZuHpOElM9IDVwyzUlpYQrAs8vNKKLQ6Fw3oFTgkn2UDSWGfmWlI-INtv_ZzGbIM7XH2iNgiOJq4yb3T6&_nc_zt=23&_nc_ht=scontent.fbru2-1.fna&_nc_gid=e0GAxe11U5kdcWwlKopW_w&oh=00_AfaBs2Wn5CMy4E0X_aduBGs63_9M4UikhZdFFaa0KgpSQQ&oe=68EB70B6" }
+  };
 
-    const firebaseConfig = {
-     apiKey: "AIzaSyDRJ8VNNtkliEUCWDUyED27niyTjtTIA6w",
-     authDomain: "box-n-burn.firebaseapp.com",
-     projectId: "box-n-burn",
-     storageBucket: "box-n-burn.firebasestorage.app",
-     messagingSenderId: "349419283461",
-     appId: "1:349419283461:web:66e931d1beeff6f643686c",
-    };
+  // Make sure these base app storage keys exist (messages, grades, files)
+  if (!localStorage.getItem('app_users')) {
+    // Store the known users list for messaging UI to read (usernames only)
+    localStorage.setItem('app_users', JSON.stringify(Object.keys(users)));
+  }
+  if (!localStorage.getItem('messages')) localStorage.setItem('messages', JSON.stringify([]));
+  if (!localStorage.getItem('grades')) localStorage.setItem('grades', JSON.stringify({}));
+  if (!localStorage.getItem('files')) localStorage.setItem('files', JSON.stringify([]));
+  if (!localStorage.getItem('canteen_orders')) localStorage.setItem('canteen_orders', JSON.stringify([]));
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const provider = new GoogleAuthProvider();
+  function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const error = document.getElementById("error");
 
-    const googleBtn = document.getElementById('googleBtn');
-    const errorEl = document.getElementById('error');
-    const debugEl = document.getElementById('debug');
-
-    function showError(text, debugText) {
-      errorEl.textContent = text;
-      errorEl.style.display = 'block';
-      if (debugText) { debugEl.textContent = debugText; debugEl.style.display = 'block'; }
-    }
-
-    googleBtn.addEventListener('click', async () => {
-      errorEl.style.display = 'none';
-      debugEl.style.display = 'none';
-      try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        if (!user || !user.email) {
-          showError('⚠️ Geen e-mailadres gevonden op deze login.');
-          return;
-        }
-
-        const staffRef = doc(db, "staff", user.email);
-        const staffSnap = await getDoc(staffRef);
-
-        if (staffSnap.exists()) {
-          const data = staffSnap.data();
-          localStorage.setItem("loggedInUser", data.name || user.displayName || user.email);
-          localStorage.setItem("userRole", data.role || '');
-          localStorage.setItem("userPfp", data.pfp || user.photoURL || '');
-          window.location.href = "dashboard.html";
-        } else {
-          showError('❌ Dit Google-account is niet toegestaan. Neem contact op met beheerder.');
-        }
-
-      } catch (err) {
-        // Specifieke fouten en uitleg in het NL
-        let message = '⚠️ Inloggen mislukt. Probeer opnieuw.';
-        let debug = `Code: ${err.code || 'unknown'}\nMessage: ${err.message || err.toString()}`;
-
-        if (err.code === 'auth/unauthorized-domain') {
-          message = 'Domein niet toegestaan. Voeg uw domein toe of contacteer support.';
-          debug += '\nActie: Voeg "localhost" en/of uw domein toe aan Authorized domains.';
-        } else if (err.code === 'auth/popup-closed-by-user') {
-          message = 'Popup gesloten. Probeer opnieuw en voltooi de Google login.';
-        } else if (err.code === 'auth/cancelled-popup-request' || err.code === 'auth/popup-blocked') {
-          message = 'De popup is geblokkeerd of er is al een popup actief. Sta popups toe of probeer opnieuw.';
-        } else if (err.code === 'auth/network-request-failed') {
-          message = 'Netwerkfout. Controleer je internetverbinding.';
-        } else if (err.code === 'auth/operation-not-allowed') {
-          message = 'Google login niet ingeschakeld in Firebase Auth (enable Google in Sign-in method).';
-        }
-
-        console.error('Login fout:', err);
-        showError(message, debug);
+    if (users[user] && users[user].password === pass) {
+      localStorage.setItem("loggedInUser", user);
+      localStorage.setItem("userRole", users[user].role);
+      localStorage.setItem("userPfp", users[user].pfp);
+      // ensure app_users stays updated (if you add accounts later)
+      const appUsers = JSON.parse(localStorage.getItem('app_users') || '[]');
+      if (!appUsers.includes(user)) {
+        appUsers.push(user);
+        localStorage.setItem('app_users', JSON.stringify(appUsers));
       }
-    });
-  </script>
+      window.location.href = "dashboard.html";
+    } else {
+      error.style.display = "block";
+      setTimeout(()=> error.style.display = "none", 3500);
+    }
+  }
+
+  document.getElementById('togglePassword').addEventListener('click', () => {
+    const p = document.getElementById('password');
+    p.type = p.type === 'password' ? 'text' : 'password';
+  });
+</script>
+
 </body>
 </html>
