@@ -44,6 +44,8 @@
       <button onclick="showPage('leden', this)">Leden</button>
       <button onclick="showPage('reserveringen', this)">Reserveringen</button>
       <button onclick="showPage('status', this)">Status</button>
+      <button onclick="goMain()">Main</button>
+      <button onclick="logout()">Logout</button>
     </div>
     <div class="user-info">
       <div class="details">
@@ -101,6 +103,17 @@
     document.querySelectorAll(".navbar .menu button").forEach(b => b.classList.remove("active"));
     if (btn) btn.classList.add("active");
   };
+
+  function goMain() {
+    window.location.href = "index.html";
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userPfp");
+    window.location.href = "login.html";
+  }
 
   async function fetchSheetData(sheetId, range) {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${API_KEY}`;
