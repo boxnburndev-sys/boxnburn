@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>PC Login</title>
+  <title>Box N Burn Login</title>
   <style>
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
@@ -37,10 +37,11 @@
       width: 130px;
       height: 130px;
       border-radius: 50%;
-      margin-bottom: 15px;
+      margin: 0 auto 15px;   /* centers horizontally */
       border: 3px solid #fff;
       display: none;
-      animation: fadeIn 0.5s ease-in;
+      object-fit: cover;     /* ensures image fills circle */
+      animation: popIn 0.4s ease-in-out;
     }
     .school-name {
       font-size: 18px;
@@ -94,6 +95,10 @@
       from {opacity: 0; transform: translateY(20px);}
       to {opacity: 1; transform: translateY(0);}
     }
+    @keyframes popIn {
+      0% {opacity: 0; transform: scale(0.7);}
+      100% {opacity: 1; transform: scale(1);}
+    }
   </style>
 </head>
 <body>
@@ -122,6 +127,7 @@
   const pfp = document.getElementById("pfp");
   const welcomeText = document.getElementById("welcomeText");
   const error = document.getElementById("error");
+
   usernameInput.addEventListener("input", () => {
     const name = usernameInput.value.trim();
     if (users[name]) {
@@ -138,6 +144,7 @@
       loginBtn.style.display = "none";
     }
   });
+
   function login() {
     const user = usernameInput.value.trim();
     const pass = passwordInput.value.trim();
@@ -153,6 +160,7 @@
       setTimeout(() => error.style.display = "none", 3000);
     }
   }
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
