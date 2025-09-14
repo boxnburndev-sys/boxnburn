@@ -39,12 +39,11 @@
 <body>
   <nav class="navbar">
     <div class="brand">📊 Box N Burn Dashboard</div>
-    <div class="menu">
+    <div class="menu" id="menuButtons">
       <button onclick="showPage('home', this)" class="active">Home</button>
       <button onclick="showPage('leden', this)">Leden</button>
       <button onclick="showPage('reserveringen', this)">Reserveringen</button>
       <button onclick="showPage('status', this)">Status</button>
-      <button id="testBtn" onclick="showPage('test', this)" style="display:none;">Test</button>
     </div>
     <div class="user-info">
       <div class="details">
@@ -183,11 +182,13 @@
     document.getElementById("pfp").src = pfp;
 
     if (role === "IT Specialist") {
-      document.getElementById("testBtn").style.display = "inline-block";
+      const menu = document.getElementById("menuButtons");
+      const btn = document.createElement("button");
+      btn.textContent = "Test";
+      btn.onclick = () => showPage("test", btn);
+      menu.appendChild(btn);
     } else {
-      if (window.location.hash.includes("test") || document.querySelector("#test:not(.hidden)")) {
-        window.location.href = "home.html";
-      }
+      document.getElementById("test").remove();
     }
   }
 
