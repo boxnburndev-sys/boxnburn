@@ -25,10 +25,6 @@
     table th, table td { padding:12px; border-bottom:1px solid #384858; text-align:left; }
     table th { background:#0f2133; font-weight:600; }
     table tr:hover { background:#384858; }
-    .status-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:16px; }
-    .status-card { background:#233445; padding:16px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.2); text-align:center; }
-    .status-card h3 { margin:0 0 8px; font-size:18px; color:#0f93ff; }
-    .status-card p { margin:0; font-size:14px; }
     .personnel-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; margin-top:20px; }
     .person-card { background:#233445; border-radius:12px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.2); text-align:center; }
     .person-card img { width:100px; height:100px; border-radius:50%; border:3px solid #0f2133; object-fit:cover; margin-bottom:10px; }
@@ -43,7 +39,6 @@
       <button onclick="showPage('home', this)" class="active">Home</button>
       <button onclick="showPage('leden', this)">Leden</button>
       <button onclick="showPage('reserveringen', this)">Reserveringen</button>
-      <button onclick="showPage('status', this)">Status</button>
       <button onclick="goMain()">Main</button>
       <button onclick="logout()">Logout</button>
     </div>
@@ -80,16 +75,6 @@
         <thead><tr><th>ID</th><th>Naam</th><th>Les</th><th>Datum</th><th>Tijd</th><th>Contact</th></tr></thead>
         <tbody id="reservationTable"></tbody>
       </table>
-    </div>
-
-    <div id="status" class="page hidden card">
-      <h2>Website Status</h2>
-      <div class="status-grid" id="statusGrid"><p>Laden...</p></div>
-    </div>
-
-    <div id="test" class="page hidden card">
-      <h2>🔧 Test Page (IT Specialist Only)</h2>
-      <p>Alleen zichtbaar voor de rol <b>IT Specialist</b>.</p>
     </div>
   </div>
 
@@ -147,23 +132,6 @@
     });
   }
 
-  async function fetchStatus() {
-    try {
-      const res = await fetch("https://www.githubstatus.com/api/v2/summary.json");
-      const data = await res.json();
-      const grid = document.getElementById("statusGrid");
-      grid.innerHTML = "";
-      data.components.forEach(c => {
-        const div = document.createElement("div");
-        div.className = "status-card";
-        div.innerHTML = `<h3>${c.name}</h3><p>Status: <b>${c.status}</b></p><p>Updated: ${new Date(c.updated_at).toLocaleString()}</p>`;
-        grid.appendChild(div);
-      });
-    } catch {
-      document.getElementById("statusGrid").innerHTML = "<p style='color:red'>❌ Fout bij ophalen status.</p>";
-    }
-  }
-
   const personnel = [
     {name:'Katrien Boeckx', role:'CEO & Founder', bio:'', img:'https://lh3.googleusercontent.com/AtSbkeeQXJ3MWa8Rzdg0I568tq-e9KjqkIDrxa-W2IT4xpnbgsxQqzgwX5ptekRYP4ix2rL_KP9kFCnbg3d29QicJ6p2T-euQgZN=w1500'},
     {name:'Tristan Vansonhoven', role:'IT Specialist', bio:'', img:'https://scontent-bru2-1.xx.fbcdn.net/v/t39.30808-6/468306733_933034698742364_6367779992239004882_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=a4xLxDmSr6AQ7kNvwFw8qLW&_nc_oc=Admkh9FCuybPIq81rH5N3T5ZvNncEKznhFbw6kD0vtI0sZcvREvg4k63MIWyDwOElDc_8AQ6gbrJXMm9owKqMuT6&_nc_zt=23&_nc_ht=scontent-bru2-1.xx&_nc_gid=gTs_ypYoiXUUmPH5tCbsaA&oh=00_AfYw75JWzkZONRXVS2QIcOkLCooS6hzr793U3kwA5qmj1w&oe=68CCD032'},
@@ -193,28 +161,16 @@
     document.getElementById("username").textContent = user;
     document.getElementById("role").textContent = role;
     document.getElementById("pfp").src = pfp;
-
-    if (role === "IT Specialist") {
-      const menu = document.getElementById("menuButtons");
-      const btn = document.createElement("button");
-      btn.textContent = "Test";
-      btn.onclick = () => showPage("test", btn);
-      menu.appendChild(btn);
-    } else {
-      document.getElementById("test").remove();
-    }
   }
 
   loadLedenFromSheet();
   loadReserveringenFromSheet();
-  fetchStatus();
   loadPersonnel();
   loadUserInfo();
 
   setInterval(() => {
     loadLedenFromSheet();
     loadReserveringenFromSheet();
-    fetchStatus();
   }, 30000);
 </script>
 
