@@ -1,345 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>IT Command Center Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Roboto, Arial, sans-serif;
-      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
-      color: #e6edf3;
-      overflow-x: hidden;
-    }
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 24px;
-      background: rgba(22, 27, 34, 0.95);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .brand {
-      font-size: 1.6rem;
-      font-weight: bold;
-      color: #58a6ff;
-      letter-spacing: 1px;
-      text-shadow: 0 0 8px rgba(88,166,255,0.8);
-    }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .status-live {
-      color: #3fb950;
-      font-weight: bold;
-      animation: pulse 1.6s infinite;
-    }
-    @keyframes pulse {
-      0% { opacity: 1 }
-      50% { opacity: 0.4 }
-      100% { opacity: 1 }
-    }
-    .profile {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-    .profile span {
-      font-weight: bold;
-      color: #58a6ff;
-      font-size: 0.95rem;
-    }
-    .btn {
-      background: #238636;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
-    }
-    .btn:hover { transform: scale(1.08); background: #2ea043; }
-    .btn-danger { background: #f85149; }
-    .btn-danger:hover { background: #da3633; }
-    .content { padding: 24px; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 22px;
-      margin-bottom: 22px;
-    }
-    .card {
-      background: #161b22;
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-      transition: transform 0.25s, box-shadow 0.25s;
-      overflow: hidden;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-    }
-    .stat-title {
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-    .stat-value {
-      font-size: 2.2rem;
-      font-weight: bold;
-      margin-top: 8px;
-      color: #58a6ff;
-      text-shadow: 0 0 6px rgba(88,166,255,0.6);
-    }
-    .status-up { color: #3fb950; font-weight: bold; }
-    .status-down { color: #f85149; font-weight: bold; }
-    canvas { max-height: 240px; }
-    table { width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 0.9rem; }
-    th,td { padding: 8px; text-align: left; }
-    th { opacity: 0.8; font-weight: normal; }
-    .incident-log, .news-feed {
-      max-height: 200px;
-      overflow-y: auto;
-      font-size: 0.85rem;
-      background: #0d1117;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-    }
-    .incident-log div { margin-bottom: 6px; }
-    .topology {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 280px;
-      position: relative;
-    }
-    .node {
-      position: absolute;
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: white;
-      box-shadow: 0 0 15px rgba(0,0,0,0.6);
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-    .node.up { background: #238636; box-shadow: 0 0 15px rgba(63,185,80,0.7); }
-    .node.down { background: #f85149; box-shadow: 0 0 15px rgba(248,81,73,0.7); }
-    .center { top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .top { top: 5%; left: 50%; transform: translateX(-50%); }
-    .left { top: 50%; left: 5%; transform: translateY(-50%); }
-    .right { top: 50%; right: 5%; transform: translateY(-50%); }
-    .bottom { bottom: 5%; left: 50%; transform: translateX(-50%); }
-    .weather { font-size: 0.9rem; line-height: 1.5; }
-    .footer {
-      padding: 16px;
-      text-align: center;
-      font-size: 0.85rem;
-      opacity: 0.6;
-      background: #161b22;
-      margin-top: 30px;
-    }
-  </style>
+<meta charset="utf-8" />
+<title>Ultimate Futuristic IT Command Center</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --bg-1:#041226;
+  --bg-2:#071428;
+  --panel:#0f1a26;
+  --glass:rgba(255,255,255,0.03);
+  --muted:#9fb0bf;
+  --accent:#1fb6ff;
+  --good:#2dd36f;
+  --warn:#ffb020;
+  --bad:#ff5c7c;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background:linear-gradient(180deg,var(--bg-1),var(--bg-2));
+  color:#f5faff;
+  overflow-x:hidden;
+}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:var(--panel);box-shadow:0 4px 14px rgba(0,0,0,0.7)}
+.brand{font-size:1.5rem;font-weight:700;color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:20px}
+.status-live{color:var(--good);font-weight:600;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.3}100%{opacity:1}}
+.btn{background:var(--accent);border:none;color:white;padding:6px 14px;border-radius:8px;cursor:pointer;font-weight:600;transition:0.2s}
+.btn:hover{transform:scale(1.05)}
+.profile{display:flex;flex-direction:column;align-items:flex-end}
+.profile span{font-weight:700;color:var(--accent)}
+.content{padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:20px}
+.card{background:var(--panel);border-radius:16px;padding:20px;box-shadow:0 6px 20px rgba(0,0,0,0.6);transition:0.2s}
+.card:hover{transform:translateY(-5px);box-shadow:0 10px 28px rgba(0,0,0,0.8)}
+.stat-title{font-size:.9rem;color:var(--muted)}
+.stat-value{font-size:2rem;font-weight:700;margin-top:6px;color:var(--accent)}
+.status-up{color:var(--good);font-weight:600}
+.status-down{color:var(--bad);font-weight:600}
+canvas{max-height:220px}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:8px;text-align:left}
+.incident-log,.news-feed,.terminal{background:var(--glass);border-radius:10px;padding:10px;max-height:200px;overflow:auto;font-size:.9rem}
+.clock{font-size:1.2rem;font-weight:600;text-align:right;color:var(--accent)}
+.mode-toggle{background:var(--warn)}
+.terminal-input{width:100%;background:transparent;border:none;color:#f5faff;font-family:monospace;padding:4px;outline:none}
+</style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="brand">IT Command Center</div>
-    <div class="nav-right">
-      <div class="status-live">● Live</div>
-      <div class="profile">
-        <span id="usernameDisplay">User</span>
-        <button class="btn btn-danger" onclick="logout()">Logout</button>
-      </div>
-      <button class="btn" onclick="goHome()">Home</button>
+<nav class="navbar">
+  <div class="brand">IT Command Center</div>
+  <div class="nav-right">
+    <div class="status-live">● Live</div>
+    <div class="clock" id="clock"></div>
+    <div class="profile">
+      <span id="usernameDisplay">User</span>
+      <button class="btn" onclick="logout()">Logout</button>
     </div>
-  </nav>
-
-  <div class="content">
-    <div class="grid">
-      <div class="card"><div class="stat-title">Active Servers</div><div class="stat-value" id="serverCount">0</div></div>
-      <div class="card"><div class="stat-title">Avg CPU Load</div><div class="stat-value" id="cpuAvg">0%</div></div>
-      <div class="card"><div class="stat-title">Avg RAM Usage</div><div class="stat-value" id="ramAvg">0%</div></div>
-      <div class="card"><div class="stat-title">Ping (ms)</div><div class="stat-value" id="pingStat">-</div></div>
-      <div class="card"><div class="stat-title">Active Incidents</div><div class="stat-value" id="incidentCount">0</div></div>
-    </div>
-
-    <div class="grid">
-      <div class="card"><h3>CPU Usage</h3><canvas id="cpuChart"></canvas></div>
-      <div class="card"><h3>RAM Usage</h3><canvas id="ramChart"></canvas></div>
-      <div class="card"><h3>Disk Usage</h3><canvas id="diskChart"></canvas></div>
-      <div class="card"><h3>Network Traffic</h3><canvas id="netChart"></canvas></div>
-    </div>
-
-    <div class="grid">
-      <div class="card">
-        <h3>Service Status</h3>
-        <table>
-          <thead><tr><th>Service</th><th>Status</th></tr></thead>
-          <tbody id="serviceTable"></tbody>
-        </table>
-      </div>
-      <div class="card"><h3>Incident Log</h3><div class="incident-log" id="incidentLog"></div></div>
-      <div class="card"><h3>Network Topology</h3>
-        <div class="topology">
-          <div class="node center up" id="coreNode">Core</div>
-          <div class="node top up" id="webNode">Web</div>
-          <div class="node left up" id="dbNode">DB</div>
-          <div class="node right up" id="mailNode">Mail</div>
-          <div class="node bottom up" id="proxyNode">Proxy</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid">
-      <div class="card"><h3>Weather</h3><div class="weather" id="weatherBox">Loading...</div></div>
-      <div class="card"><h3>Tech News</h3><div class="news-feed" id="newsFeed"></div></div>
-      <div class="card"><h3>Uptime (hrs)</h3><canvas id="uptimeChart"></canvas></div>
-    </div>
+    <button class="btn mode-toggle" onclick="toggleMode()">Mode</button>
   </div>
-
-  <div class="footer">© 2025 IT Command Center • All Systems Monitored</div>
-
+</nav>
+<div class="content">
+  <div class="grid">
+    <div class="card"><div class="stat-title">Active Servers</div><div class="stat-value" id="serverCount">0</div></div>
+    <div class="card"><div class="stat-title">Avg CPU Load</div><div class="stat-value" id="cpuAvg">0%</div></div>
+    <div class="card"><div class="stat-title">Avg RAM Usage</div><div class="stat-value" id="ramAvg">0%</div></div>
+    <div class="card"><div class="stat-title">Ping (ms)</div><div class="stat-value" id="pingStat">-</div></div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>CPU Usage</h3><canvas id="cpuChart"></canvas></div>
+    <div class="card"><h3>RAM Usage</h3><canvas id="ramChart"></canvas></div>
+    <div class="card"><h3>Disk Usage</h3><canvas id="diskChart"></canvas></div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>Service Status</h3><table><thead><tr><th>Service</th><th>Status</th></tr></thead><tbody id="serviceTable"></tbody></table></div>
+    <div class="card"><h3>Incident Log</h3><div class="incident-log" id="incidentLog"></div></div>
+    <div class="card"><h3>News Feed</h3><div class="news-feed" id="newsFeed"></div></div>
+  </div>
+  <div class="grid">
+    <div class="card"><h3>Threat Radar</h3><canvas id="threatChart"></canvas></div>
+    <div class="card"><h3>Your IP & Location</h3><div id="ipinfo">Loading...</div></div>
+    <div class="card"><h3>Terminal</h3><div class="terminal" id="terminalOutput"></div><input class="terminal-input" id="terminalInput" placeholder="Type command..."></div>
+  </div>
+</div>
 <script>
-  window.onload = function() {
-    const user = localStorage.getItem("loggedInUser");
-    if (!user) {
-      window.location.href = "ITdash.html";
-      return;
-    }
-    document.getElementById("usernameDisplay").textContent = user;
-  };
-  function logout() { localStorage.removeItem("loggedInUser"); window.location.href = "ITdash.html"; }
-  function goHome() { window.location.href = "index.html"; }
-
-  const servers = [
-    {name:"Web Server", cpu:0, ram:0, disk:0, net:0},
-    {name:"DB Server", cpu:0, ram:0, disk:0, net:0},
-    {name:"Backup Node", cpu:0, ram:0, disk:0, net:0},
-    {name:"Proxy Server", cpu:0, ram:0, disk:0, net:0}
-  ];
-  const labels=[], cpuData=[], ramData=[], diskData=[], netData=[], uptimeData=[];
-
-  const cpuChart = new Chart(document.getElementById("cpuChart"), {type:'line',data:{labels,datasets:[{label:'CPU %',data:cpuData,borderColor:'#58a6ff',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
-  const ramChart = new Chart(document.getElementById("ramChart"), {type:'line',data:{labels,datasets:[{label:'RAM %',data:ramData,borderColor:'#3fb950',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
-  const diskChart = new Chart(document.getElementById("diskChart"), {type:'line',data:{labels,datasets:[{label:'Disk %',data:diskData,borderColor:'#f85149',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
-  const netChart = new Chart(document.getElementById("netChart"), {type:'line',data:{labels,datasets:[{label:'Net MB/s',data:netData,borderColor:'#f2cc60',tension:0.3}]},options:{scales:{y:{min:0,max:1000}}}});
-  const uptimeChart = new Chart(document.getElementById("uptimeChart"), {type:'bar',data:{labels:["Web","DB","Backup","Proxy"],datasets:[{label:'Uptime Hours',data:uptimeData,backgroundColor:'#58a6ff'}]},options:{scales:{y:{beginAtZero:true}}}});
-
-  let incidentCount=0;
-  function logIncident(msg) {
-    incidentCount++;
-    document.getElementById("incidentCount").textContent=incidentCount;
-    const log=document.getElementById("incidentLog");
-    const entry=document.createElement("div");
-    entry.textContent=new Date().toLocaleTimeString()+" - "+msg;
-    log.prepend(entry);
-  }
-
-  function updateSystemStats() {
-    let cpuSum=0, ramSum=0, netSum=0;
-    servers.forEach(s=>{
-      s.cpu=(Math.random()*70+10).toFixed(1);
-      s.ram=(Math.random()*60+20).toFixed(1);
-      s.disk=(Math.random()*50+40).toFixed(1);
-      s.net=(Math.random()*900+50).toFixed(1);
-      cpuSum+=parseFloat(s.cpu); ramSum+=parseFloat(s.ram); netSum+=parseFloat(s.net);
-      if(s.cpu>85||s.ram>90) logIncident(s.name+" high usage");
-    });
-    document.getElementById("serverCount").textContent=servers.length;
-    document.getElementById("cpuAvg").textContent=(cpuSum/servers.length).toFixed(1)+"%";
-    document.getElementById("ramAvg").textContent=(ramSum/servers.length).toFixed(1)+"%";
-    const now=new Date().toLocaleTimeString();
-    labels.push(now);
-    cpuData.push((cpuSum/servers.length).toFixed(1));
-    ramData.push((ramSum/servers.length).toFixed(1));
-    diskData.push(servers[0].disk);
-    netData.push((netSum/servers.length).toFixed(1));
-    if(labels.length>20){labels.shift();cpuData.shift();ramData.shift();diskData.shift();netData.shift();}
-    uptimeData.length=0; servers.forEach(()=>uptimeData.push(Math.floor(Math.random()*1000)));
-    cpuChart.update(); ramChart.update(); diskChart.update(); netChart.update(); uptimeChart.update();
-  }
-
-  async function runPing() {
-    const start=performance.now();
-    try {
-      await fetch("https://www.google.com",{mode:"no-cors"});
-      const end=performance.now();
-      document.getElementById("pingStat").textContent=Math.round(end-start);
-    } catch {
-      document.getElementById("pingStat").textContent="Timeout";
-      logIncident("Ping failure");
-    }
-  }
-
-  const services = [
-    {name:"Website",url:"https://example.com",node:"webNode"},
-    {name:"API",url:"https://jsonplaceholder.typicode.com/posts",node:"coreNode"},
-    {name:"Intranet",url:"https://httpstat.us/200",node:"proxyNode"},
-    {name:"Mail Server",url:"https://httpstat.us/503",node:"mailNode"},
-    {name:"Database",url:"https://httpstat.us/200",node:"dbNode"}
-  ];
-
-  async function checkServices() {
-    const table=document.getElementById("serviceTable"); table.innerHTML="";
-    for(const s of services) {
-      let status; let up=false;
-      try {
-        const res=await fetch(s.url);
-        if(res.ok){status='<span class="status-up">UP</span>';up=true;}
-        else{status='<span class="status-down">DOWN</span>';}
-      } catch { status='<span class="status-down">DOWN</span>'; }
-      table.innerHTML+=`<tr><td>${s.name}</td><td>${status}</td></tr>`;
-      const node=document.getElementById(s.node);
-      if(node) node.className="node "+(up?"up":"down");
-      if(!up) logIncident(s.name+" down");
-    }
-  }
-
-  async function loadWeather() {
-    try {
-      const res=await fetch("https://wttr.in/?format=%C+%t");
-      const text=await res.text();
-      document.getElementById("weatherBox").textContent="Local Weather: "+text;
-    } catch {
-      document.getElementById("weatherBox").textContent="Weather unavailable";
-    }
-  }
-
-  async function loadNews() {
-    const feed=document.getElementById("newsFeed"); feed.innerHTML="";
-    const fakeNews=[
-      "New zero-day vulnerability discovered",
-      "Major cloud outage reported",
-      "Patch Tuesday updates released",
-      "AI monitoring integration live",
-      "Backup system tested successfully"
-    ];
-    fakeNews.forEach(n=>{
-      const div=document.createElement("div");
-      div.textContent="• "+n;
-      feed.appendChild(div);
-    });
-  }
-
-  updateSystemStats(); runPing(); checkServices(); loadWeather(); loadNews();
-  setInterval(updateSystemStats,5000);
-  setInterval(runPing,10000);
-  setInterval(checkServices,30000);
-  setInterval(loadWeather,600000);
-  setInterval(loadNews,900000);
+window.onload=function(){
+  const user=localStorage.getItem("loggedInUser");
+  if(!user){window.location.href="ITdash.html";return}
+  document.getElementById("usernameDisplay").textContent=user;
+}
+function logout(){localStorage.removeItem("loggedInUser");window.location.href="ITdash.html"}
+function toggleMode(){document.body.classList.toggle("light")}
+setInterval(()=>{document.getElementById("clock").textContent=new Date().toLocaleString()},1000)
+const servers=[{name:"Web Server 1",cpu:0,ram:0,disk:0},{name:"DB Server",cpu:0,ram:0,disk:0},{name:"Backup Node",cpu:0,ram:0,disk:0},{name:"Proxy Server",cpu:0,ram:0,disk:0}]
+const labels=[];const cpuData=[];const ramData=[];const diskData=[]
+const cpuChart=new Chart(document.getElementById("cpuChart"),{type:"line",data:{labels,datasets:[{label:"CPU %",data:cpuData,borderColor:"#1fb6ff",tension:0.3}]},options:{scales:{y:{min:0,max:100}}}})
+const ramChart=new Chart(document.getElementById("ramChart"),{type:"line",data:{labels,datasets:[{label:"RAM %",data:ramData,borderColor:"#2dd36f",tension:0.3}]},options:{scales:{y:{min:0,max:100}}}})
+const diskChart=new Chart(document.getElementById("diskChart"),{type:"line",data:{labels,datasets:[{label:"Disk %",data:diskData,borderColor:"#ff5c7c",tension:0.3}]},options:{scales:{y:{min:0,max:100}}}})
+const threatChart=new Chart(document.getElementById("threatChart"),{type:"bar",data:{labels:[],datasets:[{label:"Threat Level",data:[],backgroundColor:"#ffb020"}]},options:{scales:{y:{min:0,max:100}}}})
+function updateSystemStats(){
+  let cpuSum=0,ramSum=0
+  servers.forEach(s=>{s.cpu=(Math.random()*70+10).toFixed(1);s.ram=(Math.random()*60+20).toFixed(1);s.disk=(Math.random()*50+40).toFixed(1);cpuSum+=parseFloat(s.cpu);ramSum+=parseFloat(s.ram)})
+  document.getElementById("serverCount").textContent=servers.length
+  document.getElementById("cpuAvg").textContent=(cpuSum/servers.length).toFixed(1)+"%"
+  document.getElementById("ramAvg").textContent=(ramSum/servers.length).toFixed(1)+"%"
+  const now=new Date().toLocaleTimeString()
+  labels.push(now)
+  cpuData.push((cpuSum/servers.length).toFixed(1))
+  ramData.push((ramSum/servers.length).toFixed(1))
+  diskData.push(servers[0].disk)
+  if(labels.length>15){labels.shift();cpuData.shift();ramData.shift();diskData.shift()}
+  cpuChart.update();ramChart.update();diskChart.update()
+  threatChart.data.labels.push(now)
+  threatChart.data.datasets[0].data.push(Math.random()*100)
+  if(threatChart.data.labels.length>15){threatChart.data.labels.shift();threatChart.data.datasets[0].data.shift()}
+  threatChart.update()
+}
+async function runPing(){const start=performance.now();try{await fetch("https://www.google.com",{mode:"no-cors"});const end=performance.now();document.getElementById("pingStat").textContent=Math.round(end-start)}catch{document.getElementById("pingStat").textContent="Timeout"}}
+const services=[{name:"Website",url:"https://example.com"},{name:"API",url:"https://jsonplaceholder.typicode.com/posts"},{name:"Intranet",url:"https://httpstat.us/200"},{name:"Mail Server",url:"https://httpstat.us/503"}]
+async function checkServices(){
+  const table=document.getElementById("serviceTable");table.innerHTML=""
+  for(const s of services){let status;try{const res=await fetch(s.url);status=res.ok?'<span class="status-up">UP</span>':'<span class="status-down">DOWN</span>';if(!res.ok)alertSound()}catch{status='<span class="status-down">DOWN</span>';alertSound()}table.innerHTML+=`<tr><td>${s.name}</td><td>${status}</td></tr>`}
+}
+function alertSound(){new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg").play()}
+function logIncident(msg){const log=document.getElementById("incidentLog");const t=document.createElement("div");t.textContent=new Date().toLocaleTimeString()+" - "+msg;log.prepend(t)}
+document.getElementById("terminalInput").addEventListener("keydown",e=>{if(e.key==="Enter"){const val=e.target.value;const out=document.getElementById("terminalOutput");const d=document.createElement("div");d.textContent="> "+val;out.appendChild(d);if(val==="help"){out.appendChild(Object.assign(document.createElement("div"),{textContent:"Commands: help, hello, clear"}))}else if(val==="hello"){out.appendChild(Object.assign(document.createElement("div"),{textContent:"Hello Operator"}))}else if(val==="clear"){out.innerHTML=""}else{out.appendChild(Object.assign(document.createElement("div"),{textContent:"Unknown command"}))}e.target.value="";out.scrollTop=out.scrollHeight}})
+async function fetchNews(){try{const res=await fetch("https://api.github.com/events");const data=await res.json();const news=document.getElementById("newsFeed");news.innerHTML="";data.slice(0,10).forEach(ev=>{const d=document.createElement("div");d.textContent=ev.type+" - "+ev.repo.name;news.appendChild(d)})}catch{}}
+async function fetchIP(){try{const res=await fetch("https://ipapi.co/json/");const j=await res.json();document.getElementById("ipinfo").textContent=j.ip+" - "+j.city+", "+j.country_name}catch{document.getElementById("ipinfo").textContent="Could not load"}}
+updateSystemStats();runPing();checkServices();fetchNews();fetchIP()
+setInterval(updateSystemStats,5000)
+setInterval(runPing,10000)
+setInterval(checkServices,30000)
+setInterval(fetchNews,60000)
 </script>
 </body>
 </html>
