@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <script src="favicon.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Box N Burn IT Dash</title>
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('https://i.ibb.co/5XkVnKjY/Boxing-Spinning-Yoga.png') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(10px);
+      z-index: 0;
+    }
+    .back-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(0,120,215,0.9);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .back-btn:hover {background: #005a9e;}
+
+    .login-container {
+      position: relative;
+      z-index: 1;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      color: #fff;
+      animation: fadeIn 0.8s ease-out;
+      padding: 20px;
+    }
+    .login-container img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      border: 3px solid #fff;
+      display: none;
+      object-fit: cover;
+      animation: popIn 0.4s ease-in-out;
+    }
+    .welcome {
+      font-size: 18px;
+      margin-bottom: 15px;
+      display: none;
+    }
+    .input-group {margin-bottom: 15px;}
+    .input-group input {
+      width: 100%;
+      height: 45px;
+      padding: 0 15px;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      background: rgba(255,255,255,0.9);
+      color: #000;
+    }
+    .input-group input::placeholder {color: #666;}
+    .input-group input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px #0078d7;
+      background: #fff;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #0078d7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: none;
+    }
+    button:hover {background: #005a9e;}
+    #error {
+      color: #ff4d4d;
+      margin-top: 10px;
+      display: none;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    /* Welcome overlay */
+    .welcome-screen {
+      position: fixed;
+      inset:0;
+      background:#0078d7;
+      color:#fff;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:9999;
+      animation: fadeIn 0.5s ease-in-out;
+      padding:20px;
+      text-align:center;
+    }
+    .welcome-screen img {
+      width:90px; height:90px;
+      border-radius:50%;
+      margin-bottom:20px;
+      border:3px solid #fff;
+      object-fit:cover;
+    }
+    .welcome-screen h2 {
+      font-size:20px;
+      margin-bottom:20px;
+    }
+    .loading-bar {
+      width:70%;
+      max-width:200px;
+      height:8px;
+      background:rgba(255,255,255,0.3);
+      border-radius:5px;
+      overflow:hidden;
+      position:relative;
+    }
+    .loading-fill {
+      height:100%;
+      width:0;
+      background:#fff;
+      animation: loadAnim 2.5s forwards;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes popIn {
+      0% {opacity: 0; transform: scale(0.7);}
+      100% {opacity: 1; transform: scale(1);}
+    }
+    @keyframes loadAnim {
+      from {width:0;}
+      to {width:100%;}
+    }
+
+    /* Responsive tweaks */
+    @media (max-width:768px){
+      .login-container {padding:16px}
+      .login-container img {width:90px;height:90px}
+      .welcome {font-size:16px}
+      button {font-size:15px;padding:12px}
+    }
+    @media (max-width:480px){
+      .back-btn {font-size:12px;padding:6px 10px}
+      .login-container img {width:75px;height:75px}
+      .welcome {font-size:14px}
+      input {font-size:14px}
+      button {font-size:14px}
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Terug</button>
+  <div class="login-container">
+    <img id="pfp" src="" alt="Profile Picture">
+    <div class="welcome" id="welcomeText"></div>
+    <div class="input-group">
+      <input type="text" id="username" placeholder="Gebruikersnaam">
+    </div>
+    <div class="input-group" id="passwordGroup" style="display:none;">
+      <input type="password" id="password" placeholder="Wachtwoord">
+    </div>
+    <button id="loginBtn" onclick="login()">Aanmelden</button>
+    <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
+  </div>
+
+  <div class="welcome-screen" id="welcomeScreen" style="display:none;">
+    <img id="welcomePfp" src="">
+    <h2 id="welcomeMessage"></h2>
+    <div class="loading-bar"><div class="loading-fill"></div></div>
+  </div>
+
+<script>
+  // IT team login page
+  const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; 
+  const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
+  let users = {};
+
+  async function fetchUsers() {
+    // Pull data from the LoginIT sheet instead of Users
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${USER_SHEET_ID}/values/LoginIT!A2:D?key=${API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.values) return;
+    users = {};
+    data.values.forEach(row => {
+      const [username, password, role, pfp] = row;
+      users[username] = { password, role, pfp };
+    });
+  }
+
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const passwordGroup = document.getElementById("passwordGroup");
+  const loginBtn = document.getElementById("loginBtn");
+  const pfp = document.getElementById("pfp");
+  const welcomeText = document.getElementById("welcomeText");
+  const error = document.getElementById("error");
+
+  usernameInput.addEventListener("input", () => {
+    const name = usernameInput.value.trim();
+    if (users[name]) {
+      pfp.src = users[name].pfp;
+      pfp.style.display = "block";
+      welcomeText.textContent = `Welkom, ${name}`;
+      welcomeText.style.display = "block";
+      passwordGroup.style.display = "block";
+      loginBtn.style.display = "block";
+    } else {
+      pfp.style.display = "none";
+      welcomeText.style.display = "none";
+      passwordGroup.style.display = "none";
+      loginBtn.style.display = "none";
+    }
+  });
+
+  function login() {
+    const user = usernameInput.value.trim();
+    const pass = passwordInput.value.trim();
+    if (users[user] && users[user].password === pass) {
+      localStorage.setItem("loggedInUser", user);
+      localStorage.setItem("userRole", users[user].role);
+      localStorage.setItem("userPfp", users[user].pfp);
+
+      document.querySelector(".login-container").style.display = "none";
+      const ws = document.getElementById("welcomeScreen");
+      document.getElementById("welcomePfp").src = users[user].pfp;
+      document.getElementById("welcomeMessage").textContent = `Welkom, ${user}`;
+      ws.style.display = "flex";
+      setTimeout(()=> window.location.href = "dashboard.html", 2500);
+    } else {
+      error.style.display = "block";
+      setTimeout(() => error.style.display = "none", 3000);
+    }
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
+        login();
+      }
+    }
+  });
+
+  fetchUsers();
+</script>
+</body>
+</html>
