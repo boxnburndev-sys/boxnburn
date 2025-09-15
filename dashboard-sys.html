@@ -2,636 +2,594 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Ultimate Simulated IT Command Center — Mega Edition</title>
+<title>Box N Burn — Command Center</title>
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 :root{
-  --bg-1:#03061a;
-  --bg-2:#071428;
-  --panel:#0b1620;
-  --glass:rgba(255,255,255,0.03);
-  --muted:#9fb0bf;
-  --accent:#1fb6ff;
-  --good:#2dd36f;
-  --warn:#ffb020;
-  --bad:#ff5c7c;
+  --bg-1:#041226; --bg-2:#071428; --panel:#0f1a26; --glass:rgba(255,255,255,0.04);
+  --muted:#9fb0bf; --accent:#1fb6ff; --good:#2dd36f; --warn:#ffb020; --bad:#ff5c7c;
   --neon:#9d4dff;
 }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;color:#eaf6ff;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));-webkit-font-smoothing:antialiased}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));backdrop-filter:blur(6px)}
-.brand{font-weight:800;color:var(--accent);font-size:1.25rem;letter-spacing:0.6px}
-.controls{display:flex;gap:12px;align-items:center}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:#eaf6ff}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--panel);box-shadow:0 6px 30px rgba(0,0,0,0.6)}
+.brand{font-weight:800;color:var(--accent);font-size:1.2rem}
+.nav-right{display:flex;align-items:center;gap:14px}
 .clock{color:var(--accent);font-weight:700}
-.btn{background:linear-gradient(90deg,var(--accent),var(--neon));border:none;padding:8px 12px;border-radius:10px;color:#001822;cursor:pointer;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
+.btn{background:linear-gradient(90deg,var(--accent),var(--neon));border:none;padding:8px 12px;border-radius:10px;color:#001822;cursor:pointer;font-weight:800;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
 .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.04)}
-.layout{display:grid;grid-template-columns:360px 1fr 420px;gap:18px;padding:18px}
-.left{display:flex;flex-direction:column;gap:18px}
-.card{background:var(--panel);border-radius:12px;padding:14px;box-shadow:0 6px 30px rgba(0,0,0,0.6)}
-.h2{font-size:1rem;color:var(--muted);margin:0 0 8px 0}
-.stat{font-size:1.6rem;font-weight:800;color:var(--accent);margin-top:6px}
+.layout{display:grid;grid-template-columns:360px 1fr 420px;gap:16px;padding:18px}
+.card{background:var(--panel);border-radius:12px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+.h2{font-size:0.95rem;color:var(--muted);margin:0 0 8px 0}
+.stat{font-size:1.8rem;font-weight:800;color:var(--accent)}
+.small{font-size:0.88rem;color:var(--muted)}
+.row{display:flex;gap:12px;align-items:center}
+.col{display:flex;flex-direction:column}
 .server-list{display:flex;flex-direction:column;gap:8px}
-.server{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
-.server .meta{display:flex;flex-direction:column}
-.server .name{font-weight:700}
-.server .sub{font-size:0.85rem;color:var(--muted)}
-.badge{padding:6px 8px;border-radius:8px;font-weight:700}
-.up{background:linear-gradient(90deg,#2dd36f,#1fbf6f);color:#02120b}
+.server{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+.badge{padding:6px 10px;border-radius:8px;font-weight:800}
+.up{background:linear-gradient(90deg,#2dd36f,#1fbf6f);color:#04120b}
 .down{background:linear-gradient(90deg,#ff5c7c,#ff7b9a);color:#2a0610}
-.center{display:flex;align-items:center;justify-content:center}
-.middle{display:flex;flex-direction:column;gap:18px}
-.top-row{display:flex;gap:18px}
-.panel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-.canvas-wrap{background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);padding:10px;border-radius:10px}
-.table{width:100%;border-collapse:collapse;font-size:0.9rem}
-.table th,.table td{padding:8px;text-align:left;color:#dff3ff}
-.terminal{background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);height:420px;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:8px}
-.output{flex:1;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#dff3ff;padding-right:6px}
-.input{display:flex;gap:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.canvas{padding:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border-radius:10px}
+.terminal{background:var(--glass);border-radius:10px;padding:10px;display:flex;flex-direction:column;height:340px}
+.output{flex:1;overflow:auto;font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#dff3ff;padding-right:6px}
+.input{display:flex;gap:8px;margin-top:8px}
 .cmd{flex:1;background:transparent;border:1px solid rgba(255,255,255,0.03);padding:8px;border-radius:8px;color:#e8fbff;font-family:ui-monospace,monospace}
-.suggestion{font-size:12px;color:var(--muted)}
-.widget{display:flex;flex-direction:column;gap:8px}
-.incidents{height:220px;overflow:auto}
-.pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);font-weight:700;color:var(--muted)}
-.kv{display:flex;justify-content:space-between;gap:8px}
-.gadget{display:flex;flex-direction:column;gap:8px}
-.smallchart{height:120px}
-.footer{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;color:var(--muted);font-size:0.85rem}
-.debug-log{height:120px;overflow:auto;background:rgba(255,255,255,0.01);padding:8px;border-radius:8px;font-family:monospace}
-.switch{display:inline-flex;align-items:center;gap:6px}
-.toggle{width:44px;height:26px;border-radius:999px;background:rgba(255,255,255,0.03);position:relative;cursor:pointer}
-.knob{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#00121a;transition:all .18s}
-.toggle.on{background:linear-gradient(90deg,#2dd36f,#1fbf6f)}
-.toggle.on .knob{left:21px;background:#041416}
+.pulse{animation:pulse 1.6s infinite;color:var(--good);font-weight:700}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.3}100%{opacity:1}}
+.incident-log{height:200px;overflow:auto;background:rgba(255,255,255,0.01);border-radius:8px;padding:8px;font-family:monospace}
+.news{height:200px;overflow:auto;background:rgba(255,255,255,0.01);border-radius:8px;padding:8px}
+.gauge{position:relative;width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:auto;background:conic-gradient(var(--accent) 0%, var(--glass) 0%)}
+.gauge span{position:absolute;font-weight:800;color:var(--accent)}
+.tools{display:flex;flex-direction:column;gap:8px}
+.tool-row{display:flex;gap:8px}
+.debug{height:110px;overflow:auto;background:rgba(255,255,255,0.01);padding:8px;border-radius:8px;font-family:monospace}
 .legend{display:flex;gap:8px;flex-wrap:wrap}
-.seed{font-family:ui-monospace,monospace;color:#9fb0bf;font-size:12px}
-.ascii{font-family:ui-monospace,monospace;color:var(--accent);white-space:pre-wrap}
 .badge-mini{padding:4px 6px;border-radius:6px;background:rgba(255,255,255,0.02);font-weight:700;color:var(--muted);font-size:12px}
+.footer{padding:10px 18px;color:var(--muted);font-size:0.85rem}
+.center{text-align:center}
+pre.ascii{color:var(--accent);font-family:ui-monospace,monospace}
 </style>
 </head>
 <body>
 <nav class="navbar">
-  <div class="brand">Ultimate IT Command Center — Mega Sim</div>
-  <div class="controls">
+  <div class="brand">Box N Burn — Command Center</div>
+  <div class="nav-right">
     <div class="clock" id="clock">--:--:--</div>
-    <button class="btn" id="panicBtn">SIM PANIC</button>
-    <button class="btn ghost" id="spawnIncident">Spawn Incident</button>
-    <div class="pill" id="statusPill">SIM MODE</div>
+    <div class="col" style="align-items:flex-end">
+      <div id="usernameDisplay" class="small">Operator</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn ghost" id="logoutBtn">Logout</button>
+      </div>
+    </div>
   </div>
 </nav>
+
 <div class="layout">
-  <div class="left">
-    <div class="card">
-      <div class="h2">Operators</div>
-      <div class="server-list" id="opsList">
-        <div class="server"><div class="meta"><div class="name">Operator-Alpha</div><div class="sub">Shift: Morning</div></div><div class="badge-mini up">Online</div></div>
-        <div class="server"><div class="meta"><div class="name">Operator-Beta</div><div class="sub">Shift: Night</div></div><div class="badge-mini up">Online</div></div>
-      </div>
+  <div class="card">
+    <div class="h2">Operators & Controls</div>
+    <div class="server-list" id="opsList">
+      <div class="server"><div><strong>Operator-A</strong><div class="small">Shift: Days</div></div><div class="badge-mini up">Online</div></div>
+      <div class="server"><div><strong>Operator-B</strong><div class="small">Shift: Nights</div></div><div class="badge-mini up">Online</div></div>
     </div>
-    <div class="card gadget">
-      <div class="h2">Quick Controls</div>
-      <div class="kv"><div class="pill">Auto-Resolve</div><div class="switch"><div class="toggle" id="autoResolveToggle"><div class="knob"></div></div></div></div>
-      <div class="kv"><div class="pill">Sound Alerts</div><div class="switch"><div class="toggle on" id="soundToggle"><div class="knob"></div></div></div></div>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="btn" id="clearIncidents">Clear Incidents</button>
-        <button class="btn ghost" id="downloadLog">Download Log</button>
+
+    <div style="height:12px"></div>
+
+    <div class="h2">Quick Gizmos</div>
+    <div class="tools">
+      <div class="tool-row">
+        <button class="btn ghost" id="downloadLogBtn">Download Log</button>
+        <button class="btn ghost" id="exportCsvBtn">Export CSV</button>
       </div>
-    </div>
-    <div class="card">
-      <div class="h2">Network Map</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
-        <div class="card canvas-wrap smallchart"><canvas id="nwChart"></canvas></div>
-        <div class="card canvas-wrap smallchart"><canvas id="connChart"></canvas></div>
-        <div class="card canvas-wrap smallchart"><canvas id="latChart"></canvas></div>
-        <div class="card canvas-wrap smallchart"><canvas id="errChart"></canvas></div>
+      <div class="tool-row">
+        <button class="btn" id="beepBtn">Beep</button>
+        <button class="btn ghost" id="clearIncidentsBtn">Clear Incidents</button>
       </div>
+      <div style="height:8px"></div>
+      <div class="h2">Network Snapshot</div>
+      <div class="canvas"><canvas id="nwMini"></canvas></div>
     </div>
+
+    <div style="height:12px"></div>
+
+    <div class="h2">Recent Debug</div>
+    <div class="debug" id="debug"></div>
   </div>
 
-  <div class="middle">
-    <div class="top-row">
-      <div class="card" style="flex:1">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
         <div class="h2">Overview</div>
-        <div style="display:flex;gap:12px;margin-top:8px">
-          <div style="flex:1">
-            <div class="stat">Servers: <span id="serverCount">0</span></div>
-            <div class="legend" style="margin-top:8px">
-              <div class="badge-mini">CPU <span id="cpuAvg">0%</span></div>
-              <div class="badge-mini">RAM <span id="ramAvg">0%</span></div>
-              <div class="badge-mini">NET <span id="netAvg">0%</span></div>
-            </div>
-          </div>
-          <div style="width:260px">
-            <div class="canvas-wrap" style="padding:8px">
-              <canvas id="sysSpark"></canvas>
-            </div>
-          </div>
-        </div>
+        <div class="small">Everything starts green. Run commands to animate and simulate real behavior.</div>
       </div>
-
-      <div class="card" style="width:320px">
-        <div class="h2">Active Services</div>
-        <div id="serviceTableWrap" style="margin-top:8px">
-          <table class="table" id="serviceTable">
-            <thead><tr><th>Service</th><th>Status</th><th>Latency</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
+      <div class="center">
+        <div class="stat" id="serverCount">5</div>
+        <div class="small">Active Servers</div>
       </div>
     </div>
 
-    <div class="panel-grid">
+    <div style="height:12px"></div>
+
+    <div class="grid">
       <div class="card">
-        <div class="h2">CPU Usage</div>
-        <div class="canvas-wrap"><canvas id="cpuChart" style="height:180px"></canvas></div>
+        <div class="h2">CPU</div>
+        <div class="canvas"><canvas id="cpuChartMain"></canvas></div>
       </div>
       <div class="card">
-        <div class="h2">RAM Usage</div>
-        <div class="canvas-wrap"><canvas id="ramChart" style="height:180px"></canvas></div>
+        <div class="h2">RAM</div>
+        <div class="canvas"><canvas id="ramChartMain"></canvas></div>
       </div>
       <div class="card">
-        <div class="h2">Disk IO</div>
-        <div class="canvas-wrap"><canvas id="diskChart" style="height:180px"></canvas></div>
+        <div class="h2">Disk</div>
+        <div class="canvas"><canvas id="diskChartMain"></canvas></div>
       </div>
     </div>
+
+    <div style="height:12px"></div>
+
+    <div style="display:flex;gap:12px">
+      <div style="flex:1" class="card">
+        <div class="h2">Services</div>
+        <table style="width:100%"><thead><tr><th>Service</th><th>Status</th><th>Latency</th></tr></thead><tbody id="serviceTable"></tbody></table>
+      </div>
+      <div style="width:240px" class="card center">
+        <div class="h2">Network</div>
+        <div class="gauge" id="netGauge"><span id="netGaugeVal">20%</span></div>
+        <div class="small" style="margin-top:8px">Green baseline: healthy</div>
+      </div>
+    </div>
+
+    <div style="height:12px"></div>
 
     <div class="card">
-      <div class="h2">Threat Radar & Events</div>
-      <div style="display:flex;gap:12px">
-        <div style="flex:1">
-          <canvas id="threatChart" style="height:160px"></canvas>
-        </div>
-        <div style="width:320px" class="incidents" id="incidents"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="right">
-    <div class="card terminal" id="terminalCard">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <div class="h2">Command Console</div>
-        <div class="suggestion">Type <span class="pill">help</span> for commands</div>
+        <div class="h2">Threat Radar</div>
+        <div class="legend"><div class="badge-mini">Live on command</div></div>
       </div>
-      <div class="output" id="output"></div>
+      <div class="canvas"><canvas id="threatMain"></canvas></div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="h2">Terminal (all actions happen via commands)</div>
+    <div class="terminal">
+      <div class="output" id="terminalOutput"></div>
       <div class="input">
-        <input class="cmd" id="cmdInput" placeholder="Enter command...">
-        <button class="btn ghost" id="runBtn">RUN</button>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-        <div class="seed">Session: SIM-{{SEQ}}</div>
-        <div style="flex:1"></div>
-        <div class="badge-mini">v1.0-sim</div>
+        <input id="terminalInput" class="cmd" placeholder="Type command — try 'help'">
+        <button class="btn ghost" id="terminalRun">Run</button>
       </div>
     </div>
 
-    <div class="card">
-      <div class="h2">Tools & Gadgets</div>
-      <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
-        <div style="display:flex;gap:8px">
-          <button class="btn" id="portScanBtn">Port Scan</button>
-          <button class="btn ghost" id="pcapBtn">Start PCAP</button>
-          <button class="btn ghost" id="tailBtn">Tail Logs</button>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:6px">
-          <button class="btn" id="deployBtn">Sim Deploy</button>
-          <button class="btn ghost" id="stressBtn">Stress Test</button>
-          <button class="btn ghost" id="auditBtn">Run Audit</button>
-        </div>
-        <div class="debug-log" id="toolLog"></div>
-      </div>
-    </div>
+    <div style="height:12px"></div>
 
-    <div class="card">
-      <div class="h2">Recent Debug</div>
-      <div class="debug-log" id="debugLog"></div>
-    </div>
+    <div class="h2">Incident Log</div>
+    <div class="incident-log" id="incidentLog"></div>
+
+    <div style="height:12px"></div>
+
+    <div class="h2">News Feed</div>
+    <div class="news" id="newsFeed"></div>
   </div>
 </div>
 
-<div class="footer">
-  <div>Made for fun • Simulated environment — not real infra</div>
-  <div class="seed" id="uptimeSeed">Uptime: 99.99%</div>
-</div>
+<div class="footer">Box N Burn — Simulator dashboard. Nothing changes until you run a command.</div>
 
 <script>
-let SEQ = 1001
-const clockEl = document.getElementById('clock')
-setInterval(()=>{const d=new Date();clockEl.textContent=d.toLocaleTimeString()},1000)
-const serverList = [
-  {id:'srv-web-01',name:'Web Server 01',cpu:0,ram:0,disk:0,up:true,ips:['10.0.1.3']},
-  {id:'srv-db-01',name:'DB Server 01',cpu:0,ram:0,disk:0,up:true,ips:['10.0.1.5']},
-  {id:'srv-bkp-01',name:'Backup Node',cpu:0,ram:0,disk:0,up:true,ips:['10.0.2.3']},
-  {id:'srv-proxy-01',name:'Proxy',cpu:0,ram:0,disk:0,up:true,ips:['10.0.0.9']},
-  {id:'srv-ai-01',name:'Inference Node',cpu:0,ram:0,disk:0,up:true,ips:['10.0.3.7']}
+/* -------------------------
+   Login, clock, basic helpers
+   ------------------------- */
+(function(){
+  const user = localStorage.getItem('loggedInUser')
+  if(!user){ window.location.href='ITdash.html'; return }
+  document.getElementById('usernameDisplay').textContent = user
+})()
+setInterval(()=>{document.getElementById('clock').textContent = new Date().toLocaleString()},1000)
+document.getElementById('logoutBtn').addEventListener('click', ()=>{localStorage.removeItem('loggedInUser');window.location.href='ITdash.html'})
+
+function rnd(min,max){ return Math.floor(Math.random()*(max-min+1))+min }
+function now(){ return new Date().toLocaleTimeString() }
+function el(id){ return document.getElementById(id) }
+function appendTerminal(txt, color){ const out = el('terminalOutput'); const d = document.createElement('div'); d.innerHTML = `<span style="color:${color||'#dff3ff'}">${txt}</span>`; out.appendChild(d); out.scrollTop = out.scrollHeight }
+function appendIncident(title, msg, level='HIGH'){ const node = document.createElement('div'); node.style.marginBottom='8px'; node.innerHTML = `<strong>${title}</strong> <span style="color:var(--muted)">[${level}]</span><div style="font-size:12px;color:var(--muted)">${msg}</div><div style="font-size:11px;color:var(--muted)">${new Date().toLocaleString()}</div>`; el('incidentLog').prepend(node) }
+function addNews(txt){ const d = document.createElement('div'); d.textContent = `${now()} - ${txt}`; el('newsFeed').prepend(d); if(el('newsFeed').children.length>40) el('newsFeed').removeChild(el('newsFeed').lastChild) }
+function debugLog(txt){ const d = document.createElement('div'); d.textContent = `${now()} - ${txt}`; el('debug').prepend(d); if(el('debug').children.length>200) el('debug').removeChild(el('debug').lastChild) }
+
+/* -------------------------
+   Baseline green data (static until commands)
+   ------------------------- */
+const baselineServers = [
+  {id:'web-01', name:'web-01.boxnburn', cpu:14, ram:28, disk:34, up:true},
+  {id:'db-01', name:'db-01.boxnburn', cpu:16, ram:30, disk:40, up:true},
+  {id:'cache-01', name:'cache-01.boxnburn', cpu:8, ram:22, disk:10, up:true},
+  {id:'proxy-01', name:'proxy-01.boxnburn', cpu:12, ram:20, disk:18, up:true},
+  {id:'ai-01', name:'ai-01.boxnburn', cpu:9, ram:26, disk:22, up:true}
 ]
-const services = [
-  {name:'website.com',svc:'HTTP',status:true,lat:24},
-  {name:'api.website.com',svc:'API',status:true,lat:38},
-  {name:'intranet.local',svc:'INTRANET',status:true,lat:7},
-  {name:'mail.website.com',svc:'SMTP',status:true,lat:180}
+let servicesList = [
+  {name:'website', proto:'HTTP', status:true, lat:22},
+  {name:'api', proto:'REST', status:true, lat:34},
+  {name:'intranet', proto:'LAN', status:true, lat:6},
+  {name:'mail', proto:'SMTP', status:true, lat:90}
 ]
-const incidents = []
-const output = document.getElementById('output')
-const cmdInput = document.getElementById('cmdInput')
-const runBtn = document.getElementById('runBtn')
-const incidentsEl = document.getElementById('incidents')
-const serviceTableBody = document.querySelector('#serviceTable tbody')
-const debugLog = document.getElementById('debugLog')
-const toolLog = document.getElementById('toolLog')
-const autoResolveToggle = document.getElementById('autoResolveToggle')
-let autoResolve = false
-autoResolveToggle.addEventListener('click', ()=>{autoResolve = !autoResolve;autoResolveToggle.classList.toggle('on', autoResolve);if(autoResolve) appendTool('Auto-resolve enabled') else appendTool('Auto-resolve disabled')})
-const soundToggle = document.getElementById('soundToggle')
-let soundEnabled = true
-soundToggle.addEventListener('click', ()=>{soundEnabled = !soundEnabled;soundToggle.classList.toggle('on', soundEnabled)})
-document.getElementById('panicBtn').addEventListener('click', ()=>{spawnPanic()})
-document.getElementById('spawnIncident').addEventListener('click', ()=>{spawnIncident()})
-document.getElementById('clearIncidents').addEventListener('click', ()=>{incidents.length=0;renderIncidents();appendTool('Cleared incidents')})
-document.getElementById('downloadLog').addEventListener('click', ()=>{downloadLog()})
-document.getElementById('portScanBtn').addEventListener('click', ()=>{simulatePortScan('192.168.1.12')})
-document.getElementById('pcapBtn').addEventListener('click', ()=>{togglePcap()})
-document.getElementById('tailBtn').addEventListener('click', ()=>{tailLogs()})
-document.getElementById('deployBtn').addEventListener('click', ()=>{simulateDeploy()})
-document.getElementById('stressBtn').addEventListener('click', ()=>{simulateStress()})
-document.getElementById('auditBtn').addEventListener('click', ()=>{runAudit()})
-runBtn.addEventListener('click', ()=>{execute(cmdInput.value);cmdInput.value='';cmdInput.focus()})
-cmdInput.addEventListener('keydown', (e)=>{if(e.key==='Enter'){runBtn.click()}})
+el('serverCount').textContent = baselineServers.length
 
-function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-function appendOut(txt,cls){const d=document.createElement('div');d.className='line';d.innerHTML=txt;output.appendChild(d);output.scrollTop=output.scrollHeight}
-function appendTool(txt){const d=document.createElement('div');d.textContent=new Date().toLocaleTimeString()+' - '+txt;toolLog.prepend(d);if(toolLog.children.length>200) toolLog.removeChild(toolLog.lastChild)}
-function appendDebug(txt){const d=document.createElement('div');d.textContent=new Date().toLocaleTimeString()+' - '+txt;debugLog.prepend(d);if(debugLog.children.length>200) debugLog.removeChild(debugLog.lastChild)}
+/* -------------------------
+   Charts (filled with green baseline snapshots)
+   ------------------------- */
+const cpuCtx = el('cpuChartMain').getContext('2d')
+const ramCtx = el('ramChartMain').getContext('2d')
+const diskCtx = el('diskChartMain').getContext('2d')
+const threatCtx = el('threatMain').getContext('2d')
+const nwMiniCtx = el('nwMini').getContext('2d')
 
-function downloadLog(){
-  let txt = ''
-  const rows = [...debugLog.children]
-  rows.reverse().forEach(r=>{txt += r.textContent + '\n'})
-  const blob = new Blob([txt],{type:'text/plain'})
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a');a.href=url;a.download='debug-log.txt';a.click();URL.revokeObjectURL(url)
+function makeSeries(initial){
+  const labels = []
+  const data = []
+  const t = new Date()
+  for(let i=12;i>0;i--){ labels.push(new Date(t.getTime() - i*60000).toLocaleTimeString()) ; data.push(initial + Math.round(Math.random()*2 -1)) }
+  return {labels,data}
 }
 
-function renderServices(){
-  serviceTableBody.innerHTML=''
-  services.forEach(s=>{
-    const tr=document.createElement('tr')
-    tr.innerHTML=`<td>${s.name} <span class="badge-mini">${s.svc}</span></td><td>${s.status?'<span class="up badge">UP</span>':'<span class="down badge">DOWN</span>'}</td><td>${s.lat}ms</td>`
-    serviceTableBody.appendChild(tr)
-  })
+const cpuSeries = makeSeries(15)
+const ramSeries = makeSeries(28)
+const diskSeries = makeSeries(32)
+
+const cpuChart = new Chart(cpuCtx, {type:'line', data:{labels:cpuSeries.labels, datasets:[{label:'CPU %', data:cpuSeries.data, borderColor:'#1fb6ff', backgroundColor:'rgba(31,182,255,0.08)', fill:true, tension:0.3}]}, options:{plugins:{legend:{display:false}}, scales:{y:{min:0,max:100}}}})
+const ramChart = new Chart(ramCtx, {type:'line', data:{labels:ramSeries.labels, datasets:[{label:'RAM %', data:ramSeries.data, borderColor:'#2dd36f', backgroundColor:'rgba(45,211,111,0.06)', fill:true, tension:0.3}]}, options:{plugins:{legend:{display:false}}, scales:{y:{min:0,max:100}}}})
+const diskChart = new Chart(diskCtx, {type:'line', data:{labels:diskSeries.labels, datasets:[{label:'Disk %', data:diskSeries.data, borderColor:'#ff5c7c', backgroundColor:'rgba(255,92,124,0.06)', fill:true, tension:0.3}]}, options:{plugins:{legend:{display:false}}, scales:{y:{min:0,max:100}}}})
+const threatChart = new Chart(threatCtx, {type:'radar', data:{labels:['Malware','Phishing','DDoS','Exploit','Botnet','Ransomware'], datasets:[{label:'Threat Index', data:[5,3,2,4,1,2], backgroundColor:'rgba(255,176,32,0.12)', borderColor:'#ffb020'}]}, options:{scales:{r:{min:0,max:100}}}})
+const nwMini = new Chart(nwMiniCtx, {type:'doughnut', data:{labels:['LAN','WAN','CLOUD'], datasets:[{data:[60,25,15], backgroundColor:['#1fb6ff','#2dd36f','#ffb020']}]})
+
+/* set baseline UI text */
+function renderBaselineUI(){
+  const cpuAvg = Math.round(cpuSeries.data.reduce((s,x)=>s+x,0)/cpuSeries.data.length)
+  const ramAvg = Math.round(ramSeries.data.reduce((s,x)=>s+x,0)/ramSeries.data.length)
+  el('cpuAvg').textContent = cpuAvg + '%'
+  el('ramAvg').textContent = ramAvg + '%'
+  el('pingStat').textContent = (rnd(12,40)) + ' ms'
+  el('netGaugeVal').textContent = '20%'
+  el('serviceTable').innerHTML = servicesList.map(s => `<tr><td>${s.name}</td><td>${s.status?'<span style="color:var(--good)">UP</span>':'<span style="color:var(--bad)">DOWN</span>'}</td><td>${s.lat}ms</td></tr>`).join('')
+  addNews('Baseline: All systems healthy (green).')
+}
+renderBaselineUI()
+
+/* ---- Nothing auto-updates from here. All behaviors are triggered by terminal commands. ---- */
+
+/* -------------------------
+   Terminal command implementations
+   ------------------------- */
+const TERM = {
+  runningMonitors: {}, // hold interval IDs if commands start live updates
+  logs: [],
+  incidents: []
 }
 
-function renderIncidents(){
-  incidentsEl.innerHTML=''
-  incidents.slice(0,50).forEach((inc,i)=>{
-    const div=document.createElement('div')
-    div.style.padding='8px';div.style.marginBottom='8px';div.style.borderRadius='8px'
-    div.style.background=i%2? 'rgba(255,255,255,0.01)': 'rgba(255,255,255,0.02)'
-    div.innerHTML=`<div style="display:flex;justify-content:space-between"><div style="font-weight:800">${inc.title}</div><div style="font-size:12px;color:var(--muted)">${inc.level}</div></div><div style="font-size:12px;color:var(--muted);margin-top:6px">${inc.msg}</div><div style="font-size:12px;color:var(--muted);margin-top:6px">${new Date(inc.ts).toLocaleString()}</div>`
-    incidentsEl.appendChild(div)
-  })
-}
+function write(msg, color){ appendTerminal(msg, color); TERM.logs.push({ts:Date.now(), msg}) }
+function addIncident(title, msg, level='HIGH'){ TERM.incidents.unshift({title,msg,level,ts:Date.now()}); appendIncident(title, msg, level) }
 
-function pushIncident(title,msg,level='HIGH'){
-  incidents.unshift({title,msg,level,ts:Date.now()})
-  renderIncidents()
-  appendDebug('Incident: '+title)
-  if(soundEnabled) playBeep()
-  if(autoResolve) setTimeout(()=>{resolveOldest()},5000)
-}
-
-function resolveOldest(){
-  if(incidents.length===0) return
-  const inc = incidents.shift()
-  renderIncidents()
-  appendTool('Auto-resolved incident: '+inc.title)
-}
-
-function spawnIncident(){
-  const titles = ['Service Unreachable','High CPU Spike','DB Connection Errors','Failed Backup','Suspicious Login','Certificate Expiry']
-  const msgs = [
-    'Endpoint returned 5xx responses from multiple regions',
-    'CPU crossed 95% on node',
-    'Connection pool exhausted by worker processes',
-    'Last snapshot failed at midnight',
-    'Multiple failed logins from 3rd party IP',
-    'TLS cert expires in 2 days'
+function showHelp(){
+  const cmds = [
+    'help', 'clear', 'hello', 'whoami', 'about', 'time', 'servers', 'status', 'services',
+    'cpu', 'ram', 'disk', 'threats', 'net', 'ping', 'simulate <type>', 'start <monitor>',
+    'stop <monitor>', 'scan <ip>', 'tail <seconds>', 'pcap <seconds>', 'deploy', 'stress',
+    'audit', 'genkey', 'banner', 'echo <msg>', 'news', 'incident add <title>|<msg>|<level>',
+    'incident list', 'incident resolve', 'download logs', 'export csv', 'games', 'fortune',
+    'matrix', 'hack', 'reboot', 'shutdown', 'version'
   ]
-  const i = rnd(0,titles.length-1)
-  pushIncident(titles[i],msgs[i], rnd(0,1)?'CRITICAL':'HIGH')
+  write('Available commands: ' + cmds.join(', '))
 }
 
-function spawnPanic(){
-  for(let i=0;i<5;i++){
-    setTimeout(()=>{spawnIncident()}, i*300)
-  }
-  appendTool('PANIC sequence triggered')
-}
-
-function appendSeeded(){
-  const el = document.querySelector('.seed')
-  el.textContent = 'Session: SIM-'+SEQ
-}
-appendSeeded()
-
-function playBeep(){
-  try{
-    const ctx = new (window.AudioContext||window.webkitAudioContext)()
-    const o = ctx.createOscillator()
-    const g = ctx.createGain()
-    o.type='sine';o.frequency.value=600
-    o.connect(g);g.connect(ctx.destination);g.gain.value=0.02
-    o.start();setTimeout(()=>{o.stop();ctx.close()},140)
-  }catch(e){}
-}
-
-function simulateMetrics(){
-  let cpuSum=0,ramSum=0,netSum=0
-  serverList.forEach(s=>{
-    s.cpu = Math.max(2,Math.min(99,(s.cpu*0.6) + rnd(0,20)))
-    s.ram = Math.max(10,Math.min(99,(s.ram*0.7) + rnd(0,18)))
-    s.disk = Math.max(5,Math.min(99,(s.disk*0.8)+ rnd(0,10)))
-    if(Math.random()>0.985) s.up = !s.up
-    cpuSum += s.cpu; ramSum += s.ram; netSum += s.disk
-  })
-  document.getElementById('serverCount').textContent = serverList.length
-  document.getElementById('cpuAvg').textContent = Math.round(cpuSum/serverList.length) + '%'
-  document.getElementById('ramAvg').textContent = Math.round(ramSum/serverList.length) + '%'
-  document.getElementById('netAvg').textContent = Math.round(netSum/serverList.length) + '%'
-  if(Math.random()>0.995) spawnIncident()
-  renderServices()
-  updateCharts()
-}
-
-setInterval(simulateMetrics,2200)
-renderServices()
-
-const cpuCtx = document.getElementById('cpuChart').getContext('2d')
-const ramCtx = document.getElementById('ramChart').getContext('2d')
-const diskCtx = document.getElementById('diskChart').getContext('2d')
-const threatCtx = document.getElementById('threatChart').getContext('2d')
-const sysSparkCtx = document.getElementById('sysSpark').getContext('2d')
-const nwCtx = document.getElementById('nwChart').getContext('2d')
-const connCtx = document.getElementById('connChart').getContext('2d')
-const latCtx = document.getElementById('latChart').getContext('2d')
-const errCtx = document.getElementById('errChart').getContext('2d')
-
-const cpuChart = new Chart(cpuCtx, {type:'line',data:{labels:[],datasets:[{label:'CPU %',data:[],borderColor: 'rgba(31,182,255,1)',backgroundColor:'rgba(31,182,255,0.08)',tension:0.3}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100}}}})
-const ramChart = new Chart(ramCtx, {type:'line',data:{labels:[],datasets:[{label:'RAM %',data:[],borderColor: 'rgba(45,211,111,1)',backgroundColor:'rgba(45,211,111,0.06)',tension:0.3}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100}}}})
-const diskChart = new Chart(diskCtx, {type:'line',data:{labels:[],datasets:[{label:'Disk IO',data:[],borderColor: 'rgba(255,92,124,1)',backgroundColor:'rgba(255,92,124,0.06)',tension:0.3}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100}}}})
-const threatChart = new Chart(threatCtx, {type:'radar',data:{labels:['Malware','Phishing','DDoS','Exploit','Botnet','Ransomware'],datasets:[{label:'Threat Index',data:[0,0,0,0,0,0],backgroundColor:'rgba(255,176,32,0.18)',borderColor:'#ffb020'}]},options:{scales:{r:{min:0,max:100}}}})
-const sysSpark = new Chart(sysSparkCtx,{type:'line',data:{labels:[],datasets:[{label:'Sys',data:[],borderColor:'#9d4dff',tension:0.4}]},options:{plugins:{legend:{display:false}},scales:{y:{display:false},x:{display:false}}}})
-const nwChart = new Chart(nwCtx,{type:'doughnut',data:{labels:['LAN','WAN','CLOUD'],datasets:[{data:[30,40,30],backgroundColor:['#1fb6ff','#2dd36f','#ffb020']}]}})
-const connChart = new Chart(connCtx,{type:'bar',data:{labels:['US','EU','APAC'],datasets:[{data:[120,100,140],backgroundColor:'#1fb6ff'}]}})
-const latChart = new Chart(latCtx,{type:'line',data:{labels:[],datasets:[{data:[],borderColor:'#ffb020',tension:0.3}]}})
-const errChart = new Chart(errCtx,{type:'line',data:{labels:[],datasets:[{data:[],borderColor:'#ff5c7c',tension:0.3}]}})
-
-function updateCharts(){
-  const t = new Date().toLocaleTimeString()
-  const cpuAvg = Math.round(serverList.reduce((s,x)=>s+x.cpu,0)/serverList.length)
-  const ramAvg = Math.round(serverList.reduce((s,x)=>s+x.ram,0)/serverList.length)
-  const diskAvg = Math.round(serverList.reduce((s,x)=>s+x.disk,0)/serverList.length)
-  pushToChart(cpuChart,t,cpuAvg)
-  pushToChart(ramChart,t,ramAvg)
-  pushToChart(diskChart,t,diskAvg)
-  pushToChart(sysSpark,t, Math.round((cpuAvg+ramAvg+diskAvg)/3))
-  pushToChart(latChart,t, rnd(10,240))
-  pushToChart(errChart,t, rnd(0,10))
-  const threats = Array.from({length:6},()=>rnd(0,100))
-  threatChart.data.datasets[0].data = threats
-  threatChart.update()
-}
-
-function pushToChart(chart,label,value){
-  chart.data.labels.push(label)
-  chart.data.datasets[0].data.push(value)
-  if(chart.data.labels.length>24){chart.data.labels.shift();chart.data.datasets[0].data.shift()}
-  chart.update()
-}
-
-function randomLogLine(){
-  const verbs = ['INFO','WARN','ERROR','DEBUG','TRACE']
-  const comps = ['auth','db','worker','scheduler','cache','proxy','backup']
-  const msgs = ['operation completed','connection reset','timeout after 120s','cache miss','permission denied','job queued','received heartbeat']
-  return `${new Date().toISOString()} ${verbs[rnd(0,verbs.length-1)]} ${comps[rnd(0,comps.length-1)]}: ${msgs[rnd(0,msgs.length-1)]}`
-}
-
-const tailers = {}
-function tailLogs(){
-  const id = 'tail-'+Date.now()
-  if(tailers[id]) return
-  appendTool('Starting tail session '+id)
-  tailers[id] = setInterval(()=>{appendOut(randomLogLine());appendDebug('tail:'+randomLogLine())},500)
-  setTimeout(()=>{clearInterval(tailers[id]);delete tailers[id];appendTool('Tail ended '+id)},15000)
-}
-
-let pcapOn = false
-function togglePcap(){
-  pcapOn = !pcapOn
-  appendTool((pcapOn?'PCAP started':'PCAP stopped'))
-  if(pcapOn){
-    let c=0
-    const pid = setInterval(()=>{appendDebug(`pcap: packet ${++c} src=192.168.${rnd(0,5)}.${rnd(2,254)} dst=10.0.${rnd(0,5)}.${rnd(2,254)} proto=${['TCP','UDP','ICMP'][rnd(0,2)]}`)},300)
-    setTimeout(()=>{clearInterval(pid);pcapOn=false;appendTool('PCAP auto-stopped after 12s')},12000)
-  }
-}
-
-function simulateDeploy(){
-  appendOut('> deploy start')
-  appendOut('pushing artifacts...')
-  setTimeout(()=>{appendOut('starting rollout...')},800)
-  setTimeout(()=>{appendOut('verifying health endpoints...')},1600)
-  setTimeout(()=>{appendOut('canary ok, rolling full...')},2800)
-  setTimeout(()=>{appendOut('deploy complete: SUCCESS')},4200)
-  appendTool('Simulated deploy completed')
-}
-
-function simulateStress(){
-  appendOut('> stress --target srv-web-01 --time 30s')
-  let i=0
-  const id = setInterval(()=>{i++; appendOut(`stress: iteration ${i} - requests ${rnd(800,1200)} latency ${rnd(120,800)}ms`); appendDebug('stress:'+i)},600)
-  setTimeout(()=>{clearInterval(id);appendOut('stress complete');appendTool('Stress test finished')},8000)
-}
-
-function runAudit(){
-  appendOut('> run-audit')
-  appendOut('scanning configurations...')
-  setTimeout(()=>{appendOut('found 3 low-risk issues');appendOut('recommended: rotate keys, update dependencies')},1200)
-  appendTool('Audit generated summary')
-}
-
-function simulatePortScan(target='127.0.0.1'){
-  appendOut(`> portscan ${target}`)
-  const ports = [22,80,443,8080,3306,5432,6379,27017]
-  let i=0
-  const id = setInterval(()=>{const p = ports[i%ports.length]; appendOut(`${target}:${p} - ${Math.random()>0.5?'OPEN':'CLOSED'}`); i++; if(i>ports.length-1){clearInterval(id);appendTool('Port scan complete')}} ,400)
-}
-
-function spawnLogBurst(){
-  for(let i=0;i<20;i++){
-    setTimeout(()=>{appendDebug(randomLogLine())}, i*80)
-  }
-}
-
-function simulateAttackScenario(){
-  spawnIncident()
-  spawnIncident()
-  appendDebug('Simulated attack wave detected')
-  for(let i=0;i<4;i++){
-    setTimeout(()=>{simulateMetrics();simulatePortScan('10.0.3.'+(10+i));}, i*500)
-  }
-}
-
-function simulateSSH(target='srv-web-01'){
-  appendOut(`ssh ${target}`)
-  appendOut('Authenticating...')
-  setTimeout(()=>{appendOut('password accepted');appendOut(`${target}$ ls -la /var/www`)},700)
-  setTimeout(()=>{appendOut('-rw-r--r-- index.html');appendOut('-rw-r--r-- app.js')},1200)
-}
-
-function simulateTop(){
-  appendOut('PID   CPU%   MEM%   NAME')
-  for(let i=0;i<8;i++){
-    appendOut(`${1000+i}  ${rnd(0,99)}%    ${rnd(0,99)}%   process-${i}`)
-  }
-}
-
-function simulateKill(pid){
-  appendOut(`killing ${pid}...`)
-  setTimeout(()=>{appendOut(`process ${pid} terminated`);appendTool(`Killed process ${pid}`)},600)
-}
-
-function showAscii(){
-  const art = `
-   ____  _____ __  ______  __
-  / __ \\/ ___// / / / __ \\/ /__
- / / / /\\__ \\/ /_/ / /_/ / //_/
-/_/ /_/____/ /____/\\____/\\__/
-`
-  appendOut('<pre class="ascii">'+art+'</pre>')
-}
-
-function showFiles(path='/var/www'){
-  appendOut('Listing '+path)
-  appendOut('drwxr-xr-x  4096 index.html')
-  appendOut('-rw-r--r--  2048 app.js')
-  appendOut('-rw-r--r--  1024 style.css')
-}
-
-function generateApiKey(){
-  const key = [...Array(4)].map(()=>Math.random().toString(36).substring(2,10)).join('-')
-  appendOut('NEW_KEY: '+key)
-  appendTool('API Key generated')
-}
-
-function secretVault(){
-  appendOut('vault: access denied (simulated)')
-}
-
-function calc(expression){
-  try{
-    const clean = expression.replace(/[^-()\d/*+. %]/g,'')
-    const res = Function('"use strict";return ('+clean+')')()
-    appendOut(expression + ' = ' + res)
-  }catch(e){appendOut('calc: invalid expression')}
-}
-
-function fortune(){
-  const f = ['You will spot a memory leak today.','Your next commit will be green.','Expect a surprise deploy.','Watch out for off-by-one errors.','Backup before lunch.']
-  appendOut(f[rnd(0,f.length-1)])
-}
-
-function help(){
-  appendOut('Available commands:')
-  const cmds = Object.keys(COMMANDS).sort()
-  appendOut(cmds.join(', '))
-  appendOut('Type help <cmd> for details')
-}
-
+/* Basic commands */
 const COMMANDS = {
-  help: {fn:(a)=>{ if(!a) return help(); if(COMMANDS[a]) appendOut(a+' - '+(COMMANDS[a].desc||'No description')); else appendOut('No such command')}, desc:'Show help'},
-  hello: {fn:()=>appendOut('Hello Operator') , desc:'Greet the console'},
-  clear: {fn:()=>{output.innerHTML=''; appendOut('Console cleared')}, desc:'Clear console'},
-  time: {fn:()=>appendOut(new Date().toString()), desc:'Show time'},
-  services: {fn:()=>services.forEach(s=>appendOut(`${s.name} ${s.status?'UP':'DOWN'} ${s.lat}ms`)), desc:'List services'},
-  stats: {fn:()=>appendOut(`CPU ${document.getElementById('cpuAvg').textContent} RAM ${document.getElementById('ramAvg').textContent}`), desc:'Show summarized metrics'},
-  echo: {fn:(a)=>appendOut(a||''), desc:'Echo text'},
-  matrix: {fn:()=>{for(let i=0;i<10;i++) setTimeout(()=>appendOut(Array(80).fill(0).map(()=>Math.random()>0.7?'#':' ').join('')) , i*60)}, desc:'Matrix rain'},
-  tail: {fn:()=>tailLogs(), desc:'Tail logs for 12s'},
-  pcap: {fn:()=>togglePcap(), desc:'Start/stop packet capture'},
-  deploy: {fn:()=>simulateDeploy(), desc:'Simulate deployment'},
-  stress: {fn:()=>simulateStress(), desc:'Run stress test'},
-  audit: {fn:()=>runAudit(), desc:'Run configuration audit'},
-  portscan: {fn:(a)=>simulatePortScan(a||'127.0.0.1'), desc:'Port scan target'},
-  spawn: {fn:()=>spawnIncident(), desc:'Spawn a single incident'},
-  panic: {fn:()=>spawnPanic(), desc:'Trigger panic wave'},
-  ssh: {fn:(a)=>simulateSSH(a||'srv-web-01'), desc:'Simulate ssh into host'},
-  top: {fn:()=>simulateTop(), desc:'Show top-like process list'},
-  kill: {fn:(a)=>simulateKill(a||'1001'), desc:'Kill process id'},
-  files: {fn:(a)=>showFiles(a||'/var/www'), desc:'List files'},
-  ascii: {fn:()=>showAscii(), desc:'Show ascii art'},
-  genkey: {fn:()=>generateApiKey(), desc:'Generate API key'},
-  vault: {fn:()=>secretVault(), desc:'Access secret vault (sim)'},
-  calc: {fn:(a)=>calc(a||''), desc:'Calculate expression'},
-  fortune: {fn:()=>fortune(), desc:'Get fortune'},
-  debug: {fn:(a)=>appendDebug(a||'manually triggered debug'), desc:'Append debug log'},
-  logburst: {fn:()=>spawnLogBurst(), desc:'Create log burst'},
-  attack: {fn:()=>simulateAttackScenario(), desc:'Simulate attack wave'},
-  helpme: {fn:()=>appendOut('Contact: ops@sim.local'), desc:'Contact info'}
+  help: ()=>showHelp(),
+  clear: ()=>{ el('terminalOutput').innerHTML = ''; write('console cleared') },
+  hello: ()=>write('Hello Operator of Box N Burn'),
+  whoami: ()=>write('Operator: ' + el('usernameDisplay').textContent),
+  about: ()=>write('Box N Burn — Command Center Simulator — interactive-only mode'),
+  time: ()=>write(new Date().toString()),
+  version: ()=>write('Box N Burn CC v1.0-sim'),
+  servers: ()=> baselineServers.forEach(s=> write(`${s.name} - CPU:${s.cpu}% RAM:${s.ram}%`)),
+  status: ()=>{ write('System baseline displayed. Run "simulate" or "start monitor" to animate changes.') },
+  services: ()=> servicesList.forEach(s=> write(`${s.name} (${s.proto}) - ${s.status? 'UP':'DOWN'} - ${s.lat}ms`)),
+  cpu: ()=> write('CPU chart baseline present. Run "start cpu" to animate spikes.'),
+  ram: ()=> write('RAM chart baseline present. Run "start ram" to animate usage.'),
+  disk: ()=> write('Disk baseline present. Run "start disk" to animate IO.'),
+  threats: ()=> write('Threat radar baseline present. Run "simulate attack" to populate.'),
+  net: ()=> write('Network gauge baseline at ' + el('netGaugeVal').textContent + ' (green)'),
+  ping: ()=> write('Ping: ' + (rnd(10,45)) + ' ms'),
+  echo: (arg)=> write(arg || ''),
+  fortune: ()=> write(['You will find a mem-leak.','Your next deploy is green.','Remember backups.','Patch Tuesday is near.'][rnd(0,3)]),
+  banner: ()=> write('<pre class="ascii">BOX N BURN\n██████╗ ██████╗</pre>')
 }
 
-function execute(raw){
-  if(!raw || !raw.trim()) return
-  const parts = raw.trim().split(' ')
-  const cmd = parts[0]
-  const rest = parts.slice(1).join(' ')
-  if(COMMANDS[cmd]) {
-    try{COMMANDS[cmd].fn(rest)}catch(e){appendOut('Command error: '+e.message)}
-  } else {
-    appendOut('Unknown command: '+cmd)
+/* helpers to start/stop monitors (only start when explicitly requested) */
+function animateChart(chart, seriesGenerator, labelPrefix='') {
+  const id = 'anim_' + Math.random().toString(36).slice(2,8)
+  TERM.runningMonitors[id] = setInterval(()=>{
+    const label = new Date().toLocaleTimeString()
+    const val = seriesGenerator()
+    chart.data.labels.push(label)
+    chart.data.datasets[0].data.push(val)
+    if(chart.data.labels.length>24){ chart.data.labels.shift(); chart.data.datasets[0].data.shift() }
+    chart.update()
+  }, 1000)
+  return id
+}
+
+function stopMonitorById(id){
+  if(TERM.runningMonitors[id]){ clearInterval(TERM.runningMonitors[id]); delete TERM.runningMonitors[id]; return true }
+  return false
+}
+
+/* Commands for starting/stopping specific monitors */
+COMMANDS['start'] = (arg)=>{
+  if(!arg) return write('start what? options: cpu|ram|disk|threat|net|all')
+  if(arg==='cpu'){ 
+    if(TERM.cpuAnim) return write('cpu monitor already running')
+    TERM.cpuAnim = animateChart(cpuChart, ()=> Math.round(Math.max(1, cpuChart.data.datasets[0].data[cpuChart.data.datasets[0].data.length-1] + (Math.random()*10-5))), 'cpu')
+    write('cpu monitor started (id:' + TERM.cpuAnim + ')')
+  } else if(arg==='ram'){
+    if(TERM.ramAnim) return write('ram monitor already running')
+    TERM.ramAnim = animateChart(ramChart, ()=> Math.round(Math.max(1, ramChart.data.datasets[0].data[ramChart.data.datasets[0].data.length-1] + (Math.random()*8-4)))), write('ram monitor started')
+  } else if(arg==='disk'){
+    if(TERM.diskAnim) return write('disk monitor already running')
+    TERM.diskAnim = animateChart(diskChart, ()=> Math.round(Math.max(1, diskChart.data.datasets[0].data[diskChart.data.datasets[0].data.length-1] + (Math.random()*6-3)))), write('disk monitor started')
+  } else if(arg==='threat' || arg==='threats' || arg==='attack'){
+    if(TERM.threatAnim) return write('threat monitor already running')
+    TERM.threatAnim = setInterval(()=>{ threatChart.data.datasets[0].data = threatChart.data.datasets[0].data.map(()=> Math.round(Math.random()*100)); threatChart.update() }, 1200)
+    write('threat monitor started')
+  } else if(arg==='net'){
+    if(TERM.netAnim) return write('net monitor already running')
+    TERM.netAnim = setInterval(()=>{ const n = rnd(5,95); el('netGauge').style.background = `conic-gradient(var(--accent) ${n}%, var(--glass) ${n}% )`; el('netGaugeVal').textContent = n + '%' }, 900)
+    write('net monitor started')
+  } else if(arg==='all'){
+    COMMANDS['start']('cpu'); COMMANDS['start']('ram'); COMMANDS['start']('disk'); COMMANDS['start']('threat'); COMMANDS['start']('net')
+    write('all monitors started')
+  } else write('unknown monitor: ' + arg)
+}
+
+COMMANDS['stop'] = (arg)=>{
+  if(!arg) return write('stop what? options: monitor id or cpu|ram|disk|threat|net|all')
+  if(arg==='cpu' && TERM.cpuAnim){ clearInterval(TERM.cpuAnim); TERM.cpuAnim = null; return write('cpu monitor stopped') }
+  if(arg==='ram' && TERM.ramAnim){ clearInterval(TERM.ramAnim); TERM.ramAnim = null; return write('ram monitor stopped') }
+  if(arg==='disk' && TERM.diskAnim){ clearInterval(TERM.diskAnim); TERM.diskAnim = null; return write('disk monitor stopped') }
+  if(arg==='threat' && TERM.threatAnim){ clearInterval(TERM.threatAnim); TERM.threatAnim = null; return write('threat monitor stopped') }
+  if(arg==='net' && TERM.netAnim){ clearInterval(TERM.netAnim); TERM.netAnim = null; return write('net monitor stopped') }
+  if(arg==='all'){ for(const k of ['cpuAnim','ramAnim','diskAnim','threatAnim','netAnim']) if(TERM[k]){ clearInterval(TERM[k]); TERM[k] = null } return write('all monitors stopped') }
+  if(arg.startsWith('anim_')){ if(stopMonitorById(arg)){ write('monitor '+arg+' stopped') } else write('no such monitor id') }
+  else write('unknown stop target: ' + arg)
+}
+
+/* Simulation commands (run only when user requests) */
+COMMANDS['simulate'] = (arg)=>{
+  if(!arg) return write('simulate what? options: spike|ddos|outage|patch|backup-fail')
+  if(arg==='spike'){
+    write('Simulating CPU spike across web nodes...')
+    for(let i=0;i<6;i++){
+      setTimeout(()=>{
+        cpuChart.data.datasets[0].data.push(Math.min(100, cpuChart.data.datasets[0].data[cpuChart.data.datasets[0].data.length-1] + rnd(20,45)))
+        cpuChart.data.labels.push(new Date().toLocaleTimeString())
+        if(cpuChart.data.labels.length>24){cpuChart.data.labels.shift();cpuChart.data.datasets[0].data.shift()}
+        cpuChart.update()
+      }, i*700)
+    }
+    addIncident('High CPU', 'Web cluster experienced spike due to heavy requests', 'CRITICAL')
+  } else if(arg === 'ddos'){
+    write('Simulating DDoS — launching threat radar & net load...')
+    COMMANDS['start']('threat')
+    COMMANDS['start']('net')
+    addIncident('DDoS Attack', 'Large number of connections from multiple IPs', 'CRITICAL')
+  } else if(arg === 'outage'){
+    write('Simulating partial outage: mail service down')
+    servicesList = servicesList.map(s=> s.name==='mail'? {...s, status:false} : s)
+    el('serviceTable').innerHTML = servicesList.map(s => `<tr><td>${s.name}</td><td>${s.status?'<span style="color:var(--good)">UP</span>':'<span style="color:var(--bad)">DOWN</span>'}</td><td>${s.lat}ms</td></tr>`).join('')
+    addIncident('Mail Service Down', 'SMTP server returned 503 from all regions', 'HIGH')
+  } else if(arg === 'patch'){
+    write('Simulating patch rollout...')
+    addNews('Patch: security hotfix deployed to web cluster')
+    setTimeout(()=>{ write('Patch completed — verifying...'); addNews('Patch verification succeeded') }, 2200)
+  } else if(arg === 'backup-fail'){
+    write('Simulating backup failure...')
+    addIncident('Backup Failed', 'Nightly snapshot failed due to storage quota', 'HIGH')
+  } else write('unknown simulate type: '+arg)
+}
+
+/* Tools: scan, tail, pcap, deploy, stress, audit */
+COMMANDS['scan'] = (arg)=>{
+  const target = arg || '10.0.1.12'
+  write('Port scanning ' + target)
+  const samplePorts = [22,80,443,3306,5432,8080]
+  samplePorts.forEach((p,i)=>{
+    setTimeout(()=> write(`${target}:${p} - ${Math.random()>0.5 ? 'OPEN' : 'CLOSED'}`), i*350)
+  })
+}
+
+COMMANDS['tail'] = (arg)=>{
+  const secs = Math.max(1, Math.min(60, parseInt(arg) || 10))
+  write(`Tailing logs for ${secs}s`)
+  const id = setInterval(()=> write(`${now()} - ${['INFO','WARN','ERROR'][rnd(0,2)]} - pid:${rnd(1000,4999)} - message sample`), 600)
+  setTimeout(()=>{ clearInterval(id); write('Tail ended') }, secs*1000)
+}
+
+COMMANDS['pcap'] = (arg)=>{
+  const secs = Math.max(1, Math.min(30, parseInt(arg) || 8))
+  write(`Capturing packets for ${secs}s (simulated)`)
+  const id = setInterval(()=> write(`pcap: packet src=192.168.${rnd(0,5)}.${rnd(2,250)} dst=10.0.${rnd(0,5)}.${rnd(2,250)} proto=${['TCP','UDP','ICMP'][rnd(0,2)]}`), 250)
+  setTimeout(()=>{ clearInterval(id); write('PCAP capture finished (simulated)'); debugLog('Saved pcap to /tmp/sim.pcap') }, secs*1000)
+}
+
+COMMANDS['deploy'] = ()=>{
+  write('Starting simulated deploy...')
+  write('Building artifacts...')
+  setTimeout(()=> write('Deploying canary...'), 900)
+  setTimeout(()=> { write('Canary healthy. rolling...'); addNews('Canary passed – rolling to production') }, 2200)
+  setTimeout(()=> { write('Deploy complete — services healthy'); addNews('Deploy: success') }, 4200)
+}
+
+COMMANDS['stress'] = (arg)=>{
+  const target = arg || 'web-01'
+  write(`Starting stress test against ${target} (simulated)`)
+  const id = setInterval(()=> write(`stress: reqs ${rnd(800,1400)} latency ${rnd(120,900)}ms`), 700)
+  setTimeout(()=>{ clearInterval(id); write('Stress test ended'); addNews('Stress test complete') }, 7000)
+}
+
+COMMANDS['audit'] = ()=>{
+  write('Running configuration audit (simulated)...')
+  setTimeout(()=> write('Found 3 low-risk issues: rotate keys, update deps, increase log retention'), 1400)
+  setTimeout(()=> addNews('Audit completed — report available'), 2400)
+}
+
+/* Utility commands */
+COMMANDS['genkey'] = ()=>{
+  const k = Array.from({length:4}, ()=> Math.random().toString(36).slice(2,10)).join('-')
+  write('NEW_KEY: ' + k)
+  debugLog('Generated API key (simulated)')
+}
+
+COMMANDS['incident'] = (arg)=>{
+  if(!arg) return write('incident subcommands: add <title>|<msg>|<level> | list | resolve')
+  const parts = arg.split(' ')
+  const sub = parts.shift()
+  if(sub==='add'){
+    const payload = parts.join(' ').split('|')
+    if(payload.length<3) return write('format: incident add Title|Message|LEVEL')
+    const [title, msg, level] = payload
+    addIncident(title.trim(), msg.trim(), (level||'HIGH').trim())
+    write('incident added')
+  } else if(sub==='list'){
+    if(TERM.incidents.length===0) write('No incidents')
+    else TERM.incidents.forEach(i=> write(`${i.title} [${i.level}] - ${new Date(i.ts).toLocaleString()}`))
+  } else if(sub==='resolve'){
+    const popped = TERM.incidents.shift()
+    if(popped){ write('resolved: '+popped.title); debugLog('Resolved incident: '+popped.title) }
+    else write('no incidents to resolve')
+  } else write('unknown incident subcommand: '+sub)
+}
+
+/* logs and export */
+COMMANDS['download'] = (arg)=>{
+  if(arg==='logs' || arg==='log' || arg==='download logs'){
+    const content = TERM.logs.map(l=> `${new Date(l.ts).toISOString()} ${l.msg}`).join('\n')
+    const blob = new Blob([content], {type:'text/plain'})
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a'); a.href=url; a.download='boxnburn-logs.txt'; a.click(); URL.revokeObjectURL(url); write('logs downloaded')
+  } else write('usage: download logs')
+}
+COMMANDS['export'] = (arg)=>{
+  if(arg==='csv'){
+    const rows = [['ts','msg'], ...TERM.logs.map(l=> [new Date(l.ts).toISOString(), JSON.stringify(l.msg)])]
+    const csv = rows.map(r=> r.map(c=> `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n')
+    const blob = new Blob([csv], {type:'text/csv'})
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a'); a.href=url; a.download='boxnburn-logs.csv'; a.click(); URL.revokeObjectURL(url); write('CSV exported')
+  } else write('usage: export csv')
+}
+
+/* fun & games */
+COMMANDS['matrix'] = ()=>{
+  write('Matrix stream (press clear to stop):')
+  for(let i=0;i<40;i++) setTimeout(()=> write(Array(60).fill(0).map(()=> Math.random()>0.86?String.fromCharCode(rnd(33,126)):' ').join(''), '#0f0'), i*60)
+}
+COMMANDS['hack'] = ()=>{
+  write('Launching playful hack simulation...')
+  const seq = ['Accessing nodes', 'Bypassing firewall', 'Opening tunnel', 'Injecting payload', 'Root shell']
+  seq.forEach((s,i)=> setTimeout(()=> write(s, '#ff5c7c'), i*900))
+  setTimeout(()=> addIncident('Simulated intrusion', 'Operator triggered hack demo', 'MEDIUM'), seq.length*900)
+}
+COMMANDS['games'] = ()=> write('Mini-games (demo): snake, tetris — type snake or tetris to play (basic demo)')
+
+COMMANDS['snake'] = ()=>{
+  write('Snake demo starting (in-terminal, simple). Use ctrl+c to stop by clearing.')
+  const width = 24, height = 10
+  let snake = [{x:6,y:5},{x:5,y:5},{x:4,y:5}]
+  let dir = {x:1,y:0}
+  let food = {x:rnd(1,width-2), y:rnd(1,height-2)}
+  const render = ()=> {
+    let out = ''
+    for(let y=0;y<height;y++){
+      for(let x=0;x<width;x++){
+        if(x===0 || y===0 || x===width-1 || y===height-1) out += '#'
+        else if(snake.some(p=>p.x===x && p.y===y)) out += 'O'
+        else if(food.x===x && food.y===y) out += '*'
+        else out += ' '
+      }
+      out += '\n'
+    }
+    write('<pre class="ascii">'+out+'</pre>')
   }
+  let interval = setInterval(()=>{
+    const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y}
+    if(head.x<=0 || head.x>=width-1 || head.y<=0 || head.y>=height-1){
+      clearInterval(interval); write('Snake demo ended (hit wall)')
+      return
+    }
+    snake.unshift(head)
+    if(head.x===food.x && head.y===food.y){
+      food = {x:rnd(1,width-2), y:rnd(1,height-2)}
+    } else snake.pop()
+    render()
+  }, 450)
+  setTimeout(()=>{ clearInterval(interval); write('Snake demo auto-stopped') }, 18000)
 }
 
-function simulateBackgroundNoise(){
-  const choices = [
-    ()=>appendDebug('hb: node-'+rnd(1,20)+' heartbeat'),
-    ()=>appendDebug('sync: checkpoint created'),
-    ()=>appendDebug('replica: lag 120ms'),
-    ()=>appendDebug('cache: evicted 32 keys'),
-    ()=>{ if(Math.random()>0.997) spawnIncident() }
-  ]
-  const fn = choices[rnd(0,choices.length-1)]
-  fn()
+COMMANDS['tetris'] = ()=>{
+  write('Tetris demo: dropping blocks...')
+  const blocks = ['[]','==','##','<>']
+  let drop = 0
+  const id = setInterval(()=> {
+    write('Row '+(++drop)+': ' + blocks[rnd(0,blocks.length-1)].repeat(rnd(4,8)))
+    if(drop>10){ clearInterval(id); write('Tetris demo ended') }
+  }, 500)
 }
 
-setInterval(simulateBackgroundNoise,1200)
-
-function initSeeds(){
-  serverList.forEach(s=>{s.cpu=rnd(5,20);s.ram=rnd(20,40);s.disk=rnd(10,40)})
-  for(let i=0;i<10;i++){appendDebug(randomLogLine())}
-  updateCharts()
-  renderIncidents()
+/* system ops */
+COMMANDS['reboot'] = ()=>{
+  write('Rebooting system (simulated)...')
+  write('Stopping services...')
+  setTimeout(()=> write('Starting kernel...'), 1200)
+  setTimeout(()=> write('Services online. System booted.'), 3000)
 }
-initSeeds()
-
-document.getElementById('toolLog').addEventListener('click',(e)=>{appendTool('Tool log clicked')})
-
-function toggleVisualEffect(){
-  document.body.animate([{filter:'hue-rotate(0deg)'},{filter:'hue-rotate(360deg)'}],{duration:30000,iterations:1})
+COMMANDS['shutdown'] = ()=>{
+  write('Shutdown (simulated). No more commands until reload.')
+  write('Bye.')
 }
 
-function simulatePortExploitation(){
-  appendOut('> exploit --target srv-db-01 --vector CVE-XXXX')
-  appendOut('scanning...')
-  setTimeout(()=>{appendOut('exploit successful: shell opened');pushIncident('Privilege Escalation','Simulated root gained on srv-db-01','CRITICAL')},1200)
+/* miscellaneous shortcuts */
+COMMANDS['news'] = ()=> addNews(['New CVE in package-x','Maintenance window scheduled','Unexpected login attempt','Backup completed'][rnd(0,3)]) 
+COMMANDS['whoami'] = COMMANDS['whoami'] // alias
+COMMANDS['ping'] = ()=> COMMANDS['ping'] // alias
+
+/* generic execute */
+function executeLine(line){
+  if(!line || !line.trim()) return
+  write('> ' + line, '#9fb0bf')
+  const parts = line.trim().split(' ')
+  const cmd = parts[0].toLowerCase()
+  const arg = parts.slice(1).join(' ')
+  if(COMMANDS[cmd]){
+    try{ COMMANDS[cmd](arg) } catch(e){ write('Error: ' + e.message) }
+  } else {
+    write('Unknown command: ' + cmd + ' — type "help" for list')
+  }
+  TERM.logs.push({ts:Date.now(), cmd:line})
 }
 
-const interactiveExamples = ['help','services','stats','tail','pcap','deploy','portscan 10.0.1.5','ssh srv-db-01','top','kill 1003','genkey','calc 12*(3+5)']
+/* wire up terminal input & buttons */
+el('terminalRun').addEventListener('click', ()=>{ const v = el('terminalInput').value; executeLine(v); el('terminalInput').value=''; el('terminalInput').focus() })
+el('terminalInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ el('terminalRun').click() } })
 
-appendOut('Welcome to Ultimate IT Command Center (Sim)')
-appendOut('Type "help" to get started. Example commands: '+interactiveExamples.join(', '))
-appendDebug('Session started')
-appendTool('Simulator ready')
+/* quick UI tool buttons */
+el('downloadLogBtn').addEventListener('click', ()=> COMMANDS['download']('logs'))
+el('exportCsvBtn').addEventListener('click', ()=> COMMANDS['export']('csv'))
+el('beepBtn').addEventListener('click', ()=>{ try{ const ctx = new (window.AudioContext||window.webkitAudioContext)(); const o = ctx.createOscillator(); const g = ctx.createGain(); o.frequency.value = 880; o.connect(g); g.connect(ctx.destination); g.gain.value = 0.02; o.start(); setTimeout(()=>{ o.stop(); ctx.close(); }, 140) }catch(e){} })
+el('clearIncidentsBtn').addEventListener('click', ()=>{ el('incidentLog').innerHTML=''; TERM.incidents.length=0; write('incidents cleared') })
+
+/* initial debug entries */
+debugLog('Box N Burn simulator ready')
+write('Welcome to Box N Burn Command Center (sim). Type "help" to begin.')
+write('Baseline status: all green. Nothing will change until you run commands.')
 
 </script>
 </body>
