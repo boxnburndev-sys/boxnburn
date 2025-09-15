@@ -27,22 +27,23 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    .login-box {
+    .login-container {
       width: 100%;
-      max-width: 420px;
-      padding: 45px 35px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(25px);
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65);
+      max-width: 440px;
+      padding: 50px 35px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(30px);
+      border-radius: 24px;
+      box-shadow: 0 12px 45px rgba(0, 0, 0, 0.7);
       text-align: center;
       animation: fadeIn 0.8s ease-out;
+      position: relative;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(25px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .login-box img {
+    .login-container img {
       width: 110px;
       height: 110px;
       border-radius: 50%;
@@ -50,8 +51,9 @@
       margin-bottom: 20px;
       object-fit: cover;
       display: none;
+      box-shadow: 0 0 20px rgba(125, 211, 252, 0.4);
     }
-    .login-box h2 {
+    .login-container h2 {
       font-size: 26px;
       font-weight: 600;
       margin-bottom: 30px;
@@ -59,16 +61,16 @@
       letter-spacing: 0.5px;
     }
     .input-group {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       text-align: left;
       position: relative;
     }
     .input-group input {
       width: 100%;
-      height: 52px;
-      padding: 0 44px 0 44px;
+      height: 54px;
+      padding: 0 44px;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 16px;
       background: rgba(255, 255, 255, 0.95);
       color: #000;
@@ -102,11 +104,11 @@
     }
     button {
       width: 100%;
-      padding: 15px;
+      padding: 16px;
       background: linear-gradient(135deg, #6366f1, #06b6d4);
       color: white;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 17px;
       font-weight: 600;
       cursor: pointer;
@@ -115,7 +117,7 @@
     }
     button:hover {
       background: linear-gradient(135deg, #4f46e5, #0891b2);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+      box-shadow: 0 6px 22px rgba(99, 102, 241, 0.55);
       transform: translateY(-2px);
     }
     #error {
@@ -143,6 +145,7 @@
       margin-bottom: 20px;
       border: 3px solid #7dd3fc;
       object-fit: cover;
+      box-shadow: 0 0 20px rgba(125, 211, 252, 0.5);
     }
     .welcome-screen h2 {
       font-size: 22px;
@@ -151,7 +154,7 @@
     }
     .loading-bar {
       width: 70%;
-      max-width: 240px;
+      max-width: 260px;
       height: 12px;
       background: rgba(167, 139, 250, 0.25);
       border-radius: 8px;
@@ -168,11 +171,25 @@
       from { width: 0; }
       to { width: 100%; }
     }
+    .privacy-link {
+      margin-top: 22px;
+      font-size: 13px;
+      color: #a5b4fc;
+    }
+    .privacy-link a {
+      color: #93c5fd;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .privacy-link a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
     @media (max-width: 480px) {
-      .login-box {
+      .login-container {
         padding: 35px 25px;
       }
-      .login-box h2 {
+      .login-container h2 {
         font-size: 22px;
       }
     }
@@ -180,8 +197,8 @@
   <script src="https://kit.fontawesome.com/7c7e1c4c4a.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class="login-box">
-    <img id="pfp" src="" alt="Profile Picture">
+  <div class="login-container">
+    <img id="pfp" src="" alt="Profielfoto">
     <h2 id="welcomeText">Meld je aan</h2>
     <div class="input-group">
       <input type="text" id="username" placeholder="Gebruikersnaam">
@@ -194,12 +211,17 @@
     </div>
     <button id="loginBtn" onclick="login()">Inloggen</button>
     <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
+    <div class="privacy-link">
+      <a href="privacy.html">Privacybeleid</a>
+    </div>
   </div>
+
   <div class="welcome-screen" id="welcomeScreen" style="display:none;">
     <img id="welcomePfp" src="">
     <h2 id="welcomeMessage"></h2>
     <div class="loading-bar"><div class="loading-fill"></div></div>
   </div>
+
 <script>
   const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; 
   const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
@@ -256,7 +278,7 @@
       localStorage.setItem("loggedInUser",user);
       localStorage.setItem("userRole",users[user].role);
       localStorage.setItem("userPfp",users[user].pfp);
-      document.querySelector(".login-box").style.display="none";
+      document.querySelector(".login-container").style.display="none";
       const ws=document.getElementById("welcomeScreen");
       document.getElementById("welcomePfp").src=users[user].pfp;
       document.getElementById("welcomeMessage").textContent=`Welkom, ${user}`;
