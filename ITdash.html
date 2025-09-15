@@ -5,14 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IT Dashboard Login</title>
   <style>
-    /* Reset & Base */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
     }
-
     body {
       min-height: 100vh;
       display: flex;
@@ -24,106 +22,87 @@
       color: #fff;
       overflow: hidden;
     }
-
     @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    /* Login Box */
     .login-box {
-      width: 90%;
+      width: 100%;
       max-width: 420px;
-      padding: 40px 30px;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 20px;
-      box-shadow: 0 8px 35px rgba(0, 0, 0, 0.65);
+      padding: 50px 35px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65);
       text-align: center;
       animation: fadeIn 0.8s ease-out;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* Avatar */
     .login-box img {
-      width: 120px;
-      height: 120px;
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
       border: 3px solid #7dd3fc;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       object-fit: cover;
       display: none;
     }
-
-    /* Heading */
     .login-box h2 {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 600;
-      margin-bottom: 20px;
-      color: #a78bfa;
-      letter-spacing: 1px;
+      margin-bottom: 25px;
+      color: #c4b5fd;
+      letter-spacing: 0.5px;
     }
-
-    /* Inputs */
     .input-group {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       text-align: left;
     }
-
     .input-group input {
       width: 100%;
-      height: 48px;
-      padding: 0 15px;
+      height: 52px;
+      padding: 0 16px;
       border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      background: rgba(255, 255, 255, 0.92);
+      border-radius: 12px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.95);
       color: #000;
       transition: all 0.25s ease;
     }
-
     .input-group input:focus {
       outline: none;
-      box-shadow: 0 0 0 2px #a78bfa;
+      box-shadow: 0 0 0 3px #a78bfa;
       background: #fff;
     }
-
-    /* Button */
     button {
       width: 100%;
-      padding: 14px;
+      padding: 15px;
       background: linear-gradient(135deg, #6366f1, #06b6d4);
       color: white;
       border: none;
-      border-radius: 10px;
-      font-size: 16px;
+      border-radius: 12px;
+      font-size: 17px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       display: none;
     }
-
     button:hover {
       background: linear-gradient(135deg, #4f46e5, #0891b2);
-      box-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
       transform: translateY(-2px);
     }
-
     #error {
       color: #f87171;
-      margin-top: 10px;
+      margin-top: 12px;
       display: none;
-      font-size: 14px;
+      font-size: 15px;
       text-align: center;
     }
-
-    /* Welcome Screen */
     .welcome-screen {
       position: fixed;
       inset: 0;
@@ -135,39 +114,34 @@
       z-index: 9999;
       animation: fadeIn 0.4s ease-in-out;
     }
-
     .welcome-screen img {
-      width: 100px;
-      height: 100px;
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
       margin-bottom: 20px;
       border: 3px solid #7dd3fc;
       object-fit: cover;
     }
-
     .welcome-screen h2 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #a78bfa;
+      font-size: 22px;
+      margin-bottom: 22px;
+      color: #c4b5fd;
     }
-
     .loading-bar {
       width: 70%;
-      max-width: 220px;
-      height: 10px;
+      max-width: 240px;
+      height: 12px;
       background: rgba(167, 139, 250, 0.25);
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
       position: relative;
     }
-
     .loading-fill {
       height: 100%;
       width: 0;
       background: linear-gradient(135deg, #6366f1, #06b6d4);
       animation: loadAnim 2.5s forwards;
     }
-
     @keyframes loadAnim {
       from { width: 0; }
       to { width: 100%; }
@@ -187,18 +161,15 @@
     <button id="loginBtn" onclick="login()">Inloggen</button>
     <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
   </div>
-
   <div class="welcome-screen" id="welcomeScreen" style="display:none;">
     <img id="welcomePfp" src="">
     <h2 id="welcomeMessage"></h2>
     <div class="loading-bar"><div class="loading-fill"></div></div>
   </div>
-
 <script>
   const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; 
   const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
   let users = {};
-
   async function fetchUsers() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${USER_SHEET_ID}/values/LoginIT!A2:D?key=${API_KEY}`;
     const res = await fetch(url);
@@ -210,7 +181,6 @@
       users[username] = { password, role, pfp };
     });
   }
-
   const usernameInput=document.getElementById("username");
   const passwordInput=document.getElementById("password");
   const passwordGroup=document.getElementById("passwordGroup");
@@ -218,7 +188,6 @@
   const pfp=document.getElementById("pfp");
   const welcomeText=document.getElementById("welcomeText");
   const error=document.getElementById("error");
-
   usernameInput.addEventListener("input",()=>{
     const name=usernameInput.value.trim();
     if(users[name]){
@@ -234,7 +203,6 @@
       loginBtn.style.display="none";
     }
   });
-
   function login(){
     const user=usernameInput.value.trim();
     const pass=passwordInput.value.trim();
@@ -253,13 +221,11 @@
       setTimeout(()=>error.style.display="none",3000);
     }
   }
-
   document.addEventListener("keydown",(e)=>{
     if(e.key==="Enter"){
       if(usernameInput.value.trim()!==""&&passwordInput.value.trim()!==""){login();}
     }
   });
-
   fetchUsers();
 </script>
 </body>
