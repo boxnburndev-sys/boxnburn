@@ -4,7 +4,7 @@
   <script src="favicon.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Box N Burn IT Dash</title>
+  <title>IT Dashboard Login</title>
   <style>
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
@@ -13,24 +13,30 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: url('https://i.ibb.co/5XkVnKjY/Boxing-Spinning-Yoga.png') no-repeat center center fixed;
-      background-size: cover;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+      background-size: 300% 300%;
+      animation: gradientShift 8s ease infinite;
       position: relative;
       overflow-x: hidden;
+      color: #fff;
+    }
+    @keyframes gradientShift {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
     body::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(10px);
+      background: rgba(0,0,0,0.5);
       z-index: 0;
     }
     .back-btn {
       position: absolute;
       top: 15px;
       left: 15px;
-      background: rgba(0,120,215,0.9);
+      background: rgba(56,189,248,0.9);
       color: white;
       border: none;
       padding: 8px 14px;
@@ -39,9 +45,9 @@
       font-weight: 600;
       cursor: pointer;
       z-index: 10;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.2s;
     }
-    .back-btn:hover {background: #005a9e;}
+    .back-btn:hover {background: #0ea5e9; transform: scale(1.05);}
 
     .login-container {
       position: relative;
@@ -49,16 +55,18 @@
       width: 90%;
       max-width: 400px;
       text-align: center;
-      color: #fff;
       animation: fadeIn 0.8s ease-out;
       padding: 20px;
+      background: rgba(30,41,59,0.8);
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(56,189,248,0.4);
     }
     .login-container img {
       width: 110px;
       height: 110px;
       border-radius: 50%;
       margin: 0 auto 15px;
-      border: 3px solid #fff;
+      border: 3px solid #38bdf8;
       display: none;
       object-fit: cover;
       animation: popIn 0.4s ease-in-out;
@@ -79,26 +87,25 @@
       background: rgba(255,255,255,0.9);
       color: #000;
     }
-    .input-group input::placeholder {color: #666;}
     .input-group input:focus {
       outline: none;
-      box-shadow: 0 0 0 2px #0078d7;
+      box-shadow: 0 0 0 2px #38bdf8;
       background: #fff;
     }
     button {
       width: 100%;
       padding: 14px;
-      background: #0078d7;
+      background: #38bdf8;
       color: white;
       border: none;
       border-radius: 6px;
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.2s;
       display: none;
     }
-    button:hover {background: #005a9e;}
+    button:hover {background: #0ea5e9; transform: translateY(-2px);}
     #error {
       color: #ff4d4d;
       margin-top: 10px;
@@ -111,8 +118,8 @@
     .welcome-screen {
       position: fixed;
       inset:0;
-      background:#0078d7;
-      color:#fff;
+      background:#0f172a;
+      color:#38bdf8;
       display:flex;
       flex-direction:column;
       justify-content:center;
@@ -126,7 +133,7 @@
       width:90px; height:90px;
       border-radius:50%;
       margin-bottom:20px;
-      border:3px solid #fff;
+      border:3px solid #38bdf8;
       object-fit:cover;
     }
     .welcome-screen h2 {
@@ -137,7 +144,7 @@
       width:70%;
       max-width:200px;
       height:8px;
-      background:rgba(255,255,255,0.3);
+      background:rgba(56,189,248,0.3);
       border-radius:5px;
       overflow:hidden;
       position:relative;
@@ -145,7 +152,7 @@
     .loading-fill {
       height:100%;
       width:0;
-      background:#fff;
+      background:#38bdf8;
       animation: loadAnim 2.5s forwards;
     }
 
@@ -161,21 +168,6 @@
     @keyframes loadAnim {
       from {width:0;}
       to {width:100%;}
-    }
-
-    /* Responsive tweaks */
-    @media (max-width:768px){
-      .login-container {padding:16px}
-      .login-container img {width:90px;height:90px}
-      .welcome {font-size:16px}
-      button {font-size:15px;padding:12px}
-    }
-    @media (max-width:480px){
-      .back-btn {font-size:12px;padding:6px 10px}
-      .login-container img {width:75px;height:75px}
-      .welcome {font-size:14px}
-      input {font-size:14px}
-      button {font-size:14px}
     }
   </style>
 </head>
@@ -207,7 +199,6 @@
   let users = {};
 
   async function fetchUsers() {
-    // Pull data from the LoginIT sheet instead of Users
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${USER_SHEET_ID}/values/LoginIT!A2:D?key=${API_KEY}`;
     const res = await fetch(url);
     const data = await res.json();
@@ -257,7 +248,7 @@
       document.getElementById("welcomePfp").src = users[user].pfp;
       document.getElementById("welcomeMessage").textContent = `Welkom, ${user}`;
       ws.style.display = "flex";
-      setTimeout(()=> window.location.href = "dashboard.html", 2500);
+      setTimeout(()=> window.location.href = "dashboard-it.html", 2500);
     } else {
       error.style.display = "block";
       setTimeout(() => error.style.display = "none", 3000);
