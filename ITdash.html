@@ -30,11 +30,11 @@
     .login-box {
       width: 100%;
       max-width: 420px;
-      padding: 50px 35px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
-      border-radius: 24px;
-      box-shadow: 0 12px 45px rgba(0, 0, 0, 0.65);
+      padding: 45px 35px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(25px);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65);
       text-align: center;
       animation: fadeIn 0.8s ease-out;
     }
@@ -52,20 +52,21 @@
       display: none;
     }
     .login-box h2 {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 600;
-      margin-bottom: 25px;
-      color: #c4b5fd;
+      margin-bottom: 30px;
+      color: #e0e7ff;
       letter-spacing: 0.5px;
     }
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       text-align: left;
+      position: relative;
     }
     .input-group input {
       width: 100%;
       height: 52px;
-      padding: 0 16px;
+      padding: 0 44px 0 44px;
       border: none;
       border-radius: 12px;
       font-size: 16px;
@@ -75,8 +76,29 @@
     }
     .input-group input:focus {
       outline: none;
-      box-shadow: 0 0 0 3px #a78bfa;
+      box-shadow: 0 0 0 3px #818cf8;
       background: #fff;
+    }
+    .input-group i {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #6b7280;
+      transition: color 0.2s;
+    }
+    .input-group input:focus + i {
+      color: #4f46e5;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #6b7280;
+      cursor: pointer;
     }
     button {
       width: 100%;
@@ -98,7 +120,7 @@
     }
     #error {
       color: #f87171;
-      margin-top: 12px;
+      margin-top: 15px;
       display: none;
       font-size: 15px;
       text-align: center;
@@ -146,7 +168,16 @@
       from { width: 0; }
       to { width: 100%; }
     }
+    @media (max-width: 480px) {
+      .login-box {
+        padding: 35px 25px;
+      }
+      .login-box h2 {
+        font-size: 22px;
+      }
+    }
   </style>
+  <script src="https://kit.fontawesome.com/7c7e1c4c4a.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <div class="login-box">
@@ -154,9 +185,12 @@
     <h2 id="welcomeText">Meld je aan</h2>
     <div class="input-group">
       <input type="text" id="username" placeholder="Gebruikersnaam">
+      <i class="fas fa-user"></i>
     </div>
     <div class="input-group" id="passwordGroup" style="display:none;">
       <input type="password" id="password" placeholder="Wachtwoord">
+      <i class="fas fa-lock"></i>
+      <i class="fas fa-eye toggle-password" id="togglePassword"></i>
     </div>
     <button id="loginBtn" onclick="login()">Inloggen</button>
     <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
@@ -188,6 +222,7 @@
   const pfp=document.getElementById("pfp");
   const welcomeText=document.getElementById("welcomeText");
   const error=document.getElementById("error");
+  const togglePassword=document.getElementById("togglePassword");
   usernameInput.addEventListener("input",()=>{
     const name=usernameInput.value.trim();
     if(users[name]){
@@ -201,6 +236,17 @@
       welcomeText.textContent="Meld je aan";
       passwordGroup.style.display="none";
       loginBtn.style.display="none";
+    }
+  });
+  togglePassword.addEventListener("click",()=>{
+    if(passwordInput.type==="password"){
+      passwordInput.type="text";
+      togglePassword.classList.remove("fa-eye");
+      togglePassword.classList.add("fa-eye-slash");
+    }else{
+      passwordInput.type="password";
+      togglePassword.classList.remove("fa-eye-slash");
+      togglePassword.classList.add("fa-eye");
     }
   });
   function login(){
