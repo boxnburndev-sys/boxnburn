@@ -4,144 +4,173 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IT Dashboard Login</title>
-  <link rel="stylesheet" href="favicon.css">
   <style>
-    * {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
     body {
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
-      background-size:400% 400%;
-      animation:gradientShift 10s ease infinite;
-      color:#fff;
-      overflow:hidden;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #312e81);
+      background-size: 400% 400%;
+      animation: gradientShift 12s ease infinite;
+      color: #fff;
+      overflow: hidden;
     }
+
     @keyframes gradientShift {
-      0% {background-position:0% 50%;}
-      50% {background-position:100% 50%;}
-      100% {background-position:0% 50%;}
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
+
+    /* Login Box */
     .login-box {
-      width:90%;
-      max-width:420px;
-      padding:40px 30px;
-      background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(14px);
-      border:1px solid rgba(255,255,255,0.1);
-      border-radius:20px;
-      box-shadow:0 8px 30px rgba(0,0,0,0.6);
-      text-align:center;
-      animation:fadeIn 0.8s ease-out;
+      width: 90%;
+      max-width: 420px;
+      padding: 40px 30px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      box-shadow: 0 8px 35px rgba(0, 0, 0, 0.65);
+      text-align: center;
+      animation: fadeIn 0.8s ease-out;
     }
+
     @keyframes fadeIn {
-      from {opacity:0; transform:translateY(20px);}
-      to {opacity:1; transform:translateY(0);}
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Avatar */
     .login-box img {
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      border:3px solid #38bdf8;
-      margin-bottom:15px;
-      object-fit:cover;
-      display:none;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #7dd3fc;
+      margin-bottom: 15px;
+      object-fit: cover;
+      display: none;
     }
+
+    /* Heading */
     .login-box h2 {
-      font-size:22px;
-      font-weight:600;
-      margin-bottom:20px;
-      color:#38bdf8;
-      letter-spacing:1px;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #a78bfa;
+      letter-spacing: 1px;
     }
+
+    /* Inputs */
     .input-group {
-      margin-bottom:18px;
-      text-align:left;
+      margin-bottom: 18px;
+      text-align: left;
     }
+
     .input-group input {
-      width:100%;
-      height:48px;
-      padding:0 15px;
-      border:none;
-      border-radius:10px;
-      font-size:15px;
-      background:rgba(255,255,255,0.9);
-      color:#000;
-      transition:all 0.2s;
+      width: 100%;
+      height: 48px;
+      padding: 0 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #000;
+      transition: all 0.25s ease;
     }
+
     .input-group input:focus {
-      outline:none;
-      box-shadow:0 0 0 2px #38bdf8;
-      background:#fff;
+      outline: none;
+      box-shadow: 0 0 0 2px #a78bfa;
+      background: #fff;
     }
+
+    /* Button */
     button {
-      width:100%;
-      padding:14px;
-      background:#38bdf8;
-      color:white;
-      border:none;
-      border-radius:10px;
-      font-size:16px;
-      font-weight:600;
-      cursor:pointer;
-      transition:all 0.25s ease;
-      display:none;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: none;
     }
+
     button:hover {
-      background:#0ea5e9;
-      box-shadow:0 0 15px #0ea5e9;
-      transform:translateY(-2px);
+      background: linear-gradient(135deg, #4f46e5, #0891b2);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
+      transform: translateY(-2px);
     }
+
     #error {
-      color:#ff4d4d;
-      margin-top:10px;
-      display:none;
-      font-size:14px;
-      text-align:center;
+      color: #f87171;
+      margin-top: 10px;
+      display: none;
+      font-size: 14px;
+      text-align: center;
     }
+
+    /* Welcome Screen */
     .welcome-screen {
-      position:fixed;
-      inset:0;
-      background:#0f172a;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      z-index:9999;
-      animation:fadeIn 0.4s ease-in-out;
+      position: fixed;
+      inset: 0;
+      background: #0f172a;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.4s ease-in-out;
     }
+
     .welcome-screen img {
-      width:100px;
-      height:100px;
-      border-radius:50%;
-      margin-bottom:20px;
-      border:3px solid #38bdf8;
-      object-fit:cover;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      border: 3px solid #7dd3fc;
+      object-fit: cover;
     }
+
     .welcome-screen h2 {
-      font-size:20px;
-      margin-bottom:20px;
-      color:#38bdf8;
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #a78bfa;
     }
+
     .loading-bar {
-      width:70%;
-      max-width:220px;
-      height:10px;
-      background:rgba(56,189,248,0.25);
-      border-radius:6px;
-      overflow:hidden;
-      position:relative;
+      width: 70%;
+      max-width: 220px;
+      height: 10px;
+      background: rgba(167, 139, 250, 0.25);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
     }
+
     .loading-fill {
-      height:100%;
-      width:0;
-      background:#38bdf8;
-      animation:loadAnim 2.5s forwards;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      animation: loadAnim 2.5s forwards;
     }
+
     @keyframes loadAnim {
-      from {width:0;}
-      to {width:100%;}
+      from { width: 0; }
+      to { width: 100%; }
     }
   </style>
 </head>
