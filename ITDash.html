@@ -1,229 +1,158 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-  <script src="favicon.js"></script>
   <meta charset="UTF-8">
-  <title>Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>IT Ops Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#233445;color:white;word-wrap:break-word;overflow-x:hidden}
-    .navbar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#0f2133;box-shadow:0 4px 10px rgba(0,0,0,0.3);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px}
-    .brand-logo{width:60px;height:60px;border-radius:50%;object-fit:cover;flex-shrink:0}
-    .brand{display:flex;align-items:center;gap:10px;font-size:1.2rem;font-weight:bold;flex:1 1 auto;min-width:140px}
-    .menu{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;flex:2 1 auto}
-    .menu button{background:#0f2133;border:2px solid #384858;padding:8px 16px;border-radius:20px;cursor:pointer;font-weight:600;color:white;transition:all 0.18s ease;flex-shrink:0}
-    .menu button:hover{transform:scale(1.08);background:#384858}
-    .menu button.active{background:#233445;transform:scale(1.05)}
-    .user-info{display:flex;align-items:center;gap:12px;flex-shrink:0}
-    .user-info img{width:40px;height:40px;border-radius:50%;border:2px solid white;object-fit:cover;flex-shrink:0}
-    .user-info .details{text-align:right;white-space:nowrap}
-    .user-info .details .name{font-weight:600}
-    .user-info .details .role{font-size:12px;opacity:0.85}
-    .content{padding:24px}
-    .hidden{display:none}
-    .card{background:#384858;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.2);animation:fadeIn 0.4s ease;overflow-x:auto}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    table{width:100%;border-collapse:collapse;margin-top:12px;background:#233445;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
-    table th,table td{padding:12px;border-bottom:1px solid #384858;text-align:left;word-break:break-word}
-    table th{background:#0f2133;font-weight:600}
-    table tr:hover{background:#384858}
-    .personnel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}
-    .person-card{background:#233445;border-radius:12px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,0.2);text-align:center;word-wrap:break-word}
-    .person-card img{width:100px;height:100px;border-radius:50%;border:3px solid #0f2133;object-fit:cover;margin-bottom:10px}
-    .person-card h3{margin:0;font-size:18px;color:#0f93ff;word-break:break-word}
-    .person-card p{margin:6px 0;font-size:14px;word-break:break-word}
-    .refresh-btn{margin-top:12px;padding:8px 16px;border-radius:10px;border:none;cursor:pointer;background:#0f93ff;color:white;font-weight:600;transition:all 0.2s ease}
-    .refresh-btn:hover{background:#0d7cd6;transform:scale(1.05)}
-    @media(max-width:1024px){
-      .menu button{padding:6px 12px;font-size:14px}
-      .user-info .details{display:none}
-    }
-    @media(max-width:768px){
-      .menu{justify-content:center;width:100%}
-      .menu button{flex:1 1 auto;min-width:100px}
-      .user-info img{width:32px;height:32px}
-      .content{padding:16px}
-      table{display:block;overflow-x:auto;white-space:nowrap}
-    }
-    @media(max-width:480px){
-      .brand-logo{width:40px;height:40px}
-      .brand{font-size:1rem}
-      .menu{flex-direction:column;align-items:stretch}
-      .menu button{width:100%;border-radius:10px}
-      .person-card img{width:80px;height:80px}
-      .person-card h3{font-size:16px}
-      .person-card p{font-size:12px}
-    }
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#0e1621;color:#f5f5f5}
+    .navbar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#0a1a2f;box-shadow:0 4px 10px rgba(0,0,0,0.4)}
+    .brand{font-size:1.4rem;font-weight:bold;color:#0f93ff}
+    .content{padding:20px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-bottom:20px}
+    .card{background:#162230;border-radius:14px;padding:20px;box-shadow:0 6px 16px rgba(0,0,0,0.4);transition:transform 0.2s}
+    .card:hover{transform:translateY(-5px)}
+    .stat-title{font-size:0.9rem;opacity:0.8}
+    .stat-value{font-size:2rem;font-weight:bold;margin-top:8px;color:#0f93ff}
+    .status-up{color:#4caf50;font-weight:bold}
+    .status-down{color:#f44336;font-weight:bold}
+    canvas{max-height:220px}
   </style>
 </head>
 <body>
   <nav class="navbar">
-    <div class="brand">
-      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn Logo" class="brand-logo">
-      Box N Burn Dashboard
-    </div>
-    <div class="menu" id="menuButtons">
-      <button onclick="goMain()">Home</button>
-      <button onclick="showPage('home',this)" class="active">Team</button>
-      <button onclick="showPage('leden',this)">Leden</button>
-      <button onclick="showPage('reserveringen',this)">Reserveringen</button>
-      <button onclick="logout()">Logout</button>
-      <button onclick="showPage('profiel',this)">Profiel</button>
-    </div>
-    <div class="user-info">
-      <div class="details">
-        <div class="name" id="username"></div>
-        <div class="role" id="role"></div>
-      </div>
-      <img id="pfp" alt="User profile picture">
-    </div>
+    <div class="brand">⚡ IT Operations Dashboard</div>
   </nav>
+
   <div class="content">
-    <div id="home" class="page card">
-      <h2>Welkom bij Box N Burn!</h2>
-      <p>We zijn blij dat je er bent. Hier kun je reserveringen maken, je status bekijken en meer.</p>
-      <h2>Ons Team</h2>
-      <div id="personnelGrid" class="personnel-grid"></div>
-      <button class="refresh-btn" onclick="loadPersonnel()">Ververs Team</button>
-    </div>
-    <div id="leden" class="page hidden card">
-      <h2>Leden</h2>
-      <h3>Boksen</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenBoksen"></tbody></table>
-      <h3>Yoga</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenYoga"></tbody></table>
-      <h3>Spinning</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenSpinning"></tbody></table>
-      <button class="refresh-btn" onclick="loadLedenFromSheet()">Ververs Leden</button>
-    </div>
-    <div id="reserveringen" class="page hidden card">
-      <h2>Reserveringen</h2>
-      <table>
-        <thead><tr><th>ID</th><th>Naam</th><th>Les</th><th>Datum</th><th>Tijd</th><th>Contact</th></tr></thead>
-        <tbody id="reservationTable"></tbody>
-      </table>
-      <button class="refresh-btn" onclick="loadReserveringenFromSheet()">Ververs Reserveringen</button>
-    </div>
-    <div id="profiel" class="page hidden card">
-      <h2>Mijn Profiel</h2>
-      <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-        <img id="profilePic" style="width:120px;height:120px;border-radius:50%;border:3px solid #0f2133;object-fit:cover">
-        <div>
-          <p><b>Naam:</b> <span id="profileName"></span></p>
-          <p><b>Rol:</b> <span id="profileRole"></span></p>
-          <p><b>Bio:</b> <span id="profileBio"></span></p>
-        </div>
+    <!-- Top stats -->
+    <div class="grid">
+      <div class="card">
+        <div class="stat-title">Active Servers</div>
+        <div class="stat-value" id="serverCount">0</div>
       </div>
-      <button class="refresh-btn" onclick="refreshProfile()">Ververs Profiel</button>
+      <div class="card">
+        <div class="stat-title">Avg CPU Load</div>
+        <div class="stat-value" id="cpuAvg">0%</div>
+      </div>
+      <div class="card">
+        <div class="stat-title">Avg RAM Usage</div>
+        <div class="stat-value" id="ramAvg">0%</div>
+      </div>
+      <div class="card">
+        <div class="stat-title">Ping (ms)</div>
+        <div class="stat-value" id="pingStat">-</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="grid">
+      <div class="card"><h3>CPU Usage</h3><canvas id="cpuChart"></canvas></div>
+      <div class="card"><h3>RAM Usage</h3><canvas id="ramChart"></canvas></div>
+      <div class="card"><h3>Disk Usage</h3><canvas id="diskChart"></canvas></div>
+    </div>
+
+    <!-- Services -->
+    <div class="card">
+      <h3>Service Status</h3>
+      <table style="width:100%;margin-top:10px;border-collapse:collapse">
+        <thead><tr><th style="text-align:left;padding:6px">Service</th><th style="text-align:left;padding:6px">Status</th></tr></thead>
+        <tbody id="serviceTable"></tbody>
+      </table>
     </div>
   </div>
+
 <script>
-  // Two different sheets
-  const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48"; // leden + reserveringen
-  const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; // users, login, profile
-  const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4"; // your API key
+  // ==== SYSTEM DATA SIMULATION ====
+  const servers = [
+    {name:"Web Server 1", cpu:0, ram:0, disk:0},
+    {name:"DB Server", cpu:0, ram:0, disk:0},
+    {name:"Backup Node", cpu:0, ram:0, disk:0},
+    {name:"Proxy Server", cpu:0, ram:0, disk:0}
+  ];
 
-  // Show specific page
-  window.showPage=function(pageId,btn){
-    document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
-    document.getElementById(pageId).classList.remove("hidden");
-    document.querySelectorAll(".navbar .menu button").forEach(b=>b.classList.remove("active"));
-    if(btn)btn.classList.add("active")
-  };
+  // Charts
+  const labels=[];
+  const cpuData=[]; const ramData=[]; const diskData=[];
 
-  function goMain(){window.location.href="index.html"}
+  const cpuChart=new Chart(document.getElementById("cpuChart"),{
+    type:'line',data:{labels,datasets:[{label:'CPU %',data:cpuData,borderColor:'#0f93ff',tension:0.3}]},
+    options:{scales:{y:{min:0,max:100}}}
+  });
+  const ramChart=new Chart(document.getElementById("ramChart"),{
+    type:'line',data:{labels,datasets:[{label:'RAM %',data:ramData,borderColor:'#4caf50',tension:0.3}]},
+    options:{scales:{y:{min:0,max:100}}}
+  });
+  const diskChart=new Chart(document.getElementById("diskChart"),{
+    type:'line',data:{labels,datasets:[{label:'Disk %',data:diskData,borderColor:'#f44336',tension:0.3}]},
+    options:{scales:{y:{min:0,max:100}}}
+  });
 
-  function logout(){
-    localStorage.removeItem("loggedInUser");
-    window.location.href="login.html"
+  function updateSystemStats(){
+    let cpuSum=0, ramSum=0;
+    servers.forEach(s=>{
+      s.cpu=(Math.random()*70+10).toFixed(1);
+      s.ram=(Math.random()*60+20).toFixed(1);
+      s.disk=(Math.random()*50+40).toFixed(1);
+      cpuSum+=parseFloat(s.cpu);
+      ramSum+=parseFloat(s.ram);
+    });
+
+    document.getElementById("serverCount").textContent=servers.length;
+    document.getElementById("cpuAvg").textContent=(cpuSum/servers.length).toFixed(1)+"%";
+    document.getElementById("ramAvg").textContent=(ramSum/servers.length).toFixed(1)+"%";
+
+    const now=new Date().toLocaleTimeString();
+    labels.push(now);
+    cpuData.push((cpuSum/servers.length).toFixed(1));
+    ramData.push((ramSum/servers.length).toFixed(1));
+    diskData.push(servers[0].disk);
+
+    if(labels.length>15){labels.shift();cpuData.shift();ramData.shift();diskData.shift();}
+    cpuChart.update();ramChart.update();diskChart.update();
   }
 
-  // Fetch data helper
-  async function fetchSheetData(sheetId,range){
+  // ==== PING TEST ====
+  async function runPing(){
+    const start=performance.now();
     try{
-      const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${API_KEY}`;
-      const res=await fetch(url);
-      const data=await res.json();
-      return data.values||[]
-    }catch(e){
-      console.error("Fout bij ophalen van gegevens:",e);
-      return[]
+      await fetch("https://www.google.com",{mode:"no-cors"});
+      const end=performance.now();
+      document.getElementById("pingStat").textContent=Math.round(end-start);
+    }catch{
+      document.getElementById("pingStat").textContent="Timeout";
     }
   }
 
-  // Load leden (main sheet)
-  async function loadLedenFromSheet(){
-    const rows=await fetchSheetData(SHEET_ID,"Leden!A2:D");
-    const boksen=document.getElementById("ledenBoksen");
-    const yoga=document.getElementById("ledenYoga");
-    const spinning=document.getElementById("ledenSpinning");
-    boksen.innerHTML="";yoga.innerHTML="";spinning.innerHTML="";
-    rows.forEach(r=>{
-      const[id,naam,les,contact]=r;
-      const row=`<tr><td>${id}</td><td>${naam}</td><td>${contact}</td></tr>`;
-      if(les==="Boksen")boksen.innerHTML+=row;
-      if(les==="Yoga")yoga.innerHTML+=row;
-      if(les==="Spinning")spinning.innerHTML+=row
-    })
-  }
+  // ==== SERVICE STATUS ====
+  const services=[
+    {name:"Website",url:"https://example.com"},
+    {name:"API",url:"https://jsonplaceholder.typicode.com/posts"},
+    {name:"Intranet",url:"https://httpstat.us/200"},
+    {name:"Mail Server",url:"https://httpstat.us/503"}
+  ];
 
-  // Load reserveringen (main sheet)
-  async function loadReserveringenFromSheet(){
-    const rows=await fetchSheetData(SHEET_ID,"Reserveringen!A2:F");
-    const table=document.getElementById("reservationTable");
+  async function checkServices(){
+    const table=document.getElementById("serviceTable");
     table.innerHTML="";
-    rows.forEach(r=>{
-      const[id,naam,les,datum,tijd,contact]=r;
-      table.innerHTML+=`<tr><td>${id}</td><td>${naam}</td><td>${les}</td><td>${datum}</td><td>${tijd}</td><td>${contact}</td></tr>`
-    })
-  }
-
-  // Load personnel (user sheet)
-  async function loadPersonnel(){
-    const rows=await fetchSheetData(USER_SHEET_ID,"Users!A2:E");
-    const grid=document.getElementById("personnelGrid");
-    grid.innerHTML="";
-    rows.forEach(r=>{
-      const[username,,role,bio,pfp]=r;
-      const card=document.createElement("div");
-      card.className="person-card";
-      card.innerHTML=`<img src="${pfp}" alt="${username}"><h3>${username}</h3><p><b>Rol:</b> ${role}</p><p><b>Bio:</b> ${bio}</p>`;
-      grid.appendChild(card)
-    })
-  }
-
-  // Load logged-in user info (user sheet)
-  async function loadUserInfo(){
-    const user=localStorage.getItem("loggedInUser");
-    if(!user){window.location.href="login.html";return}
-    const rows=await fetchSheetData(USER_SHEET_ID,"Users!A2:E");
-    const found=rows.find(r=>r[0]===user);
-    if(found){
-      const[username,,role,bio,pfp]=found;
-      document.getElementById("username").textContent=username;
-      document.getElementById("role").textContent=role;
-      document.getElementById("pfp").src=pfp;
-      document.getElementById("profileName").textContent=username;
-      document.getElementById("profileRole").textContent=role;
-      document.getElementById("profileBio").textContent=bio;
-      document.getElementById("profilePic").src=pfp;
+    for(const s of services){
+      let status;
+      try{
+        const res=await fetch(s.url);
+        status=res.ok?'<span class="status-up">UP</span>':'<span class="status-down">DOWN</span>';
+      }catch{status='<span class="status-down">DOWN</span>';}
+      table.innerHTML+=`<tr><td style="padding:6px">${s.name}</td><td style="padding:6px">${status}</td></tr>`;
     }
   }
 
-  async function refreshProfile(){await loadUserInfo()}
-
-  // Auto refresh
-  setInterval(()=>{
-    loadLedenFromSheet();
-    loadReserveringenFromSheet();
-    loadPersonnel()
-  },60000);
-
-  // Init
-  loadLedenFromSheet();
-  loadReserveringenFromSheet();
-  loadPersonnel();
-  loadUserInfo();
+  // ==== INIT LOOP ====
+  updateSystemStats();
+  runPing();
+  checkServices();
+  setInterval(updateSystemStats,5000);
+  setInterval(runPing,10000);
+  setInterval(checkServices,30000);
 </script>
 </body>
 </html>
