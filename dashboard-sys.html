@@ -1,344 +1,345 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Box N Burn — Command Center (Responsive v2)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<style>
-:root{
-  --bg1:#03061a;--bg2:#071428;--panel:#071722;--muted:#9fb0bf;--accent:#1fb6ff;--good:#2dd36f;--warn:#ffb020;--bad:#ff5c7c;--neon:#9d4dff;--glass:rgba(255,255,255,0.03);
-}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#eaf6ff;-webkit-font-smoothing:antialiased}
-.container{display:grid;grid-template-rows:auto 1fr auto;min-height:100vh}
-.navbar{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:linear-gradient(90deg,rgba(255,255,255,0.01),rgba(255,255,255,0.01));backdrop-filter:blur(6px)}
-.brand{font-weight:800;color:var(--accent);font-size:1.05rem}
-.controls{display:flex;gap:12px;align-items:center}
-.clock{color:var(--accent);font-weight:700}
-.pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);font-weight:700;color:var(--muted)}
-.main{display:grid;grid-template-columns:320px 1fr 380px;gap:16px;padding:16px}
-.card{background:linear-gradient(180deg,var(--panel),rgba(255,255,255,0.01));border-radius:12px;padding:12px;box-shadow:0 10px 30px rgba(0,0,0,0.45)}
-.h2{font-size:0.95rem;color:var(--muted);margin:0 0 8px}
-.stat{font-size:1.4rem;font-weight:800;color:var(--accent)}
-.server-list{display:flex;flex-direction:column;gap:8px}
-.server{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
-.badge{padding:6px 8px;border-radius:8px;font-weight:700}
-.up{background:linear-gradient(90deg,var(--good),#19b86a);color:#02120b}
-.down{background:linear-gradient(90deg,var(--bad),#ff7b9a);color:#2a0610}
-.center{display:flex;align-items:center;justify-content:center}
-.terminal{display:flex;flex-direction:column;gap:8px;height:420px}
-.output{flex:1;overflow:auto;background:transparent;padding-right:6px;font-family:ui-monospace,Menlo,monospace;font-size:13px}
-.input{display:flex;gap:8px}
-.cmd{flex:1;background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:8px;color:#e8fbff}
-.table{width:100%;border-collapse:collapse;font-size:0.9rem}
-.table th,.table td{padding:8px;text-align:left;color:#dff3ff}
-.debug-log{height:120px;overflow:auto;background:rgba(255,255,255,0.01);padding:8px;border-radius:8px;font-family:monospace}
-.tools{display:flex;gap:8px;flex-wrap:wrap}
-.btn{background:linear-gradient(90deg,var(--accent),var(--neon));border:none;padding:8px 12px;border-radius:10px;color:#001822;cursor:pointer;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
-.btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.04)}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.smallchart{height:110px}
-.footer{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;color:var(--muted);font-size:0.85rem}
-.legend{display:flex;gap:8px;flex-wrap:wrap}
-.ascii{font-family:ui-monospace,monospace;color:var(--accent);white-space:pre-wrap}
-/* responsive */
-@media (max-width:1100px){.main{grid-template-columns:1fr 380px}.right{order:3}}
-@media (max-width:820px){.main{grid-template-columns:1fr;padding:12px}.navbar{padding:10px}.terminal{height:360px}.grid-3{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:480px){.grid-3{grid-template-columns:1fr}.clock{display:none}}
-</style>
+  <meta charset="UTF-8">
+  <title>IT Command Center Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      color: #e6edf3;
+      overflow-x: hidden;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      background: rgba(22, 27, 34, 0.95);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #58a6ff;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(88,166,255,0.8);
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .status-live {
+      color: #3fb950;
+      font-weight: bold;
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1 }
+      50% { opacity: 0.4 }
+      100% { opacity: 1 }
+    }
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .profile span {
+      font-weight: bold;
+      color: #58a6ff;
+      font-size: 0.95rem;
+    }
+    .btn {
+      background: #238636;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .btn:hover { transform: scale(1.08); background: #2ea043; }
+    .btn-danger { background: #f85149; }
+    .btn-danger:hover { background: #da3633; }
+    .content { padding: 24px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    .card {
+      background: #161b22;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      transition: transform 0.25s, box-shadow 0.25s;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    }
+    .stat-title {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-top: 8px;
+      color: #58a6ff;
+      text-shadow: 0 0 6px rgba(88,166,255,0.6);
+    }
+    .status-up { color: #3fb950; font-weight: bold; }
+    .status-down { color: #f85149; font-weight: bold; }
+    canvas { max-height: 240px; }
+    table { width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 0.9rem; }
+    th,td { padding: 8px; text-align: left; }
+    th { opacity: 0.8; font-weight: normal; }
+    .incident-log, .news-feed {
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      background: #0d1117;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    }
+    .incident-log div { margin-bottom: 6px; }
+    .topology {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 280px;
+      position: relative;
+    }
+    .node {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .node.up { background: #238636; box-shadow: 0 0 15px rgba(63,185,80,0.7); }
+    .node.down { background: #f85149; box-shadow: 0 0 15px rgba(248,81,73,0.7); }
+    .center { top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .top { top: 5%; left: 50%; transform: translateX(-50%); }
+    .left { top: 50%; left: 5%; transform: translateY(-50%); }
+    .right { top: 50%; right: 5%; transform: translateY(-50%); }
+    .bottom { bottom: 5%; left: 50%; transform: translateX(-50%); }
+    .weather { font-size: 0.9rem; line-height: 1.5; }
+    .footer {
+      padding: 16px;
+      text-align: center;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      background: #161b22;
+      margin-top: 30px;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <header class="navbar">
-    <div class="brand">Box N Burn — Command Center</div>
-    <div class="controls">
-      <div class="clock" id="clock">--:--:--</div>
-      <div class="pill" id="statusPill">LIVE SIM</div>
+  <nav class="navbar">
+    <div class="brand">IT Command Center</div>
+    <div class="nav-right">
+      <div class="status-live">● Live</div>
+      <div class="profile">
+        <span id="usernameDisplay">User</span>
+        <button class="btn btn-danger" onclick="logout()">Logout</button>
+      </div>
+      <button class="btn" onclick="goHome()">Home</button>
     </div>
-  </header>
+  </nav>
 
-  <main class="main">
-    <section class="left">
+  <div class="content">
+    <div class="grid">
+      <div class="card"><div class="stat-title">Active Servers</div><div class="stat-value" id="serverCount">0</div></div>
+      <div class="card"><div class="stat-title">Avg CPU Load</div><div class="stat-value" id="cpuAvg">0%</div></div>
+      <div class="card"><div class="stat-title">Avg RAM Usage</div><div class="stat-value" id="ramAvg">0%</div></div>
+      <div class="card"><div class="stat-title">Ping (ms)</div><div class="stat-value" id="pingStat">-</div></div>
+      <div class="card"><div class="stat-title">Active Incidents</div><div class="stat-value" id="incidentCount">0</div></div>
+    </div>
+
+    <div class="grid">
+      <div class="card"><h3>CPU Usage</h3><canvas id="cpuChart"></canvas></div>
+      <div class="card"><h3>RAM Usage</h3><canvas id="ramChart"></canvas></div>
+      <div class="card"><h3>Disk Usage</h3><canvas id="diskChart"></canvas></div>
+      <div class="card"><h3>Network Traffic</h3><canvas id="netChart"></canvas></div>
+    </div>
+
+    <div class="grid">
       <div class="card">
-        <div class="h2">Operators</div>
-        <div class="server-list" id="opsList"></div>
+        <h3>Service Status</h3>
+        <table>
+          <thead><tr><th>Service</th><th>Status</th></tr></thead>
+          <tbody id="serviceTable"></tbody>
+        </table>
       </div>
-
-      <div class="card">
-        <div class="h2">Quick Controls</div>
-        <div class="tools" style="margin-bottom:8px">
-          <button class="btn" id="startAllBtn">Start Monitors</button>
-          <button class="btn ghost" id="stopAllBtn">Stop Monitors</button>
-          <button class="btn ghost" id="panicBtn">Trigger Panic</button>
-        </div>
-        <div class="h2" style="margin-top:8px">Network Snapshot</div>
-        <div class="grid-3" style="margin-top:8px">
-          <div class="card smallchart"><canvas id="nwChart"></canvas></div>
-          <div class="card smallchart"><canvas id="latChart"></canvas></div>
-          <div class="card smallchart"><canvas id="errChart"></canvas></div>
+      <div class="card"><h3>Incident Log</h3><div class="incident-log" id="incidentLog"></div></div>
+      <div class="card"><h3>Network Topology</h3>
+        <div class="topology">
+          <div class="node center up" id="coreNode">Core</div>
+          <div class="node top up" id="webNode">Web</div>
+          <div class="node left up" id="dbNode">DB</div>
+          <div class="node right up" id="mailNode">Mail</div>
+          <div class="node bottom up" id="proxyNode">Proxy</div>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="middle">
-      <div class="card">
-        <div class="h2">Overview</div>
-        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-          <div style="flex:1">
-            <div class="stat">Servers: <span id="serverCount">0</span></div>
-            <div class="legend" style="margin-top:8px">
-              <div class="pill">CPU <span id="cpuAvg">0%</span></div>
-              <div class="pill">RAM <span id="ramAvg">0%</span></div>
-              <div class="pill">NET <span id="netAvg">0%</span></div>
-            </div>
-          </div>
-          <div style="width:260px">
-            <div class="card" style="padding:6px"><canvas id="sysSpark"></canvas></div>
-          </div>
-        </div>
-      </div>
+    <div class="grid">
+      <div class="card"><h3>Weather</h3><div class="weather" id="weatherBox">Loading...</div></div>
+      <div class="card"><h3>Tech News</h3><div class="news-feed" id="newsFeed"></div></div>
+      <div class="card"><h3>Uptime (hrs)</h3><canvas id="uptimeChart"></canvas></div>
+    </div>
+  </div>
 
-      <div class="card" style="margin-top:12px">
-        <div class="h2">Active Services</div>
-        <div id="serviceTableWrap" style="margin-top:8px">
-          <table class="table" id="serviceTable"><thead><tr><th>Service</th><th>Status</th><th>Latency</th></tr></thead><tbody></tbody></table>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:12px">
-        <div class="h2">Metrics</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px">
-          <div class="card"><canvas id="cpuChart" style="height:160px"></canvas></div>
-          <div class="card"><canvas id="ramChart" style="height:160px"></canvas></div>
-          <div class="card"><canvas id="diskChart" style="height:120px"></canvas></div>
-          <div class="card"><canvas id="threatChart" style="height:120px"></canvas></div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:12px">
-        <div class="h2">Threat Radar & Events</div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <div style="flex:1"><canvas id="threatLarge" style="height:140px"></canvas></div>
-          <div style="width:320px" class="incidents" id="incidents"></div>
-        </div>
-      </div>
-    </section>
-
-    <aside class="right">
-      <div class="card terminal">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="h2">Command Console</div>
-          <div class="pill">Type <strong>help</strong></div>
-        </div>
-        <div class="output" id="output"></div>
-        <div class="input" style="margin-top:8px">
-          <input class="cmd" id="cmdInput" placeholder="Enter command..." />
-          <button class="btn ghost" id="runBtn">RUN</button>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-          <div class="pill" id="sessionSeed">Session: SIM-1001</div>
-          <div style="flex:1"></div>
-          <div class="pill">v2.0</div>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:12px">
-        <div class="h2">Tools & Debug</div>
-        <div class="tools" style="margin-bottom:8px">
-          <button class="btn" id="portScanBtn">Port Scan</button>
-          <button class="btn ghost" id="tailBtn">Tail Logs</button>
-          <button class="btn ghost" id="pcapBtn">PCAP</button>
-        </div>
-        <div class="debug-log" id="debugLog"></div>
-      </div>
-    </aside>
-  </main>
-
-  <footer class="footer">
-    <div>Box N Burn — Responsive Sim</div>
-    <div class="pill" id="uptimeSeed">Uptime: 99.99%</div>
-  </footer>
-</div>
+  <div class="footer">© 2025 IT Command Center • All Systems Monitored</div>
 
 <script>
-// --- Responsive, fully working simulated dashboard ---
-const STATE = {
-  servers:[
-    {id:'srv-web-01',name:'Web Server 01',cpu:14,ram:28,disk:34,up:true,ips:['10.0.1.3']},
-    {id:'srv-db-01',name:'DB Server 01',cpu:16,ram:30,disk:40,up:true,ips:['10.0.1.5']},
-    {id:'srv-bkp-01',name:'Backup Node',cpu:8,ram:22,disk:10,up:true,ips:['10.0.2.3']},
-    {id:'srv-proxy-01',name:'Proxy',cpu:12,ram:20,disk:18,up:true,ips:['10.0.0.9']},
-    {id:'srv-ai-01',name:'Inference Node',cpu:9,ram:26,disk:22,up:true,ips:['10.0.3.7']}
-  ],
-  services:[
-    {name:'website.com',svc:'HTTP',status:true,lat:24},
-    {name:'api.website.com',svc:'API',status:true,lat:38},
-    {name:'intranet.local',svc:'INTRANET',status:true,lat:7},
-    {name:'mail.website.com',svc:'SMTP',status:true,lat:180}
-  ],
-  incidents:[],
-  monitorsRunning:false,
-  seed:1001,
-  audioEnabled:true
-}
+  window.onload = function() {
+    const user = localStorage.getItem("loggedInUser");
+    if (!user) {
+      window.location.href = "ITdash.html";
+      return;
+    }
+    document.getElementById("usernameDisplay").textContent = user;
+  };
+  function logout() { localStorage.removeItem("loggedInUser"); window.location.href = "ITdash.html"; }
+  function goHome() { window.location.href = "index.html"; }
 
-// DOM refs
-const clockEl = document.getElementById('clock'), opsList = document.getElementById('opsList'), serverCountEl = document.getElementById('serverCount'), cpuAvgEl = document.getElementById('cpuAvg'), ramAvgEl = document.getElementById('ramAvg'), netAvgEl = document.getElementById('netAvg'), serviceTableBody = document.querySelector('#serviceTable tbody'), incidentsEl = document.getElementById('incidents'), output = document.getElementById('output'), debugLog = document.getElementById('debugLog'), sessionSeed = document.getElementById('sessionSeed')
+  const servers = [
+    {name:"Web Server", cpu:0, ram:0, disk:0, net:0},
+    {name:"DB Server", cpu:0, ram:0, disk:0, net:0},
+    {name:"Backup Node", cpu:0, ram:0, disk:0, net:0},
+    {name:"Proxy Server", cpu:0, ram:0, disk:0, net:0}
+  ];
+  const labels=[], cpuData=[], ramData=[], diskData=[], netData=[], uptimeData=[];
 
-setInterval(()=>{clockEl.textContent=new Date().toLocaleTimeString()},1000)
+  const cpuChart = new Chart(document.getElementById("cpuChart"), {type:'line',data:{labels,datasets:[{label:'CPU %',data:cpuData,borderColor:'#58a6ff',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
+  const ramChart = new Chart(document.getElementById("ramChart"), {type:'line',data:{labels,datasets:[{label:'RAM %',data:ramData,borderColor:'#3fb950',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
+  const diskChart = new Chart(document.getElementById("diskChart"), {type:'line',data:{labels,datasets:[{label:'Disk %',data:diskData,borderColor:'#f85149',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
+  const netChart = new Chart(document.getElementById("netChart"), {type:'line',data:{labels,datasets:[{label:'Net MB/s',data:netData,borderColor:'#f2cc60',tension:0.3}]},options:{scales:{y:{min:0,max:1000}}}});
+  const uptimeChart = new Chart(document.getElementById("uptimeChart"), {type:'bar',data:{labels:["Web","DB","Backup","Proxy"],datasets:[{label:'Uptime Hours',data:uptimeData,backgroundColor:'#58a6ff'}]},options:{scales:{y:{beginAtZero:true}}}});
 
-function rnd(min,max){return Math.floor(Math.random()*(max-min+1))+min}
-
-function appendOut(txt, color){ const d=document.createElement('div'); d.innerHTML = `<span style="color:${color||'#dff3ff'}">${txt}</span>`; output.appendChild(d); output.scrollTop=output.scrollHeight }
-function appendDebug(txt){ const d=document.createElement('div'); d.textContent = new Date().toLocaleTimeString()+' - '+txt; debugLog.prepend(d); if(debugLog.children.length>300) debugLog.removeChild(debugLog.lastChild) }
-
-function renderOps(){ opsList.innerHTML=''; const names = ['Operator-Alpha','Operator-Beta','Operator-Gamma']; names.forEach((n,i)=>{ const el = document.createElement('div'); el.className='server'; el.innerHTML = `<div><div style="font-weight:700">${n}</div><div style="font-size:0.85rem;color:var(--muted)">Shift: ${['Morning','Evening','Night'][i%3]}</div></div><div class="badge-mini ${i%2? 'up':'up'}" style="padding:6px 8px;border-radius:8px;background:linear-gradient(90deg,var(--good),#19b86a);font-weight:700;color:#02120b">Online</div>`; opsList.appendChild(el) }) }
-
-function renderServices(){ serviceTableBody.innerHTML=''; STATE.services.forEach(s=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${s.name} <span class="badge-mini">${s.svc}</span></td><td>${s.status?'<span class="up badge">UP</span>':'<span class="down badge">DOWN</span>'}</td><td>${s.lat} ms</td>`; serviceTableBody.appendChild(tr) }) }
-
-function renderIncidents(){ incidentsEl.innerHTML=''; STATE.incidents.slice(0,50).forEach((inc,i)=>{ const div=document.createElement('div'); div.style.padding='8px'; div.style.marginBottom='8px'; div.style.borderRadius='8px'; div.style.background = i%2? 'rgba(255,255,255,0.01)': 'rgba(255,255,255,0.02)'; div.innerHTML = `<div style="display:flex;justify-content:space-between"><div style="font-weight:800">${inc.title}</div><div style="font-size:12px;color:var(--muted)">${inc.level}</div></div><div style="font-size:12px;color:var(--muted);margin-top:6px">${inc.msg}</div><div style="font-size:12px;color:var(--muted);margin-top:6px">${new Date(inc.ts).toLocaleString()}</div>`; incidentsEl.appendChild(div) }) }
-
-function pushIncident(title,msg,level='HIGH'){ STATE.incidents.unshift({title,msg,level,ts:Date.now()}); renderIncidents(); appendDebug('Incident: '+title); if(STATE.audioEnabled) playBeep(); }
-
-function resolveOldest(){ if(STATE.incidents.length===0) return; const inc=STATE.incidents.shift(); renderIncidents(); appendDebug('Resolved: '+inc.title) }
-
-function spawnPanic(){ for(let i=0;i<5;i++) setTimeout(()=>{ spawnIncident() }, i*300); appendDebug('PANIC sequence triggered') }
-function spawnIncident(){ const titles=['Service Unreachable','High CPU Spike','DB Connection Errors','Failed Backup','Suspicious Login','Certificate Expiry']; const msgs=['Endpoint returned 5xx responses','CPU crossed 95% on node','Connection pool exhausted','Snapshot failed','Multiple failed logins','TLS cert expires in 2 days']; const i=rnd(0,titles.length-1); pushIncident(titles[i],msgs[i], rnd(0,1)?'CRITICAL':'HIGH') }
-
-// Charts setup (responsive)
-const makeChart=(ctx, cfg)=> new Chart(ctx, Object.assign({options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}}, cfg))
-const cpuCtx = document.getElementById('cpuChart').getContext('2d');
-const ramCtx = document.getElementById('ramChart').getContext('2d');
-const diskCtx = document.getElementById('diskChart').getContext('2d');
-const threatCtx = document.getElementById('threatChart').getContext('2d');
-const threatLargeCtx = document.getElementById('threatLarge').getContext('2d');
-const sysSparkCtx = document.getElementById('sysSpark').getContext('2d');
-const nwCtx = document.getElementById('nwChart').getContext('2d');
-const latCtx = document.getElementById('latChart').getContext('2d');
-const errCtx = document.getElementById('errChart').getContext('2d');
-
-const cpuChart = makeChart(cpuCtx, {type:'line',data:{labels:[],datasets:[{label:'CPU',data:[],borderColor: '#1fb6ff',tension:0.3,fill:true,backgroundColor:'rgba(31,182,255,0.06)'}]},options:{scales:{y:{min:0,max:100}}}})
-const ramChart = makeChart(ramCtx, {type:'line',data:{labels:[],datasets:[{label:'RAM',data:[],borderColor: '#2dd36f',tension:0.3,fill:true,backgroundColor:'rgba(45,211,111,0.05)'}]},options:{scales:{y:{min:0,max:100}}}})
-const diskChart = makeChart(diskCtx, {type:'line',data:{labels:[],datasets:[{label:'Disk',data:[],borderColor: '#ff5c7c',tension:0.3,fill:true,backgroundColor:'rgba(255,92,124,0.05)'}]},options:{scales:{y:{min:0,max:100}}}})
-const threatChart = makeChart(threatCtx, {type:'radar',data:{labels:['Malware','Phishing','DDoS','Exploit','Botnet','Ransomware'],datasets:[{label:'Threat',data:[10,20,30,15,5,8],borderColor:'#ffb020',backgroundColor:'rgba(255,176,32,0.12)'}]},options:{scales:{r:{min:0,max:100}}}})
-const threatLarge = makeChart(threatLargeCtx, {type:'bar',data:{labels:['Malware','Phishing','DDoS','Exploit','Botnet','Ransomware'],datasets:[{label:'Threat',data:[10,20,30,15,5,8],backgroundColor:'#ffb020'}]},options:{scales:{y:{min:0,max:100}}}})
-const sysSpark = makeChart(sysSparkCtx, {type:'line',data:{labels:[],datasets:[{label:'Sys',data:[],borderColor:'#9d4dff',tension:0.4,fill:false}]},options:{scales:{y:{display:false},x:{display:false}}}})
-const nwChart = new Chart(nwCtx,{type:'doughnut',data:{labels:['LAN','WAN','CLOUD'],datasets:[{data:[30,40,30],backgroundColor:['#1fb6ff','#2dd36f','#ffb020']}]});
-const latChart = makeChart(latCtx,{type:'line',data:{labels:[],datasets:[{data:[],borderColor:'#ffb020',tension:0.3}]}})
-const errChart = makeChart(errCtx,{type:'line',data:{labels:[],datasets:[{data:[],borderColor:'#ff5c7c',tension:0.3}]}})
-
-function pushToChart(chart,label,value){ chart.data.labels.push(label); chart.data.datasets[0].data.push(value); if(chart.data.labels.length>30){ chart.data.labels.shift(); chart.data.datasets[0].data.shift() } chart.update() }
-
-// Live simulation loops (every 2s)
-let simInterval = null
-function startMonitors(){ if(STATE.monitorsRunning) return; STATE.monitorsRunning=true; appendDebug('Monitors started'); simInterval = setInterval(simulateMetricsOnce,2000); simulateMetricsOnce() }
-function stopMonitors(){ if(!STATE.monitorsRunning) return; STATE.monitorsRunning=false; clearInterval(simInterval); appendDebug('Monitors stopped') }
-
-function simulateMetricsOnce(){ // adjust server metrics and services
-  let cpuSum=0, ramSum=0, netSum=0
-  STATE.servers.forEach(s=>{
-    // gentle random walk towards baseline with state-aware shifts
-    const perturb = (min,max)=> Math.max(min,Math.min(99, Math.round(s.cpu*0.85 + rnd(min,max))))
-    if(s._forcedDown){ s.up = false; s.cpu = Math.min(5, s.cpu + rnd(-1,3)); }
-    else { s.up = true; s.cpu = Math.max(2, Math.min(95, Math.round((s.cpu*0.85) + rnd(0,18)))); }
-    s.ram = Math.max(10, Math.min(95, Math.round((s.ram*0.85) + rnd(0,16))));
-    s.disk = Math.max(5, Math.min(95, Math.round((s.disk*0.9) + rnd(0,8))));
-    cpuSum += s.cpu; ramSum += s.ram; netSum += s.disk;
-  })
-  document.getElementById('serverCount').textContent = STATE.servers.length
-  cpuAvgEl.textContent = Math.round(cpuSum/STATE.servers.length)+'%'
-  ramAvgEl.textContent = Math.round(ramSum/STATE.servers.length)+'%'
-  netAvgEl.textContent = Math.round(netSum/STATE.servers.length)+'%'
-
-  // services latencies slightly higher when under attack
-  STATE.services.forEach(s=>{
-    if(s._forcedDown){ s.status=false; s.lat = Math.min(2000, s.lat + rnd(100,500)) }
-    else { s.status = true; s.lat = Math.max(5, Math.round((s.lat*0.85)+rnd(-3,20))) }
-  })
-
-  // update charts
-  const t = new Date().toLocaleTimeString()
-  pushToChart(cpuChart,t, Math.round(cpuSum/STATE.servers.length))
-  pushToChart(ramChart,t, Math.round(ramSum/STATE.servers.length))
-  pushToChart(diskChart,t, Math.round(netSum/STATE.servers.length))
-  pushToChart(sysSpark,t, Math.round((cpuSum/STATE.servers.length + ramSum/STATE.servers.length + netSum/STATE.servers.length)/3))
-  pushToChart(latChart,t, STATE.services.reduce((s,x)=>s+x.lat,0)/STATE.services.length)
-  pushToChart(errChart,t, STATE.incidents.length>0? Math.min(100, STATE.incidents.length*6) : rnd(0,8))
-
-  // threat data
-  const threats = Array.from({length:6}, ()=> rnd(0,100))
-  threatChart.data.datasets[0].data = threats
-  threatChart.update()
-  threatLarge.data.datasets[0].data = threats
-  threatLarge.update()
-
-  renderServices(); renderIncidents()
-}
-
-// Utilities: force service down/up for attack/outage
-function forceAllServicesDown(reason){ STATE.services.forEach(s=> s._forcedDown=true); STATE.servers.forEach(s=> s._forcedDown=true); pushIncident('Global outage',reason,'CRITICAL'); appendDebug('Services forced down: '+reason) }
-function releaseAllForces(){ STATE.services.forEach(s=> delete s._forcedDown); STATE.servers.forEach(s=> delete s._forcedDown); appendDebug('Forces released, gradual recovery started'); pushIncident('Recovery','Systems recovering','INFO') }
-
-// Commands & interactions
-function simulate(type){ if(!type) return appendOut('simulate <spike|ddos|outage|patch|backup-fail>')
-  if(type==='spike'){ STATE.servers.forEach(s=> s.cpu = Math.min(100, s.cpu + rnd(30,60))); pushIncident('High CPU','Cluster CPU spike','CRITICAL'); appendOut('Simulating CPU spike') }
-  else if(type==='ddos'){ forceAllServicesDown('DDoS flood'); appendOut('Simulating DDoS') }
-  else if(type==='outage'){ STATE.services.filter(s=>s.svc==='SMTP').forEach(s=> s._forcedDown=true); pushIncident('Mail Service Down','SMTP returning 503','HIGH'); appendOut('Simulating outage: mail down') }
-  else if(type==='patch'){ appendOut('Simulating patch rollout'); pushIncident('Patch deployed','Web cluster patched','INFO'); setTimeout(()=> appendOut('Patch verification OK'),2200) }
-  else if(type==='backup-fail'){ pushIncident('Backup Failed','Storage quota exceeded','HIGH'); appendOut('Simulating backup failure') }
-  else appendOut('unknown simulate type')
-}
-
-// Console commands registry
-const COMMANDS = {
-  help: {fn:()=>{ appendOut('Available commands: help, simulate, start, stop, spawn, panic, resolve, status'); appendOut('Examples: simulate ddos; start all; stop all; spawn; panic') }},
-  simulate: {fn:(a)=>simulate(a)},
-  start: {fn:(a)=>{ if(!a || a==='all'){ startMonitors(); appendOut('Started all monitors'); } else if(a==='cpu' || a==='ram' || a==='disk'){ startMonitors(); appendOut('Started monitor '+a) } else appendOut('start <all|cpu|ram|disk>') }},
-  stop: {fn:(a)=>{ stopMonitors(); appendOut('Stopped monitors') }},
-  spawn: {fn:()=>{ spawnIncident(); appendOut('Incident spawned') }},
-  panic: {fn:()=>{ spawnPanic(); appendOut('Panic triggered') }},
-  resolve: {fn:()=>{ resolveOldest(); appendOut('Resolved oldest incident') }},
-  status: {fn:()=>{ appendOut(`Servers: ${STATE.servers.length} Incidents: ${STATE.incidents.length} Monitors: ${STATE.monitorsRunning?'running':'stopped'}`) }},
-  ports: {fn:(a)=>{ simulatePortScan(a||'127.0.0.1') }},
-  tail: {fn:()=> tailLogs()},
-}
-
-function execute(line){ if(!line || !line.trim()) return; appendOut('> '+line,'#9fb0bf'); const parts=line.trim().split(' '); const cmd=parts[0]; const arg=parts.slice(1).join(' '); if(COMMANDS[cmd]){ try{ COMMANDS[cmd].fn(arg) }catch(e){ appendOut('Command error: '+e.message) } } else appendOut('Unknown command: '+cmd) }
-
-document.getElementById('runBtn').addEventListener('click', ()=>{ execute(document.getElementById('cmdInput').value); document.getElementById('cmdInput').value=''; document.getElementById('cmdInput').focus() })
-document.getElementById('cmdInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') document.getElementById('runBtn').click() })
-
-// Tools
-function simulatePortScan(target='127.0.0.1'){ appendOut('> portscan '+target); const ports=[22,80,443,8080,3306,5432,6379,27017]; let i=0; const id=setInterval(()=>{ appendOut(`${target}:${ports[i%ports.length]} - ${Math.random()>0.5?'OPEN':'CLOSED'}`); i++; if(i>ports.length-1){ clearInterval(id); appendDebug('Port scan complete') } },300) }
-function tailLogs(){ appendDebug('Tail started'); const id=setInterval(()=>{ appendDebug(`${new Date().toISOString()} INFO auth: heartbeat`) },400); setTimeout(()=>{ clearInterval(id); appendDebug('Tail ended') },8000) }
-
-// UI buttons
-document.getElementById('startAllBtn').addEventListener('click', ()=> startMonitors())
-document.getElementById('stopAllBtn').addEventListener('click', ()=> stopMonitors())
-document.getElementById('panicBtn').addEventListener('click', ()=> spawnPanic())
-document.getElementById('portScanBtn').addEventListener('click', ()=> simulatePortScan('192.168.1.12'))
-document.getElementById('tailBtn').addEventListener('click', ()=> tailLogs())
-
-// Play beep
-function playBeep(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.type='sine'; o.frequency.value=600; o.connect(g); g.connect(ctx.destination); g.gain.value=0.02; o.start(); setTimeout(()=>{ o.stop(); ctx.close() },140) }catch(e){} }
-
-// initial render + auto-start monitors
-function init(){ renderOps(); renderServices(); sessionSeed.textContent = 'Session: SIM-'+STATE.seed; startMonitors(); appendOut('Welcome to Box N Burn — Responsive Sim'); appendOut('Type "help" to see commands (try: simulate ddos, simulate spike, start, stop, panic)'); appendDebug('Session initialized'); }
-init()
-
-// Recovery scheduler: if services are forced down, gradually release after some time
-setInterval(()=>{
-  const forced = STATE.services.some(s=>s._forcedDown)
-  if(forced){ // chance to start recovery
-    if(Math.random()>0.8){ releaseAllForces(); }
+  let incidentCount=0;
+  function logIncident(msg) {
+    incidentCount++;
+    document.getElementById("incidentCount").textContent=incidentCount;
+    const log=document.getElementById("incidentLog");
+    const entry=document.createElement("div");
+    entry.textContent=new Date().toLocaleTimeString()+" - "+msg;
+    log.prepend(entry);
   }
-},5000)
 
-// ensure charts resize on container changes
-new ResizeObserver(()=>{ [cpuChart,ramChart,diskChart,threatChart,threatLarge,sysSpark].forEach(c=>c.resize()) }).observe(document.body)
+  function updateSystemStats() {
+    let cpuSum=0, ramSum=0, netSum=0;
+    servers.forEach(s=>{
+      s.cpu=(Math.random()*70+10).toFixed(1);
+      s.ram=(Math.random()*60+20).toFixed(1);
+      s.disk=(Math.random()*50+40).toFixed(1);
+      s.net=(Math.random()*900+50).toFixed(1);
+      cpuSum+=parseFloat(s.cpu); ramSum+=parseFloat(s.ram); netSum+=parseFloat(s.net);
+      if(s.cpu>85||s.ram>90) logIncident(s.name+" high usage");
+    });
+    document.getElementById("serverCount").textContent=servers.length;
+    document.getElementById("cpuAvg").textContent=(cpuSum/servers.length).toFixed(1)+"%";
+    document.getElementById("ramAvg").textContent=(ramSum/servers.length).toFixed(1)+"%";
+    const now=new Date().toLocaleTimeString();
+    labels.push(now);
+    cpuData.push((cpuSum/servers.length).toFixed(1));
+    ramData.push((ramSum/servers.length).toFixed(1));
+    diskData.push(servers[0].disk);
+    netData.push((netSum/servers.length).toFixed(1));
+    if(labels.length>20){labels.shift();cpuData.shift();ramData.shift();diskData.shift();netData.shift();}
+    uptimeData.length=0; servers.forEach(()=>uptimeData.push(Math.floor(Math.random()*1000)));
+    cpuChart.update(); ramChart.update(); diskChart.update(); netChart.update(); uptimeChart.update();
+  }
 
+  async function runPing() {
+    const start=performance.now();
+    try {
+      await fetch("https://www.google.com",{mode:"no-cors"});
+      const end=performance.now();
+      document.getElementById("pingStat").textContent=Math.round(end-start);
+    } catch {
+      document.getElementById("pingStat").textContent="Timeout";
+      logIncident("Ping failure");
+    }
+  }
+
+  const services = [
+    {name:"Website",url:"https://example.com",node:"webNode"},
+    {name:"API",url:"https://jsonplaceholder.typicode.com/posts",node:"coreNode"},
+    {name:"Intranet",url:"https://httpstat.us/200",node:"proxyNode"},
+    {name:"Mail Server",url:"https://httpstat.us/503",node:"mailNode"},
+    {name:"Database",url:"https://httpstat.us/200",node:"dbNode"}
+  ];
+
+  async function checkServices() {
+    const table=document.getElementById("serviceTable"); table.innerHTML="";
+    for(const s of services) {
+      let status; let up=false;
+      try {
+        const res=await fetch(s.url);
+        if(res.ok){status='<span class="status-up">UP</span>';up=true;}
+        else{status='<span class="status-down">DOWN</span>';}
+      } catch { status='<span class="status-down">DOWN</span>'; }
+      table.innerHTML+=`<tr><td>${s.name}</td><td>${status}</td></tr>`;
+      const node=document.getElementById(s.node);
+      if(node) node.className="node "+(up?"up":"down");
+      if(!up) logIncident(s.name+" down");
+    }
+  }
+
+  async function loadWeather() {
+    try {
+      const res=await fetch("https://wttr.in/?format=%C+%t");
+      const text=await res.text();
+      document.getElementById("weatherBox").textContent="Local Weather: "+text;
+    } catch {
+      document.getElementById("weatherBox").textContent="Weather unavailable";
+    }
+  }
+
+  async function loadNews() {
+    const feed=document.getElementById("newsFeed"); feed.innerHTML="";
+    const fakeNews=[
+      "New zero-day vulnerability discovered",
+      "Major cloud outage reported",
+      "Patch Tuesday updates released",
+      "AI monitoring integration live",
+      "Backup system tested successfully"
+    ];
+    fakeNews.forEach(n=>{
+      const div=document.createElement("div");
+      div.textContent="• "+n;
+      feed.appendChild(div);
+    });
+  }
+
+  updateSystemStats(); runPing(); checkServices(); loadWeather(); loadNews();
+  setInterval(updateSystemStats,5000);
+  setInterval(runPing,10000);
+  setInterval(checkServices,30000);
+  setInterval(loadWeather,600000);
+  setInterval(loadNews,900000);
 </script>
 </body>
 </html>
