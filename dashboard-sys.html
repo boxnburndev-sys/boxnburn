@@ -1,406 +1,345 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>IT Command Center</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>IT Command Center Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    :root{
-      --bg:#071026; --panel:#0f1724; --muted:#98a6b3; --accent:#0f93ff; --good:#20c997; --warn:#ffb020; --bad:#ff6b6b;
-      --glass: rgba(255,255,255,0.03);
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      color: #e6edf3;
+      overflow-x: hidden;
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,var(--bg),#03101a);color:#e6f0f6;min-height:100vh}
-    header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:rgba(0,0,0,0.2);backdrop-filter:blur(6px)}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6ee7ff);display:flex;align-items:center;justify-content:center;font-weight:900;color:#02101a}
-    .title{font-weight:800;font-size:1.15rem}
-    .sub{font-size:0.85rem;color:var(--muted)}
-    .controls{display:flex;gap:10px;align-items:center}
-    .btn{background:var(--accent);border:none;padding:8px 12px;border-radius:8px;color:#02121c;font-weight:700;cursor:pointer}
-    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
-    main{display:grid;grid-template-columns:300px 1fr 360px;gap:16px;padding:18px}
-    .col{display:flex;flex-direction:column;gap:16px}
-    .panel{background:var(--panel);padding:14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}
-    .kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-    .kpi{padding:10px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
-    .kpi .big{font-size:1.6rem;font-weight:800;color:var(--accent)}
-    .tiny{font-size:0.85rem;color:var(--muted)}
-    .server-list{display:flex;flex-direction:column;gap:8px}
-    .srv{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,0.01),transparent)}
-    .srv .meta{display:flex;flex-direction:column}
-    .dot{width:12px;height:12px;border-radius:50%}
-    .up{background:var(--good)}
-    .down{background:var(--bad)}
-    .warn{background:var(--warn)}
-    .chart-wrap{height:160px}
-    .incident-list{max-height:220px;overflow:auto}
-    .incident-item{padding:8px;border-radius:6px;margin-bottom:6px;background:rgba(255,255,255,0.02);font-family:monospace}
-    .topology{height:240px;position:relative;border-radius:8px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);display:flex;align-items:center;justify-content:center}
-    .node{position:absolute;width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;color:#02121c}
-    .node.up{background:var(--good)}
-    .node.warn{background:var(--warn)}
-    .node.down{background:var(--bad)}
-    .node.center{width:120px;height:120px;border-radius:18px}
-    .service-table{width:100%;border-collapse:collapse}
-    th,td{padding:8px;text-align:left;border-bottom:1px dashed rgba(255,255,255,0.03)}
-    th{color:var(--muted);font-weight:700}
-    .logs{max-height:260px;overflow:auto;padding:6px}
-    .log-line{padding:6px;border-radius:6px;margin-bottom:6px;background:rgba(0,0,0,0.15);font-family:monospace;font-size:0.85rem}
-    .search{width:220px;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-    .footer{padding:12px;text-align:center;color:var(--muted)}
-    .widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .widget{padding:10px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
-    .badge{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-weight:700}
-    @media (max-width:1100px){main{grid-template-columns:1fr} .controls .search{display:none}}
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 24px;
+      background: rgba(22, 27, 34, 0.95);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #58a6ff;
+      letter-spacing: 1px;
+      text-shadow: 0 0 8px rgba(88,166,255,0.8);
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .status-live {
+      color: #3fb950;
+      font-weight: bold;
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1 }
+      50% { opacity: 0.4 }
+      100% { opacity: 1 }
+    }
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .profile span {
+      font-weight: bold;
+      color: #58a6ff;
+      font-size: 0.95rem;
+    }
+    .btn {
+      background: #238636;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .btn:hover { transform: scale(1.08); background: #2ea043; }
+    .btn-danger { background: #f85149; }
+    .btn-danger:hover { background: #da3633; }
+    .content { padding: 24px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    .card {
+      background: #161b22;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      transition: transform 0.25s, box-shadow 0.25s;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    }
+    .stat-title {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+    .stat-value {
+      font-size: 2.2rem;
+      font-weight: bold;
+      margin-top: 8px;
+      color: #58a6ff;
+      text-shadow: 0 0 6px rgba(88,166,255,0.6);
+    }
+    .status-up { color: #3fb950; font-weight: bold; }
+    .status-down { color: #f85149; font-weight: bold; }
+    canvas { max-height: 240px; }
+    table { width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 0.9rem; }
+    th,td { padding: 8px; text-align: left; }
+    th { opacity: 0.8; font-weight: normal; }
+    .incident-log, .news-feed {
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      background: #0d1117;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    }
+    .incident-log div { margin-bottom: 6px; }
+    .topology {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 280px;
+      position: relative;
+    }
+    .node {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .node.up { background: #238636; box-shadow: 0 0 15px rgba(63,185,80,0.7); }
+    .node.down { background: #f85149; box-shadow: 0 0 15px rgba(248,81,73,0.7); }
+    .center { top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .top { top: 5%; left: 50%; transform: translateX(-50%); }
+    .left { top: 50%; left: 5%; transform: translateY(-50%); }
+    .right { top: 50%; right: 5%; transform: translateY(-50%); }
+    .bottom { bottom: 5%; left: 50%; transform: translateX(-50%); }
+    .weather { font-size: 0.9rem; line-height: 1.5; }
+    .footer {
+      padding: 16px;
+      text-align: center;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      background: #161b22;
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <div class="logo">NQ</div>
-      <div>
-        <div class="title">IT Command Center</div>
-        <div class="sub">Realtime view</div>
+  <nav class="navbar">
+    <div class="brand">IT Command Center</div>
+    <div class="nav-right">
+      <div class="status-live">● Live</div>
+      <div class="profile">
+        <span id="usernameDisplay">User</span>
+        <button class="btn btn-danger" onclick="logout()">Logout</button>
       </div>
+      <button class="btn" onclick="goHome()">Home</button>
     </div>
-    <div class="controls">
-      <input id="globalSearch" class="search" placeholder="Search servers, services, logs..." oninput="quickSearch()" />
-      <button class="ghost" onclick="toggleTheme()">Theme</button>
-      <button class="btn" id="loginBtn" onclick="login()">Login</button>
-    </div>
-  </header>
+  </nav>
 
-  <main>
-    <div class="col">
-      <div class="panel">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-weight:800">Overview</div>
-            <div class="tiny">Live cluster snapshot</div>
-          </div>
-          <div style="text-align:right">
-            <div class="tiny">User</div>
-            <div id="userDisplay" style="font-weight:800">Guest</div>
-          </div>
-        </div>
-        <div style="margin-top:12px" class="kpis">
-          <div class="kpi"><div class="tiny">Servers</div><div id="kServers" class="big">0</div></div>
-          <div class="kpi"><div class="tiny">Active Alerts</div><div id="kAlerts" class="big">0</div></div>
-          <div class="kpi"><div class="tiny">Incidents</div><div id="kIncidents" class="big">0</div></div>
-          <div class="kpi"><div class="tiny">SLA Uptime</div><div id="kSLA" class="big">99.99%</div></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <div style="font-weight:800">Servers</div>
-          <div class="tiny">click to open quick actions</div>
-        </div>
-        <div id="serverList" class="server-list"></div>
-      </div>
-
-      <div class="panel">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-weight:800">Top Alerts</div>
-          <div><span id="alertBadge" class="badge">0</span></div>
-        </div>
-        <div id="alertPanel" style="margin-top:10px"></div>
-      </div>
+  <div class="content">
+    <div class="grid">
+      <div class="card"><div class="stat-title">Active Servers</div><div class="stat-value" id="serverCount">0</div></div>
+      <div class="card"><div class="stat-title">Avg CPU Load</div><div class="stat-value" id="cpuAvg">0%</div></div>
+      <div class="card"><div class="stat-title">Avg RAM Usage</div><div class="stat-value" id="ramAvg">0%</div></div>
+      <div class="card"><div class="stat-title">Ping (ms)</div><div class="stat-value" id="pingStat">-</div></div>
+      <div class="card"><div class="stat-title">Active Incidents</div><div class="stat-value" id="incidentCount">0</div></div>
     </div>
 
-    <div class="col">
-      <div class="panel" style="display:flex;flex-direction:column;gap:12px">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-weight:800">Cluster Metrics</div>
-          <div class="tiny">live · simulated</div>
-        </div>
-        <div style="display:flex;gap:12px">
-          <div style="flex:1">
-            <div class="chart-wrap"><canvas id="cpuChart"></canvas></div>
-            <div class="tiny">Average CPU</div>
-          </div>
-          <div style="width:260px">
-            <div style="display:flex;flex-direction:column;gap:8px">
-              <div><div class="tiny">Avg RAM</div><div id="avgRam" style="font-weight:800">0%</div></div>
-              <div><div class="tiny">Network In</div><div id="netIn" style="font-weight:800">0 Mbps</div></div>
-              <div><div class="tiny">Network Out</div><div id="netOut" style="font-weight:800">0 Mbps</div></div>
-              <div><div class="tiny">Ping</div><div id="ping" style="font-weight:800">— ms</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-          <div class="panel widget">
-            <div style="font-weight:800">Process Watch</div>
-            <div id="procWatch" class="tiny" style="margin-top:8px">—</div>
-          </div>
-          <div class="panel widget">
-            <div style="font-weight:800">Anomaly Score</div>
-            <div id="anomaly" style="font-weight:800;margin-top:8px">0</div>
-          </div>
-          <div class="panel widget">
-            <div style="font-weight:800">Quick Links</div>
-            <div style="display:flex;gap:8px;margin-top:8px">
-              <button class="ghost" onclick="testIntegration('slack')">Slack</button>
-              <button class="ghost" onclick="testIntegration('pager')">PagerDuty</button>
-              <button class="ghost" onclick="exportCSV()">Export CSV</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-weight:800">Incident Timeline</div>
-            <div class="tiny">replay & filter</div>
-          </div>
-          <div id="incidentFeed" class="incident-list" style="margin-top:10px"></div>
-          <div style="display:flex;gap:8px;margin-top:8px">
-            <button class="ghost" onclick="startReplay()">Replay</button>
-            <button class="ghost" onclick="stopReplay()">Stop</button>
-            <button class="ghost" onclick="clearIncidents()">Clear</button>
-          </div>
-        </div>
-      </div>
+    <div class="grid">
+      <div class="card"><h3>CPU Usage</h3><canvas id="cpuChart"></canvas></div>
+      <div class="card"><h3>RAM Usage</h3><canvas id="ramChart"></canvas></div>
+      <div class="card"><h3>Disk Usage</h3><canvas id="diskChart"></canvas></div>
+      <div class="card"><h3>Network Traffic</h3><canvas id="netChart"></canvas></div>
     </div>
 
-    <div class="col">
-      <div class="panel">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-weight:800">Services</div>
-          <div class="tiny">health checks</div>
-        </div>
-        <table class="service-table" style="margin-top:10px">
-          <thead><tr><th>Service</th><th>Status</th><th>Latency</th></tr></thead>
+    <div class="grid">
+      <div class="card">
+        <h3>Service Status</h3>
+        <table>
+          <thead><tr><th>Service</th><th>Status</th></tr></thead>
           <tbody id="serviceTable"></tbody>
         </table>
       </div>
-
-      <div class="panel">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-weight:800">Network Topology</div>
-          <div class="tiny">interactive</div>
-        </div>
-        <div id="topo" class="topology" style="margin-top:10px">
-          <div id="node-core" class="node center up" style="left:50%;top:50%;transform:translate(-50%,-50%)">CORE</div>
-          <div id="node-web" class="node up" style="left:20%;top:18%">WEB</div>
-          <div id="node-db" class="node up" style="left:80%;top:18%">DB</div>
-          <div id="node-mail" class="node up" style="left:20%;top:82%">MAIL</div>
-          <div id="node-proxy" class="node up" style="left:80%;top:82%">PROXY</div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="font-weight:800">Logs</div>
-          <div class="tiny">tail -f (simulated)</div>
-        </div>
-        <div id="logs" class="logs" style="margin-top:10px"></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-          <div class="tiny" id="logCount">0 lines</div>
-          <div>
-            <button class="ghost" onclick="clearLogs()">Clear</button>
-            <button class="ghost" onclick="downloadLogs()">Download</button>
-          </div>
+      <div class="card"><h3>Incident Log</h3><div class="incident-log" id="incidentLog"></div></div>
+      <div class="card"><h3>Network Topology</h3>
+        <div class="topology">
+          <div class="node center up" id="coreNode">Core</div>
+          <div class="node top up" id="webNode">Web</div>
+          <div class="node left up" id="dbNode">DB</div>
+          <div class="node right up" id="mailNode">Mail</div>
+          <div class="node bottom up" id="proxyNode">Proxy</div>
         </div>
       </div>
     </div>
-  </main>
 
-  <div class="footer">Demo build — integrate with Prometheus/InfluxDB/Elasticsearch/SSO for production</div>
+    <div class="grid">
+      <div class="card"><h3>Weather</h3><div class="weather" id="weatherBox">Loading...</div></div>
+      <div class="card"><h3>Tech News</h3><div class="news-feed" id="newsFeed"></div></div>
+      <div class="card"><h3>Uptime (hrs)</h3><canvas id="uptimeChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="footer">© 2025 IT Command Center • All Systems Monitored</div>
 
 <script>
-  const USERS = [{user:'admin',pass:'admin'}]
-  const SERVERS = [
-    {id:'web-1',name:'web-1',role:'web'}, {id:'web-2',name:'web-2',role:'web'},
-    {id:'db-1',name:'db-1',role:'db'}, {id:'backup-1',name:'backup',role:'backup'},
-    {id:'proxy-1',name:'proxy-1',role:'proxy'}
-  ]
-  const SERVICES = [
-    {name:'Website',url:'https://example.com',node:'node-web'},
-    {name:'API',url:'https://jsonplaceholder.typicode.com/posts',node:'node-core'},
-    {name:'Intranet',url:'https://httpstat.us/200',node:'node-proxy'},
-    {name:'Mail',url:'https://httpstat.us/503',node:'node-mail'},
-    {name:'DB',url:'https://httpstat.us/200',node:'node-db'}
-  ]
-  const METRICS = {}
-  const LOGS = []
-  const ALERTS = []
-  const INCIDENTS = []
-  let replayTimer = null
-  let theme='dark'
-  function login(){
-    const u = prompt('username','admin'), p = prompt('password','admin')
-    if(!u) return
-    localStorage.setItem('loggedInUser',u)
-    document.getElementById('userDisplay').textContent=u
-    document.getElementById('loginBtn').textContent='Logout'
-    document.getElementById('loginBtn').onclick = logout
-  }
-  function logout(){localStorage.removeItem('loggedInUser');location.reload()}
-  function toggleTheme(){ if(theme==='dark'){document.body.style.background='linear-gradient(180deg,#f3f6fb,#dfeef8)';theme='light'}else{document.body.style.background='linear-gradient(180deg,var(--bg),#03101a)';theme='dark'} }
-  function seed(){
-    SERVERS.forEach(s=>{ METRICS[s.id]={history:[],last:{cpu:10,ram:30,disk:50,netIn:20,netOut:10}} })
-    for(let i=0;i<20;i++) step(true)
-    renderServers(); refreshKPIs(); renderCharts()
-  }
-  function step(init=false){
-    let cpuSum=0,ramSum=0,netIn=0,netOut=0
-    SERVERS.forEach(s=>{
-      const st = METRICS[s.id]
-      const cpu = Math.min(99,Math.max(1,(parseFloat(st.last.cpu)||10) + (Math.random()*14-6)))
-      const ram = Math.min(99,Math.max(5,(parseFloat(st.last.ram)||30) + (Math.random()*8-4)))
-      const disk = Math.min(99,Math.max(10,(parseFloat(st.last.disk)||50) + (Math.random()*4-2)))
-      const nin = Math.max(0,(parseFloat(st.last.netIn)||20) + (Math.random()*40-20))
-      const nout = Math.max(0,(parseFloat(st.last.netOut)||10) + (Math.random()*30-15))
-      st.last={cpu:cpu.toFixed(1),ram:ram.toFixed(1),disk:disk.toFixed(1),netIn:nin.toFixed(1),netOut:nout.toFixed(1)}
-      st.history.push({t:Date.now(),...st.last})
-      if(st.history.length>120) st.history.shift()
-      cpuSum += cpu; ramSum += ram; netIn += nin; netOut += nout
-      if(!init && (cpu>88 || ram>92) && Math.random()>0.7){ createIncident(`${s.name} resource spike (cpu:${cpu.toFixed(0)}%)`) }
-    })
-    METRICS._avg={cpu:(cpuSum/SERVERS.length).toFixed(1),ram:(ramSum/SERVERS.length).toFixed(1),netIn:netIn.toFixed(1),netOut:netOut.toFixed(1)}
-    pushLog(`metric: avgCpu=${METRICS._avg.cpu}% avgRam=${METRICS._avg.ram}%`)
-  }
-  function createIncident(msg){
-    const inc = {id:'inc-'+Date.now(),t:Date.now(),msg}
-    INCIDENTS.unshift(inc); ALERTS.unshift({id:'al-'+Date.now(),t:Date.now(),msg,sev:'critical'})
-    pushLog('[INCIDENT] '+msg); renderAlerts(); renderIncidents()
-  }
-  function renderServers(){
-    const el=document.getElementById('serverList'); el.innerHTML=''
-    SERVERS.forEach(s=>{
-      const st = METRICS[s.id].last
-      const div = document.createElement('div'); div.className='srv'
-      div.innerHTML = `<div class="meta"><div style="font-weight:800">${s.name}</div><div class="tiny">${s.role} • CPU ${st.cpu}% • RAM ${st.ram}%</div></div><div style="display:flex;gap:8px;align-items:center"><div class="dot ${st.cpu>88||st.ram>92?'down':'up'}"></div><button class="ghost" onclick="openQuick('${s.id}')">Open</button></div>`
-      el.appendChild(div)
-    })
-    document.getElementById('kServers').textContent=SERVERS.length
-  }
-  function openQuick(id){
-    const s = SERVERS.find(x=>x.id===id); if(!s) return
-    const action = prompt(`Quick actions for ${s.name}:\n1) SSH\n2) RDP\n3) Reboot\nEnter 1/2/3 or cancel`)
-    if(action==='1') alert(`Opening web-SSH to ${s.name} (placeholder)`)
-    if(action==='2') alert(`Opening RDP to ${s.name} (placeholder)`)
-    if(action==='3') { pushLog(`[ACTION] reboot ${s.name}`); createIncident(`${s.name} unexpectedly rebooted (simulated)`) }
-  }
-  function pushLog(line){
-    LOGS.unshift({t:Date.now(),line}); if(LOGS.length>800) LOGS.pop(); renderLogs()
-  }
-  function renderLogs(){
-    const el=document.getElementById('logs'); el.innerHTML=''; LOGS.slice(0,200).forEach(l=>{ const d=document.createElement('div'); d.className='log-line'; d.textContent=`[${new Date(l.t).toLocaleTimeString()}] ${l.line}`; el.appendChild(d) })
-    document.getElementById('logCount').textContent=`${LOGS.length} lines`
-  }
-  function renderAlerts(){
-    const el=document.getElementById('alertPanel'); el.innerHTML=''; ALERTS.slice(0,10).forEach(a=>{ const d=document.createElement('div'); d.className='incident-item'; d.textContent=`[${new Date(a.t).toLocaleTimeString()}] ${a.msg}`; el.appendChild(d) })
-    document.getElementById('kAlerts').textContent=ALERTS.length
-    document.getElementById('alertBadge').textContent=ALERTS.length
-  }
-  function renderIncidents(){
-    const el=document.getElementById('incidentFeed'); el.innerHTML=''; INCIDENTS.forEach(i=>{ const d=document.createElement('div'); d.className='incident-item'; d.textContent=`[${new Date(i.t).toLocaleString()}] ${i.msg}`; el.appendChild(d) })
-    document.getElementById('kIncidents').textContent=INCIDENTS.length
-  }
-  let cpuChart
-  function renderCharts(){
-    const ctx = document.getElementById('cpuChart').getContext('2d')
-    if(cpuChart) cpuChart.destroy()
-    const labels = METRICS[SERVERS[0].id].history.map(h=>new Date(h.t).toLocaleTimeString())
-    const avg = METRICS[SERVERS[0].id].history.map((_,i)=> {
-      let sum=0; SERVERS.forEach(s=> sum+=parseFloat(METRICS[s.id].history[i]?.cpu||0)); return (sum/SERVERS.length).toFixed(1)
-    })
-    cpuChart = new Chart(ctx,{type:'line',data:{labels, datasets:[{label:'Avg CPU %',data:avg,borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent')||'#0f93ff',tension:0.3,fill:true}]},options:{animation:false,scales:{y:{min:0,max:100}}}})
-  }
-  function refreshKPIs(){
-    document.getElementById('avgRam').textContent = METRICS._avg? METRICS._avg.ram+'%' : '0%'
-    document.getElementById('netIn').textContent = METRICS._avg? METRICS._avg.netIn+' Mbps' : '0 Mbps'
-    document.getElementById('netOut').textContent = METRICS._avg? METRICS._avg.netOut+' Mbps' : '0 Mbps'
-    document.getElementById('ping').textContent = Math.round(10 + Math.random()*120)+' ms'
-    document.getElementById('kSLA').textContent = (99.5 + Math.random()*0.49).toFixed(2)+'%'
-  }
-  function simulate(){
-    step(); renderServers(); renderCharts(); refreshKPIs(); renderAlerts()
-    // change topology colors based on services
-    SERVICES.forEach(s=>{
-      const ok = Math.random()>0.12
-      const node = document.getElementById(s.node)
-      if(node) node.className = 'node '+(ok?'up':'down')
-      if(!ok) { pushLog(`[service] ${s.name} returned error`); createIncident(`${s.name} is unreachable`) }
-    })
-    // processes
-    const procs = SERVERS.map(s=> `${s.name}#${Math.round(Math.random()*5000)} (${Math.round(Math.random()*90)}%)`).slice(0,6).join('\n')
-    document.getElementById('procWatch').textContent = procs
-    // anomaly score (simple variance)
-    const scores = SERVERS.map(s=> parseFloat(METRICS[s.id].last.cpu))
-    const mean = scores.reduce((a,b)=>a+b,0)/scores.length
-    const variance = Math.sqrt(scores.reduce((a,b)=>a+Math.pow(b-mean,2),0)/scores.length).toFixed(2)
-    document.getElementById('anomaly').textContent = variance
-    // occasionally create random alert
-    if(Math.random()<0.04) { ALERTS.unshift({id:'al-'+Date.now(),t:Date.now(),msg:'Random synthetic alert'}) }
-    // simulate logs
-    if(Math.random()<0.6) pushLog(['INFO service rotated','WARN latency high','ERROR db timeout','INFO backup complete'][Math.floor(Math.random()*4)])
-  }
-  function runLoop(){
-    simulate()
-    setTimeout(runLoop,4000 + Math.random()*2000)
-  }
-  function checkServices(){
-    const tbody = document.getElementById('serviceTable'); tbody.innerHTML=''
-    SERVICES.forEach(s=>{
-      const ok = Math.random()>0.12
-      const lat = Math.round(10 + Math.random()*500)
-      const tr = document.createElement('tr')
-      tr.innerHTML = `<td>${s.name}</td><td>${ok?'<span style="color:var(--good);font-weight:800">UP</span>':'<span style="color:var(--bad);font-weight:800">DOWN</span>'}</td><td>${lat} ms</td>`
-      tbody.appendChild(tr)
-      if(!ok){ pushLog(`[health] ${s.name} status DOWN`); createIncident(`${s.name} down (health check)`)}
-    })
-  }
-  function quickSearch(){
-    const q = document.getElementById('globalSearch').value.toLowerCase()
-    if(!q) { renderServers(); return }
-    const el=document.getElementById('serverList'); el.innerHTML=''
-    SERVERS.filter(s=>s.name.includes(q)||s.role.includes(q)).forEach(s=>{
-      const st=METRICS[s.id].last
-      const div=document.createElement('div'); div.className='srv'; div.innerHTML=`<div class="meta"><div style="font-weight:800">${s.name}</div><div class="tiny">${s.role} • CPU ${st.cpu}%</div></div><div><button class="ghost" onclick="openQuick('${s.id}')">Open</button></div>`
-      el.appendChild(div)
-    })
-  }
-  function testIntegration(name){ pushLog(`[integration] test ${name} sent`); alert(`Test ${name} webhook (simulated)`)}
-  function exportCSV(){
-    let csv = 'timestamp,avgCpu,avgRam,netIn,netOut\\n'
-    for(let i=0;i<METRICS[SERVERS[0].id].history.length;i++){
-      const t = METRICS[SERVERS[0].id].history[i].t
-      const avgCpu = (SERVERS.reduce((a,s)=>a+parseFloat(METRICS[s.id].history[i]?.cpu||0),0)/SERVERS.length).toFixed(2)
-      const avgRam = (SERVERS.reduce((a,s)=>a+parseFloat(METRICS[s.id].history[i]?.ram||0),0)/SERVERS.length).toFixed(2)
-      csv += `${new Date(t).toISOString()},${avgCpu},${avgRam},${METRICS._avg?.netIn||0},${METRICS._avg?.netOut||0}\\n`
+  window.onload = function() {
+    const user = localStorage.getItem("loggedInUser");
+    if (!user) {
+      window.location.href = "ITdash.html";
+      return;
     }
-    const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob)
-    const a = document.createElement('a'); a.href=url; a.download='metrics.csv'; a.click(); URL.revokeObjectURL(url)
+    document.getElementById("usernameDisplay").textContent = user;
+  };
+  function logout() { localStorage.removeItem("loggedInUser"); window.location.href = "ITdash.html"; }
+  function goHome() { window.location.href = "index.html"; }
+
+  const servers = [
+    {name:"Web Server", cpu:0, ram:0, disk:0, net:0},
+    {name:"DB Server", cpu:0, ram:0, disk:0, net:0},
+    {name:"Backup Node", cpu:0, ram:0, disk:0, net:0},
+    {name:"Proxy Server", cpu:0, ram:0, disk:0, net:0}
+  ];
+  const labels=[], cpuData=[], ramData=[], diskData=[], netData=[], uptimeData=[];
+
+  const cpuChart = new Chart(document.getElementById("cpuChart"), {type:'line',data:{labels,datasets:[{label:'CPU %',data:cpuData,borderColor:'#58a6ff',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
+  const ramChart = new Chart(document.getElementById("ramChart"), {type:'line',data:{labels,datasets:[{label:'RAM %',data:ramData,borderColor:'#3fb950',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
+  const diskChart = new Chart(document.getElementById("diskChart"), {type:'line',data:{labels,datasets:[{label:'Disk %',data:diskData,borderColor:'#f85149',tension:0.3}]},options:{scales:{y:{min:0,max:100}}}});
+  const netChart = new Chart(document.getElementById("netChart"), {type:'line',data:{labels,datasets:[{label:'Net MB/s',data:netData,borderColor:'#f2cc60',tension:0.3}]},options:{scales:{y:{min:0,max:1000}}}});
+  const uptimeChart = new Chart(document.getElementById("uptimeChart"), {type:'bar',data:{labels:["Web","DB","Backup","Proxy"],datasets:[{label:'Uptime Hours',data:uptimeData,backgroundColor:'#58a6ff'}]},options:{scales:{y:{beginAtZero:true}}}});
+
+  let incidentCount=0;
+  function logIncident(msg) {
+    incidentCount++;
+    document.getElementById("incidentCount").textContent=incidentCount;
+    const log=document.getElementById("incidentLog");
+    const entry=document.createElement("div");
+    entry.textContent=new Date().toLocaleTimeString()+" - "+msg;
+    log.prepend(entry);
   }
-  function downloadLogs(){ const text = LOGS.map(l=>`[${new Date(l.t).toISOString()}] ${l.line}`).join('\\n'); const blob=new Blob([text],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='logs.txt'; a.click(); URL.revokeObjectURL(url) }
-  function clearLogs(){ LOGS.length=0; renderLogs() }
-  function startReplay(){
-    let i = INCIDENTS.length-1
-    if(i<0) return alert('no incidents to replay')
-    replayTimer = setInterval(()=>{ if(i<0){ clearInterval(replayTimer); return } const inc = INCIDENTS[i]; pushLog('[REPLAY] '+inc.msg); i-- },800)
+
+  function updateSystemStats() {
+    let cpuSum=0, ramSum=0, netSum=0;
+    servers.forEach(s=>{
+      s.cpu=(Math.random()*70+10).toFixed(1);
+      s.ram=(Math.random()*60+20).toFixed(1);
+      s.disk=(Math.random()*50+40).toFixed(1);
+      s.net=(Math.random()*900+50).toFixed(1);
+      cpuSum+=parseFloat(s.cpu); ramSum+=parseFloat(s.ram); netSum+=parseFloat(s.net);
+      if(s.cpu>85||s.ram>90) logIncident(s.name+" high usage");
+    });
+    document.getElementById("serverCount").textContent=servers.length;
+    document.getElementById("cpuAvg").textContent=(cpuSum/servers.length).toFixed(1)+"%";
+    document.getElementById("ramAvg").textContent=(ramSum/servers.length).toFixed(1)+"%";
+    const now=new Date().toLocaleTimeString();
+    labels.push(now);
+    cpuData.push((cpuSum/servers.length).toFixed(1));
+    ramData.push((ramSum/servers.length).toFixed(1));
+    diskData.push(servers[0].disk);
+    netData.push((netSum/servers.length).toFixed(1));
+    if(labels.length>20){labels.shift();cpuData.shift();ramData.shift();diskData.shift();netData.shift();}
+    uptimeData.length=0; servers.forEach(()=>uptimeData.push(Math.floor(Math.random()*1000)));
+    cpuChart.update(); ramChart.update(); diskChart.update(); netChart.update(); uptimeChart.update();
   }
-  function stopReplay(){ if(replayTimer) clearInterval(replayTimer) }
-  function clearIncidents(){ INCIDENTS.length=0; ALERTS.length=0; renderIncidents(); renderAlerts() }
-  function renderAll(){ renderServers(); renderCharts(); renderAlerts(); renderIncidents(); renderLogs(); refreshKPIs(); checkServices() }
-  // init
-  seed()
-  setInterval(()=>{ step(); renderServers(); refreshKPIs() },5000)
-  runLoop()
-  setInterval(checkServices,30000)
-  // expose some functions for quick dev/test
-  window.createIncident=createIncident
-  window.exportCSV=exportCSV
-  window.downloadLogs=downloadLogs
-  window.clearLogs=clearLogs
-  window.startReplay=startReplay
-  window.stopReplay=stopReplay
-  window.clearIncidents=clearIncidents
-  window.testIntegration=testIntegration
+
+  async function runPing() {
+    const start=performance.now();
+    try {
+      await fetch("https://www.google.com",{mode:"no-cors"});
+      const end=performance.now();
+      document.getElementById("pingStat").textContent=Math.round(end-start);
+    } catch {
+      document.getElementById("pingStat").textContent="Timeout";
+      logIncident("Ping failure");
+    }
+  }
+
+  const services = [
+    {name:"Website",url:"https://example.com",node:"webNode"},
+    {name:"API",url:"https://jsonplaceholder.typicode.com/posts",node:"coreNode"},
+    {name:"Intranet",url:"https://httpstat.us/200",node:"proxyNode"},
+    {name:"Mail Server",url:"https://httpstat.us/503",node:"mailNode"},
+    {name:"Database",url:"https://httpstat.us/200",node:"dbNode"}
+  ];
+
+  async function checkServices() {
+    const table=document.getElementById("serviceTable"); table.innerHTML="";
+    for(const s of services) {
+      let status; let up=false;
+      try {
+        const res=await fetch(s.url);
+        if(res.ok){status='<span class="status-up">UP</span>';up=true;}
+        else{status='<span class="status-down">DOWN</span>';}
+      } catch { status='<span class="status-down">DOWN</span>'; }
+      table.innerHTML+=`<tr><td>${s.name}</td><td>${status}</td></tr>`;
+      const node=document.getElementById(s.node);
+      if(node) node.className="node "+(up?"up":"down");
+      if(!up) logIncident(s.name+" down");
+    }
+  }
+
+  async function loadWeather() {
+    try {
+      const res=await fetch("https://wttr.in/?format=%C+%t");
+      const text=await res.text();
+      document.getElementById("weatherBox").textContent="Local Weather: "+text;
+    } catch {
+      document.getElementById("weatherBox").textContent="Weather unavailable";
+    }
+  }
+
+  async function loadNews() {
+    const feed=document.getElementById("newsFeed"); feed.innerHTML="";
+    const fakeNews=[
+      "New zero-day vulnerability discovered",
+      "Major cloud outage reported",
+      "Patch Tuesday updates released",
+      "AI monitoring integration live",
+      "Backup system tested successfully"
+    ];
+    fakeNews.forEach(n=>{
+      const div=document.createElement("div");
+      div.textContent="• "+n;
+      feed.appendChild(div);
+    });
+  }
+
+  updateSystemStats(); runPing(); checkServices(); loadWeather(); loadNews();
+  setInterval(updateSystemStats,5000);
+  setInterval(runPing,10000);
+  setInterval(checkServices,30000);
+  setInterval(loadWeather,600000);
+  setInterval(loadNews,900000);
 </script>
 </body>
 </html>
