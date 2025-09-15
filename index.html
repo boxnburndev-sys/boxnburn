@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <script src="favicon.js"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Box N Burn</title>
@@ -60,7 +59,7 @@
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  background: none; /* removed under background */
+  background: none;
   border: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -77,7 +76,7 @@
   gap: 12px;
   padding: 8px 0;
   border-bottom: 1px solid rgba(255,255,255,0.1);
-  flex-wrap: wrap; /* allow wrapping on smaller screens */
+  flex-wrap: wrap;
 }
 .lesson-row:last-child {
   border-bottom: none;
@@ -133,7 +132,7 @@
     padding:28px;
     text-align:center;
     color:var(--muted);
-    background:rgba(0,0,0,0.25); /* darker full-width strip */
+    background:rgba(0,0,0,0.25);
     width:100%;
   }
 
@@ -297,10 +296,17 @@
   </div>
 
   <script>
-const SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; 
+/* ----------------------------
+   CONFIG
+   ---------------------------- */
+const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
 const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
 const RANGE_INSTRUCTORS = "Instructors!A2:D";
-const RANGE_SCHEDULE = "Schedule!A2:E";
+const RANGE_SCHEDULE = "Shedule!A2:E"; // match exact tab name in your sheet
+
+/* ----------------------------
+   DATA + UI UTILITIES
+   ---------------------------- */
 let SCHEDULE = [];
 let INSTRUCTORS = [];
 const PLANS = [
@@ -308,38 +314,427 @@ const PLANS = [
   {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
   {id:'Maand', title:'Maan Abonnement', desc:'Maandelijks Abonnoment', price:40, period:'Maandelijks'}
 ];
+
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
-function formatDate(d=new Date()){return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'})}
-function formatTime(d=new Date()){ return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':') }
-const DUTCH_TO_DAY = {'Maandag':1,'Dinsdag':2,'Woensdag':3,'Donderdag':4,'Vrijdag':5,'Zaterdag':6,'Zondag':7};
-function parseTimes(timeString){const [start,end]=timeString.split('-').map(t=>t.trim());const [sh,sm=0]=start.split(':').map(Number);const [eh,em=0]=end.split(':').map(Number);return{start:{h:sh,m:sm},end:{h:eh,m:em}}}
-function nextOccurrenceForItem(item,fromDate=new Date()){const targetDay=DUTCH_TO_DAY[item.day];if(targetDay===undefined)return null;const now=new Date(fromDate);const todayDay=now.getDay();let delta=(targetDay-todayDay+7)%7;const{start,end}=parseTimes(item.time);const candidate=new Date(now);candidate.setHours(start.h,start.m,0,0);candidate.setDate(now.getDate()+delta);const candidateEnd=new Date(candidate);candidateEnd.setHours(end.h,end.m,0,0);if(candidateEnd<=now){candidate.setDate(candidate.getDate()+7)}return candidate}
-function getNextLesson(fromDate=new Date()){let soonest=null;let soonestItem=null;SCHEDULE.forEach(item=>{const occ=nextOccurrenceForItem(item,fromDate);if(!occ)return;if(!soonest||occ<soonest){soonest=occ;soonestItem=item}});return{item:soonestItem,date:soonest}}
-function timeUntilString(futureDate){if(!futureDate)return'';const diff=futureDate-new Date();if(diff<=0)return'nu';const mins=Math.floor(diff/60000);const days=Math.floor(mins/1440);const hours=Math.floor((mins%1440)/60);const minutes=mins%60;if(days>0)return`${days}d ${hours}u`;if(hours>0)return`${hours}u ${minutes}m`;return`${minutes}m`}
-function renderSchedule(){const tbody=$('#schedule-body');tbody.innerHTML='';const grouped={};SCHEDULE.forEach(item=>{if(!grouped[item.day])grouped[item.day]=[];grouped[item.day].push(item)});Object.keys(DUTCH_TO_DAY).forEach(day=>{if(!grouped[day])return;const dayCard=document.createElement('div');dayCard.className='day-card';dayCard.innerHTML=`<h3 class="day-title">${day}</h3>`;grouped[day].forEach(item=>{const div=document.createElement('div');div.className='lesson-row';div.innerHTML=`<div class="lesson-time">${item.time}</div><div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div><div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div><div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;dayCard.appendChild(div)});tbody.appendChild(dayCard)});updateLiveInfo()}
-function renderInstructors(){const wrap=$('#instructors-list');wrap.innerHTML='';INSTRUCTORS.forEach(i=>{const div=document.createElement('div');div.className='instructor card';div.innerHTML=`<img loading="lazy" src="${i.img}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;wrap.appendChild(div)})}
-function renderPlans(){const wrap=$('#plans-list');wrap.innerHTML='';PLANS.forEach(p=>{const div=document.createElement('div');div.className='plan card';div.innerHTML=`<h3>${p.title}</h3><div class="small muted">${p.desc}</div><div class="price">€${p.price}${p.period!=='eenmalig'?' / '+p.period:''}</div>`;wrap.appendChild(div)})}
-const modal=$('#modal');const modalContent=$('#modal-content');let activeBooking=null;
-function openBook(opts={}){if(opts.type==='proefles'){modalContent.innerHTML=`<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p><label style="display:block;margin-top:8px">Naam<input id="bk-name"></label><label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email"></label><label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>`;activeBooking={type:'proefles'};showModal();return}const id=opts.id||null;const item=SCHEDULE.find(s=>s.id===id);if(!item){alert('Les niet gevonden');return}modalContent.innerHTML=`<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div><label style="display:block;margin-top:8px">Je naam<input id="bk-name"></label><label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email"></label><label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;activeBooking={type:'lesson',id:item.id};showModal()}
-function showModal(){modal.style.display='flex';document.body.style.overflow='hidden'}
-function closeModal(){modal.style.display='none';document.body.style.overflow='auto';activeBooking=null}
-$('#modal-cancel').addEventListener('click',closeModal);
-$('#modal-confirm').addEventListener('click',()=>{if(!activeBooking){closeModal();return}const name=$('#bk-name')?.value||'Onbekend';const email=$('#bk-email')?.value||'';const qty=Number($('#bk-qty')?.value||1);const item=SCHEDULE.find(s=>s.id===activeBooking.id);if(!item&&activeBooking.type!=='proefles'){alert('Les niet gevonden');closeModal();return}if(item&&item.spots<qty){alert('Niet genoeg plekken beschikbaar');return}if(item)item.spots-=qty;renderSchedule();if(activeBooking.type==='proefles'||activeBooking.type==='lesson'){fetch('https://formspree.io/f/xyzdazgz',{method:'POST',headers:{'Accept':'application/json'},body:JSON.stringify({name,email,class:item?.class||'Proefles',day:item?.day||'',time:item?.time||'',spots:qty})}).then(r=>{if(r.ok){alert('Boeking verstuurd!')}else{alert('Er ging iets mis bij het versturen.')}}).catch(()=>alert('Er ging iets mis bij het versturen.'));closeModal();return}closeModal();alert('Boeking bevestigd')});
-document.addEventListener('click',e=>{const bookBtn=e.target.closest('[data-book]');if(bookBtn){const id=Number(bookBtn.getAttribute('data-book'));openBook({id})}const chooseBook=e.target.closest('#cta-book, #open-book');if(chooseBook){openBook({type:'proefles'})}});
-$$('.nav-links a').forEach(a=>{a.addEventListener('click',e=>{const target=a.getAttribute('data-page');if(target){e.preventDefault();history.pushState({page:target},'',`#${target}`);showPage(target)}})});
-function showPage(page){$$('.nav-links a').forEach(x=>x.classList.remove('active'));$$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');$$('#app > section').forEach(s=>s.style.display=s.id===page?'block':'none');window.scrollTo({top:0,behavior:'smooth'})}
-window.addEventListener('popstate',()=>{const page=location.hash.replace('#','')||'home';showPage(page)});
-$('#mobile-toggle').addEventListener('click',()=>{const nav=document.querySelector('nav');const expanded=nav.style.display==='block';nav.style.display=expanded?'':'block';$('#mobile-toggle').setAttribute('aria-expanded',!expanded)});
-$('#contact-form').addEventListener('submit',e=>{e.preventDefault();const form=e.target;fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}}).then(r=>{if(r.ok){alert('Bedankt! We nemen contact op.');form.reset()}else{r.json().then(j=>alert(j?.error||'Er ging iets mis'))}}).catch(()=>alert('Er ging iets mis bij versturen'))});
-function ensureOpenBar(){if($('#open-bar'))return;const bar=document.createElement('div');bar.id='open-bar';bar.style.cssText='margin-bottom:16px;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)';bar.innerHTML=`<div id="open-bar-text" style="font-weight:700">Laden…</div><div class="small muted" id="open-bar-sub">Gebaseerd op onze agenda</div>`;const container=document.querySelector('.container');if(container)container.prepend(bar)}
-function updateLiveInfo(){ensureOpenBar();const next=getNextLesson();const nextEl=$('#next-class');if(next&&next.item&&next.date){const when=formatDate(next.date)+' — '+formatTime(next.date);nextEl.innerHTML=`${next.item.class} — ${next.item.trainer}<div class="small muted" style="margin-top:6px">${when} · over ${timeUntilString(next.date)}</div>`}else{nextEl.innerHTML=`Geen komende lessen gevonden`}const todayDateEl=$('#today-date');const todayScheduleEl=$('#today-schedule');const now=new Date();todayDateEl.textContent=formatDate(now);const todayDayNum=now.getDay();let todaysItems=SCHEDULE.filter(s=>DUTCH_TO_DAY[s.day]===todayDayNum);todaysItems=todaysItems.filter(item=>{const{end}=parseTimes(item.time);const endTime=new Date(now);endTime.setHours(end.h,end.m,0,0);return endTime>now});if(todaysItems.length===0){todayScheduleEl.innerHTML=`<div class="muted">Vandaag geen resterende lessen.</div>`}else{const list=todaysItems.map(it=>{return`<div style="margin-bottom:8px"><strong>${it.time}</strong> — ${it.class}<div class="small muted">${it.trainer} · <span class="tag">${it.spots} plekken</span></div></div>`}).join('');todayScheduleEl.innerHTML=list}const openBarText=$('#open-bar-text');if(todaysItems.length>0){const anyOpen=todaysItems.some(it=>it.spots>0);if(anyOpen){openBarText.innerHTML=`We zijn open vandaag er zijn lessen gepland. <span class="small muted">Bekijk het schema</span>`;openBarText.style.color=''}else{openBarText.innerHTML=`We zijn open vandaag maar alle plekken zijn vol. <span class="small muted">Check andere dagen of meld je aan voor de wachtlijst</span>`;openBarText.style.color=''}}else{openBarText.innerHTML=`Nu gesloten — er staan geen resterende lessen in de agenda.`;openBarText.style.color=''}const newsEl=$('#news');if(next&&next.item&&next.date){newsEl.textContent=`Volgende: ${next.item.class} op ${formatDate(next.date)} om ${formatTime(next.date)} (${timeUntilString(next.date)}).`}else{newsEl.textContent='Geen nieuwe meldingen'}}
-let liveInterval=null;function startLiveUpdater(){if(liveInterval)clearInterval(liveInterval);liveInterval=setInterval(updateLiveInfo,30000)}
-async function fetchSheetData(range){const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;const res=await fetch(url);if(!res.ok)throw new Error('Google Sheets API fout');const data=await res.json();return data.values||[]}
-async function loadData(){try{const instructors=await fetchSheetData(RANGE_INSTRUCTORS);INSTRUCTORS=instructors.map(r=>({name:r[0]||'',bio:r[1]||'',role:r[2]||'',img:r[3]||''}));const schedule=await fetchSheetData(RANGE_SCHEDULE);let idCounter=1;SCHEDULE=schedule.map(r=>({id:idCounter++,day:r[0]||'',time:r[1]||'',class:r[2]||'',trainer:r[3]||'',spots:Number(r[4]||0)}));renderInstructors();renderSchedule()}catch(e){console.error(e)}}
-function init(){renderPlans();showPage(location.hash.replace('#','')||'home');ensureOpenBar();updateLiveInfo();startLiveUpdater();loadData();const saveLocal=$('#save-local');if(saveLocal){saveLocal.addEventListener('click',()=>{const form=$('#contact-form');const data=new FormData(form);const obj={};for(const[k,v]of data.entries())obj[k]=v;localStorage.setItem('contactForm',JSON.stringify(obj));alert('Contactgegevens lokaal opgeslagen!')})}const stored=localStorage.getItem('contactForm');if(stored){try{const obj=JSON.parse(stored);for(const k in obj){if(form.elements[k])form.elements[k].value=obj[k]}}catch{}}}
-document.addEventListener('DOMContentLoaded',init);
-</script>
+
+function formatDate(d=new Date()){
+  return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
+}
+function formatTime(d=new Date()){
+  return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':');
+}
+
+/* Dutch day mapping (sheet strings -> getDay numbers)
+   Note: getDay: Sunday=0, Monday=1 ... Saturday=6
+*/
+const DUTCH_TO_DAY = {'Maandag':1,'Dinsdag':2,'Woensdag':3,'Donderdag':4,'Vrijdag':5,'Zaterdag':6,'Zondag':0};
+
+function parseTimes(timeString){
+  // expects "HH:MM - HH:MM"
+  if(!timeString) return {start:{h:0,m:0},end:{h:0,m:0}};
+  const [start,end]=timeString.split('-').map(t=>t.trim());
+  const [sh,sm=0]=start.split(':').map(Number);
+  const [eh,em=0]=end.split(':').map(Number);
+  return{start:{h:sh,m:sm},end:{h:eh,m:em}};
+}
+
+function nextOccurrenceForItem(item,fromDate=new Date()){
+  const targetDay=DUTCH_TO_DAY[item.day];
+  if(targetDay===undefined) return null;
+  const now=new Date(fromDate);
+  const todayDay = now.getDay();
+  let delta = (targetDay - todayDay + 7) % 7;
+  const {start, end} = parseTimes(item.time);
+  const candidate = new Date(now);
+  candidate.setHours(start.h, start.m, 0, 0);
+  candidate.setDate(now.getDate() + delta);
+  const candidateEnd = new Date(candidate);
+  candidateEnd.setHours(end.h, end.m, 0, 0);
+  if(candidateEnd <= now) candidate.setDate(candidate.getDate() + 7);
+  return candidate;
+}
+
+function getNextLesson(fromDate=new Date()){
+  let soonest = null;
+  let soonestItem = null;
+  SCHEDULE.forEach(item=>{
+    const occ = nextOccurrenceForItem(item, fromDate);
+    if(!occ) return;
+    if(!soonest || occ < soonest){
+      soonest = occ;
+      soonestItem = item;
+    }
+  });
+  return {item: soonestItem, date: soonest};
+}
+
+function timeUntilString(futureDate){
+  if(!futureDate) return '';
+  const diff = futureDate - new Date();
+  if(diff <= 0) return 'nu';
+  const mins = Math.floor(diff/60000);
+  const days = Math.floor(mins/1440);
+  const hours = Math.floor((mins%1440)/60);
+  const minutes = mins%60;
+  if(days>0) return `${days}d ${hours}u`;
+  if(hours>0) return `${hours}u ${minutes}m`;
+  return `${minutes}m`;
+}
+
+/* ----------------------------
+   RENDERING
+   ---------------------------- */
+function renderSchedule(){
+  const tbody = $('#schedule-body');
+  tbody.innerHTML = '';
+  const grouped = {};
+  SCHEDULE.forEach(item=>{
+    if(!grouped[item.day]) grouped[item.day]=[];
+    grouped[item.day].push(item);
+  });
+
+  // keep order of days: Maandag..Zondag
+  Object.keys(DUTCH_TO_DAY).forEach(day=>{
+    if(!grouped[day]) return;
+    const dayCard = document.createElement('div');
+    dayCard.className = 'day-card';
+    dayCard.innerHTML = `<h3 class="day-title">${day}</h3>`;
+    grouped[day].forEach(item=>{
+      const div = document.createElement('div');
+      div.className = 'lesson-row';
+      // trainer link if instructor exists
+      const trainerDisplay = INSTRUCTORS.find(i=>i.name===item.trainer) ? `<a href="#${(item.trainer||'').toLowerCase().replace(/\s+/g,'-')}" style="color:var(--accent);font-weight:700">${item.trainer}</a>` : `<div class="small muted">${item.trainer||''}</div>`;
+      div.innerHTML = `<div class="lesson-time">${item.time}</div>
+        <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
+        <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
+        <div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;
+      dayCard.appendChild(div);
+    });
+    tbody.appendChild(dayCard);
+  });
+  updateLiveInfo();
+}
+
+function renderInstructors(){
+  const wrap = $('#instructors-list');
+  wrap.innerHTML = '';
+  INSTRUCTORS.forEach(i=>{
+    const div = document.createElement('div');
+    div.className = 'instructor card';
+    const id = (i.name||'').toLowerCase().replace(/\s+/g,'-');
+    div.id = id;
+    div.innerHTML = `<img loading="lazy" src="${i.img || 'https://via.placeholder.com/76'}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function renderPlans(){
+  const wrap = $('#plans-list');
+  wrap.innerHTML = '';
+  PLANS.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'plan card';
+    div.innerHTML = `<h3>${p.title}</h3><div class="small muted">${p.desc}</div><div class="price">€${p.price}${p.period!=='eenmalig'?' / '+p.period:''}</div>`;
+    wrap.appendChild(div);
+  });
+}
+
+/* ----------------------------
+   MODAL / BOOKING
+   ---------------------------- */
+const modal = $('#modal');
+const modalContent = $('#modal-content');
+let activeBooking = null;
+
+function openBook(opts={}){
+  if(opts.type==='proefles'){
+    modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
+      <label style="display:block;margin-top:8px">Naam<input id="bk-name"></label>
+      <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email"></label>
+      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>`;
+    activeBooking = {type:'proefles'};
+    showModal();
+    return;
+  }
+  const id = opts.id || null;
+  const item = SCHEDULE.find(s=>s.id===id);
+  if(!item){ alert('Les niet gevonden'); return; }
+  modalContent.innerHTML = `<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div>
+    <label style="display:block;margin-top:8px">Je naam<input id="bk-name"></label>
+    <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email"></label>
+    <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;
+  activeBooking = {type:'lesson', id: item.id};
+  showModal();
+}
+
+function showModal(){
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+  activeBooking = null;
+}
+$('#modal-cancel').addEventListener('click', closeModal);
+$('#modal-confirm').addEventListener('click', async ()=>{
+  if(!activeBooking){ closeModal(); return; }
+  const name = $('#bk-name')?.value || 'Onbekend';
+  const email = $('#bk-email')?.value || '';
+  const qty = Number($('#bk-qty')?.value || 1);
+  const item = SCHEDULE.find(s=>s.id===activeBooking.id);
+  if(item && item.spots < qty){ alert('Niet genoeg plekken beschikbaar'); return; }
+  if(item) item.spots -= qty;
+  renderSchedule();
+
+  // send booking to Formspree (use your booking endpoint)
+  try{
+    const payload = {
+      name,
+      email,
+      class: item?.class || 'Proefles',
+      day: item?.day || '',
+      time: item?.time || '',
+      spots: qty
+    };
+    // send to booking form endpoint (kept as previously used form)
+    const res = await fetch('https://formspree.io/f/xyzdazgz', {
+      method: 'POST',
+      headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(res.ok){
+      alert('Boeking verstuurd!');
+    } else {
+      alert('Er ging iets mis bij het versturen.');
+    }
+  } catch(e){
+    console.error(e);
+    alert('Er ging iets mis bij het versturen.');
+  }
+  closeModal();
+});
+
+/* Click handlers for dynamic buttons */
+document.addEventListener('click', (e)=>{
+  const bookBtn = e.target.closest('[data-book]');
+  if(bookBtn){
+    const id = Number(bookBtn.getAttribute('data-book'));
+    openBook({id});
+  }
+  const chooseBook = e.target.closest('#cta-book, #open-book');
+  if(chooseBook){
+    openBook({type:'proefles'});
+  }
+});
+
+/* ----------------------------
+   NAV + UI helpers
+   ---------------------------- */
+$$('.nav-links a').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const target = a.getAttribute('data-page');
+    if(target){
+      e.preventDefault();
+      history.pushState({page:target}, '', `#${target}`);
+      showPage(target);
+    }
+  });
+});
+
+function showPage(page){
+  // mark nav active
+  $$('.nav-links a').forEach(x=>x.classList.remove('active'));
+  $$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');
+  // show/hide sections
+  $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+window.addEventListener('popstate', ()=>{
+  const page = location.hash.replace('#','') || 'home';
+  showPage(page);
+});
+$('#mobile-toggle').addEventListener('click', ()=>{
+  const nav = document.querySelector('nav');
+  const expanded = nav.style.display === 'block';
+  nav.style.display = expanded ? '' : 'block';
+  $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
+});
+
+/* ----------------------------
+   Contact form submit
+   ---------------------------- */
+$('#contact-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const form = e.target;
+  fetch(form.action, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
+    .then(async r=>{
+      if(r.ok){
+        alert('Bedankt! We nemen contact op.');
+        form.reset();
+      } else {
+        try{
+          const j = await r.json();
+          alert(j?.error || 'Er ging iets mis');
+        }catch{
+          alert('Er ging iets mis');
+        }
+      }
+    })
+    .catch(()=>alert('Er ging iets mis bij versturen'));
+});
+
+/* ----------------------------
+   OPEN BAR / LIVE INFO
+   ---------------------------- */
+function ensureOpenBar(){
+  if($('#open-bar')) return;
+  const bar = document.createElement('div');
+  bar.id = 'open-bar';
+  bar.style.cssText = 'margin-bottom:16px;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)';
+  bar.innerHTML = `<div id="open-bar-text" style="font-weight:700">Laden…</div><div class="small muted" id="open-bar-sub">Gebaseerd op onze agenda</div>`;
+  const container = document.querySelector('.container');
+  if(container) container.prepend(bar);
+}
+
+function updateLiveInfo(){
+  ensureOpenBar();
+  const next = getNextLesson();
+  const nextEl = $('#next-class');
+  if(next && next.item && next.date){
+    const when = formatDate(next.date) + ' — ' + formatTime(next.date);
+    nextEl.innerHTML = `${next.item.class} — ${next.item.trainer}<div class="small muted" style="margin-top:6px">${when} · over ${timeUntilString(next.date)}</div>`;
+  } else {
+    nextEl.innerHTML = `Geen komende lessen gevonden`;
+  }
+
+  const todayDateEl = $('#today-date');
+  const todayScheduleEl = $('#today-schedule');
+  const now = new Date();
+  todayDateEl.textContent = formatDate(now);
+  const todayDayNum = now.getDay();
+  let todaysItems = SCHEDULE.filter(s => DUTCH_TO_DAY[s.day] === todayDayNum);
+  todaysItems = todaysItems.filter(item=>{
+    const {end} = parseTimes(item.time);
+    const endTime = new Date(now);
+    endTime.setHours(end.h, end.m, 0, 0);
+    return endTime > now;
+  });
+  if(todaysItems.length === 0){
+    todayScheduleEl.innerHTML = `<div class="muted">Vandaag geen resterende lessen.</div>`;
+  } else {
+    const list = todaysItems.map(it=>`<div style="margin-bottom:8px"><strong>${it.time}</strong> — ${it.class}<div class="small muted">${it.trainer} · <span class="tag">${it.spots} plekken</span></div></div>`).join('');
+    todayScheduleEl.innerHTML = list;
+  }
+
+  const openBarText = $('#open-bar-text');
+  if(todaysItems.length > 0){
+    const anyOpen = todaysItems.some(it => it.spots > 0);
+    if(anyOpen){
+      openBarText.innerHTML = `We zijn open vandaag er zijn lessen gepland. <span class="small muted">Bekijk het schema</span>`;
+      openBarText.style.color = '';
+    } else {
+      openBarText.innerHTML = `We zijn open vandaag maar alle plekken zijn vol. <span class="small muted">Check andere dagen of meld je aan voor de wachtlijst</span>`;
+      openBarText.style.color = '';
+    }
+  } else {
+    openBarText.innerHTML = `Nu gesloten — er staan geen resterende lessen in de agenda.`;
+    openBarText.style.color = '';
+  }
+
+  const newsEl = $('#news');
+  if(next && next.item && next.date){
+    newsEl.textContent = `Volgende: ${next.item.class} op ${formatDate(next.date)} om ${formatTime(next.date)} (${timeUntilString(next.date)}).`;
+  } else {
+    newsEl.textContent = 'Geen nieuwe meldingen';
+  }
+}
+
+/* live updater */
+let liveInterval = null;
+function startLiveUpdater(){
+  if(liveInterval) clearInterval(liveInterval);
+  liveInterval = setInterval(updateLiveInfo, 30000);
+}
+
+/* ----------------------------
+   GOOGLE SHEETS FETCHING
+   ---------------------------- */
+async function fetchSheetData(range){
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+  const res = await fetch(url);
+  if(!res.ok){
+    // helpful console output for debugging in browser
+    const text = await res.text().catch(()=>res.statusText);
+    throw new Error(`Google Sheets API fout ${res.status}: ${text}`);
+  }
+  const data = await res.json();
+  return data.values || [];
+}
+
+async function loadData(){
+  try{
+    const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
+    // map instructor rows: [Name, Bio, Role, Img]
+    INSTRUCTORS = instructors.map(r => ({ name: r[0]||'', bio: r[1]||'', role: r[2]||'', img: r[3]||'' }));
+    // schedule rows: [Day, Time, Class, Trainer, Spots]
+    const schedule = await fetchSheetData(RANGE_SCHEDULE);
+    let idCounter = 1;
+    SCHEDULE = schedule.map(r => ({ id: idCounter++, day: r[0]||'', time: r[1]||'', class: r[2]||'', trainer: r[3]||'', spots: Number(r[4]||0) }));
+    renderInstructors();
+    renderPlans();
+    renderSchedule();
+  } catch(e){
+    console.error('LoadData error: ', e);
+    // show user visible hint
+    const scheduleBody = $('#schedule-body');
+    if(scheduleBody) scheduleBody.innerHTML = `<div class="muted">Kon de agenda niet laden. Controleer dat het sheet publiek is en de API key correct is.</div>`;
+  }
+}
+
+/* ----------------------------
+   LOCAL STORAGE: contact save
+   ---------------------------- */
+function initLocalSave(){
+  const saveLocal = $('#save-local');
+  const form = document.getElementById('contact-form');
+  if(saveLocal){
+    saveLocal.addEventListener('click', ()=>{
+      const data = new FormData(form);
+      const obj = {};
+      for(const [k,v] of data.entries()) obj[k]=v;
+      localStorage.setItem('contactForm', JSON.stringify(obj));
+      alert('Contactgegevens lokaal opgeslagen!');
+    });
+  }
+  // populate if stored
+  const stored = localStorage.getItem('contactForm');
+  if(stored){
+    try{
+      const obj = JSON.parse(stored);
+      for(const k in obj){
+        if(form.elements[k]) form.elements[k].value = obj[k];
+      }
+    } catch(e){}
+  }
+}
+
+/* ----------------------------
+   INIT
+   ---------------------------- */
+function init(){
+  renderPlans();
+  showPage(location.hash.replace('#','') || 'home');
+  ensureOpenBar();
+  updateLiveInfo();
+  startLiveUpdater();
+  loadData();
+  initLocalSave();
+}
+document.addEventListener('DOMContentLoaded', init);
+
+  </script>
 
 </body>
 </html>
