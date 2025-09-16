@@ -19,127 +19,84 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     :root {
       --primary: #0b2545;
       --accent: #f97316;
-      --bg: #f5f6fa;
-      --text: #222;
-      --muted: #555;
-      --card-bg: #fff;
+      --bg: #f9fafb;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
     }
     body {
-      font-family: "Segoe UI", Roboto, sans-serif;
-      line-height: 1.6;
+      font-family: "Inter", "Segoe UI", Roboto, sans-serif;
+      line-height: 1.7;
       color: var(--text);
       margin: 0;
       padding: 0;
       background: var(--bg);
     }
     header {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), #122c5a);
       color: #fff;
-      padding: 2rem 1rem;
+      padding: 3rem 1rem 2rem;
       text-align: center;
       position: relative;
+      box-shadow: 0 4px 15px rgba(0,0,0,.15);
     }
-    header h1 { margin: 0; font-size: 2rem; }
-    header p { margin: 0.4rem 0 0; font-size: 1rem; color: #d1d5db; }
-    .container { max-width: 900px; margin: 1.5rem auto; padding: 0 1rem; }
+    header h1 { margin: 0; font-size: 2.4rem; font-weight: 700; }
+    header p { margin: 0.6rem 0 0; font-size: 1rem; color: #e5e7eb; }
+    .container { max-width: 900px; margin: 2rem auto; padding: 0 1.2rem; }
     .card {
       background: var(--card-bg);
-      padding: 1.2rem 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.05);
-      margin-bottom: 1rem;
-      transition: transform 0.2s;
+      padding: 1.8rem 2rem;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.08);
+      margin-bottom: 1.5rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-    .card:hover { transform: translateY(-3px); }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
     h2 {
       color: var(--primary);
-      border-left: 4px solid var(--accent);
-      padding-left: 0.5rem;
+      border-left: 5px solid var(--accent);
+      padding-left: 0.6rem;
       margin-top: 0;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
+      font-weight: 600;
     }
-    a { color: var(--accent); text-decoration: none; }
+    p, li { font-size: 1rem; color: var(--text); }
+    a { color: var(--accent); text-decoration: none; font-weight: 500; }
     a:hover { text-decoration: underline; }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      display: block;
-      overflow-x: auto;
-    }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background: var(--primary); color: #fff; }
     footer {
       text-align: center;
-      padding: 1.5rem 1rem;
-      font-size: 0.85rem;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
       color: var(--muted);
+      background: #f3f4f6;
+      margin-top: 2rem;
     }
-    #cookie-banner {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--card-bg);
-      border-top: 3px solid var(--accent);
-      box-shadow: 0 -2px 10px rgba(0,0,0,.1);
-      padding: 1rem;
-      display: none;
-      z-index: 1000;
-    }
-    #cookie-banner p {
-      margin: 0 0 0.5rem;
-      font-size: 0.9rem;
-    }
-    #cookie-banner .buttons {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    #cookie-banner button {
-      border: none;
-      border-radius: 6px;
-      padding: 0.6rem 1rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-      flex: 1 1 auto;
-      transition: background 0.2s ease;
-    }
-    #accept-all { background: var(--accent); color: #fff; }
-    #accept-all:hover { background: #c2410c; }
-    #accept-essential { background: #e5e7eb; color: var(--text); }
-    #accept-essential:hover { background: #d1d5db; }
-    #settings { background: var(--primary); color: #fff; }
-    #settings:hover { background: #06172a; }
     .back-btn {
       position: absolute;
-      top: 15px;
-      left: 15px;
-      background: rgba(249,115,22,0.9);
+      top: 20px;
+      left: 20px;
+      background: var(--accent);
       color: #fff;
       border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
+      padding: 10px 16px;
+      border-radius: 8px;
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.25s;
     }
     .back-btn:hover { background: #c2410c; }
 
     /* Responsive adjustments */
     @media (max-width: 900px) {
-      header h1 { font-size: 1.7rem; }
-      .container { padding: 0 0.8rem; }
+      header h1 { font-size: 2rem; }
+      .container { padding: 0 1rem; }
     }
     @media (max-width: 600px) {
-      header h1 { font-size: 1.4rem; }
-      header p { font-size: 0.85rem; }
-      .card { padding: 1rem; }
-      h2 { font-size: 1.1rem; }
-      #cookie-banner .buttons { flex-direction: column; }
-      #cookie-banner button { width: 100%; }
+      header h1 { font-size: 1.5rem; }
+      header p { font-size: 0.9rem; }
+      .card { padding: 1.4rem; }
+      h2 { font-size: 1.2rem; }
     }
   </style>
 </head>
@@ -147,14 +104,14 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   <header>
     <button class="back-btn" onclick="window.location.href='index.html'">⬅ Terug</button>
     <h1>Privacyverklaring</h1>
-    <p>Laatst bijgewerkt: 13 september 2025</p>
+    <p>Laatst bijgewerkt: 16 september 2025</p>
   </header>
 
   <div class="container">
     <div class="card">
       <h2>Wie zijn wij?</h2>
       <p>Deze website wordt beheerd door <strong>Box n Burn</strong>, gevestigd in Westerlo.<br>
-      Contact: <a href="mailto:info@boxnburn">info@boxnburn</a> — Tel. placeholder.</p>
+      Contact: <a href="mailto:info@boxnburn">info@boxnburn</a> — Tel. +32 468 00 30 97</p>
     </div>
 
     <div class="card">
@@ -165,99 +122,38 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <li>E-mailadres</li>
         <li>Telefoonnummer</li>
       </ul>
-      <p>Deze gegevens worden uitsluitend gebruikt om uw verzoek of vraag te beantwoorden.</p>
+      <p>Deze gegevens worden uitsluitend gebruikt om uw verzoek of vraag te beantwoorden. Wij gebruiken ze niet voor marketingdoeleinden en delen ze nooit met derden zonder uw toestemming.</p>
     </div>
 
     <div class="card">
       <h2>Cookies</h2>
-      <p>Onze website gebruikt cookies. We onderscheiden:</p>
-      <table>
-        <thead>
-          <tr><th>Type cookie</th><th>Doel</th><th>Toestemming</th><th>Bewaartermijn</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Essentiële cookies</td>
-            <td>Nodig voor de werking van de site (bijv. sessie, navigatie).</td>
-            <td>Nee</td>
-            <td>Session / max. 1 jaar</td>
-          </tr>
-          <tr>
-            <td>Analytische cookies</td>
-            <td>Statistieken en gebruiksanalyse (bv. Google Analytics met IP-anonymisatie).</td>
-            <td>Ja</td>
-            <td>Max. 13 maanden</td>
-          </tr>
-          <tr>
-            <td>Marketing cookies</td>
-            <td>Personalisatie en advertenties.</td>
-            <td>Ja</td>
-            <td>Max. 6 maanden</td>
-          </tr>
-        </tbody>
-      </table>
-      <p>Niet-essentiële cookies worden pas geplaatst na toestemming via onze cookie-banner.</p>
+      <p>Onze website maakt <strong>geen gebruik van cookies</strong>. Uw bezoek wordt niet gevolgd of geanalyseerd, en er worden geen marketing- of trackingcookies geplaatst. Dit betekent dat u onze website volledig anoniem kunt gebruiken.</p>
     </div>
 
     <div class="card">
       <h2>Uw rechten</h2>
       <p>U heeft recht op inzage, correctie, wissing, beperking, overdraagbaarheid van uw gegevens en het recht bezwaar te maken.  
-      Verzoeken: <a href="mailto:info@boxnburn">info@boxnburn</a>. Reactie binnen één maand.</p>
+      Verzoeken: <a href="mailto:info@boxnburn">info@boxnburn</a>. Wij reageren binnen één maand.</p>
     </div>
 
     <div class="card">
       <h2>Beveiliging</h2>
-      <p>Wij nemen passende maatregelen zoals HTTPS, toegangsbeperkingen en beveiligde opslag.</p>
+      <p>Wij nemen passende technische en organisatorische maatregelen zoals <strong>HTTPS</strong>-versleuteling, toegangsbeperkingen en beveiligde opslag om uw gegevens te beschermen tegen verlies of ongeoorloofd gebruik.</p>
     </div>
 
     <div class="card">
       <h2>Klachten</h2>
-      <p>Neem contact met ons op of dien een klacht in bij de <a href="https://www.gegevensbeschermingsautoriteit.be">Gegevensbeschermingsautoriteit</a>.</p>
+      <p>Heeft u een klacht over hoe wij met uw gegevens omgaan? Neem gerust contact met ons op. U kunt ook een klacht indienen bij de <a href="https://www.gegevensbeschermingsautoriteit.be">Gegevensbeschermingsautoriteit</a>.</p>
     </div>
 
     <div class="card">
       <h2>Wijzigingen</h2>
-      <p>Wij kunnen deze verklaring aanpassen. Controleer deze pagina voor de meest recente versie.</p>
+      <p>Wij kunnen deze verklaring aanpassen om te voldoen aan nieuwe wetgeving of interne wijzigingen. Controleer deze pagina regelmatig voor de meest recente versie.</p>
     </div>
   </div>
 
   <footer>
-    &copy; 2025 Box n Burn — Privacyverklaring
+    &copy; 2025 Box n Burn — Privacyverklaring · Deze website gebruikt <strong>geen cookies</strong>
   </footer>
-
-  <div id="cookie-banner">
-    <p>Wij gebruiken cookies om onze website goed te laten werken en om uw ervaring te verbeteren. Kies uw voorkeur:</p>
-    <div class="buttons">
-      <button id="accept-all">Alles accepteren</button>
-      <button id="accept-essential">Alleen noodzakelijke</button>
-      <button id="settings">Instellingen</button>
-    </div>
-  </div>
-
-  <script>
-    const banner = document.getElementById('cookie-banner');
-    const acceptAllBtn = document.getElementById('accept-all');
-    const acceptEssentialBtn = document.getElementById('accept-essential');
-    if (!localStorage.getItem('cookieConsent')) {
-      banner.style.display = 'block';
-    }
-    acceptAllBtn.addEventListener('click', () => {
-      localStorage.setItem('cookieConsent', 'all');
-      banner.style.display = 'none';
-      enableAnalytics();
-      enableMarketing();
-    });
-    acceptEssentialBtn.addEventListener('click', () => {
-      localStorage.setItem('cookieConsent', 'essential');
-      banner.style.display = 'none';
-    });
-    function enableAnalytics() {}
-    function enableMarketing() {}
-    const consent = localStorage.getItem('cookieConsent');
-    if (consent === 'all') {
-      enableAnalytics();
-      enableMarketing();
-    }
-  </script>
 </body>
 </html>
