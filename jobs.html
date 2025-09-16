@@ -59,17 +59,23 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     #preloader.fade{opacity:0;visibility:hidden}
     .loader{width:70px;height:70px;border:5px solid rgba(255,255,255,0.15);border-top:5px solid var(--accent);border-radius:50%;animation:spin 1s linear infinite;box-shadow:0 0 20px rgba(255,107,107,0.6)}
     @keyframes spin{to{transform:rotate(360deg)}}
-    @media (max-width:1024px){header{padding:10px 16px}.brand img{width:38px;height:38px}}
-    @media (max-width:768px){.nav-links{display:none}.hamburger{display:flex}.container{margin-top:90px;padding:16px}}
-    @media (max-width:480px){.brand .title{font-size:16px}h2{font-size:20px}.btn{font-size:15px}}
+    @media(max-width:1024px){header{padding:10px 16px}.brand img{width:38px;height:38px}}
+    @media(max-width:768px){.nav-links{display:none}.hamburger{display:flex}.container{margin-top:90px;padding:16px}}
+    @media(max-width:480px){.brand .title{font-size:16px}h2{font-size:20px}.btn{font-size:15px}}
   </style>
 </head>
 <body>
-  <div id="preloader"><div class="loader"></div>Laden...</div>
+  <div id="preloader">
+    <div class="loader"></div>
+    Laden...
+  </div>
   <header>
     <div class="brand">
       <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn logo">
-      <div><div class="title">Box N Burn Jobs</div><div class="small muted">Bekijk openstaande posities</div></div>
+      <div>
+        <div class="title">Box N Burn Jobs</div>
+        <div class="small muted">Bekijk openstaande posities</div>
+      </div>
     </div>
     <nav>
       <div class="nav-links">
@@ -110,21 +116,37 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   <script>
     const sheetId="13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"
     const apiKey="AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4"
+    const endpoint="https://formspree.io/f/xzzayobb"
     async function loadJobs(){
-      const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1!A2:C?key=${apiKey}`
+      const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/JobApp!A2:C?key=${apiKey}`
       const res=await fetch(url)
       const data=await res.json()
-      const container=document.getElementById("jobsContainer")
-      if(!data.values) return
+      const jobsContainer=document.getElementById("jobsContainer")
+      jobsContainer.innerHTML=""
+      if(!data.values)return
       data.values.forEach((row,i)=>{
-        const [title,desc,requirements]=row
+        const [title,desc,req]=row
         const card=document.createElement("div")
         card.className="job-card"
-        card.innerHTML=`<h3>${title}</h3><p>${desc||""}</p>${requirements?`<p><strong>Vereisten:</strong> ${requirements}</p>`:""}<details><summary>Contact opening</summary><form data-job="${title}"><input type="text" name="name" placeholder="Naam" required><input type="number" name="age" placeholder="Leeftijd" required><input type="email" name="email" placeholder="E-mail" required><input type="tel" name="phone" placeholder="Telefoonnummer" required><button type="submit" class="btn primary">Verstuur</button><div class="message"></div></form></details>`
-        container.appendChild(card)
+        card.innerHTML=`
+          <h3>${title||""}</h3>
+          <p>${desc||""}</p>
+          ${req?`<p><strong>Vereisten:</strong> ${req}</p>`:""}
+          <details>
+            <summary>Solliciteer</summary>
+            <form data-job="${title||"Onbekend"}">
+              <input type="text" name="name" placeholder="Naam" required>
+              <input type="number" name="age" placeholder="Leeftijd" required>
+              <input type="email" name="email" placeholder="E-mail" required>
+              <input type="tel" name="phone" placeholder="Telefoonnummer" required>
+              <button type="submit" class="btn primary">Verstuur</button>
+              <div class="message"></div>
+            </form>
+          </details>`
+        jobsContainer.appendChild(card)
+        setTimeout(()=>{card.classList.add("visible")},200*i+200)
       })
     }
-    document.addEventListener("DOMContentLoaded",loadJobs)
     document.addEventListener("submit",async e=>{
       if(e.target.tagName==="FORM"){
         e.preventDefault()
@@ -135,9 +157,11 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         const data=Object.fromEntries(new FormData(form).entries())
         data.job=form.getAttribute("data-job")||"Onbekend"
         try{
-          const res=await fetch("https://formspree.io/f/xzzayobb",{method:"POST",headers:{"Accept":"application/json"},body:JSON.stringify(data)})
-          if(res.ok){msg.textContent="Bedankt! Je aanvraag is verzonden.";msg.classList.add("success");form.reset()}else{msg.textContent="Er ging iets mis. Probeer later opnieuw.";msg.classList.add("error")}}
-        catch(err){msg.textContent="Fout bij verzenden.";msg.classList.add("error")}}
+          const res=await fetch(endpoint,{method:"POST",headers:{"Accept":"application/json"},body:JSON.stringify(data)})
+          if(res.ok){msg.textContent="Bedankt! Je aanvraag is verzonden.";msg.classList.add("success");form.reset()}
+          else{msg.textContent="Er ging iets mis. Probeer later opnieuw.";msg.classList.add("error")}
+        }catch(err){msg.textContent="Fout bij verzenden.";msg.classList.add("error")}
+      }
     })
     window.addEventListener("load",()=>{
       const preloader=document.getElementById("preloader")
@@ -147,12 +171,12 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         document.querySelector("header").classList.add("visible")
         document.querySelector(".container").classList.add("visible")
         document.querySelector("footer").classList.add("visible")
-        document.querySelectorAll(".job-card").forEach((card,i)=>{setTimeout(()=>{card.classList.add("visible")},200*i+200)})
+        loadJobs()
       },800)
     })
     document.querySelectorAll("a[href]").forEach(a=>{
       a.addEventListener("click",e=>{
-        if(a.getAttribute("href").startsWith("#")) return
+        if(a.getAttribute("href").startsWith("#"))return
         e.preventDefault()
         document.body.style.opacity=0
         setTimeout(()=>{window.location=a.href},400)
@@ -164,4 +188,6 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   </script>
 </body>
 </html>
+
+
 
