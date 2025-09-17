@@ -160,9 +160,10 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   .muted{color:var(--muted)}
   .center{display:flex;justify-content:center;align-items:center}
 
-  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
-  .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
-  .modal.show{display:flex}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000;opacity:0;transition:opacity .3s ease}
+  .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7);transform:scale(0.9);opacity:0;transition:transform .3s ease,opacity .3s ease}
+  .modal-backdrop.show{display:flex;opacity:1}
+  .modal-backdrop.show .modal{transform:scale(1);opacity:1}
 
   .click{transition:transform var(--transition)}
   .click:active{transform:scale(.98)}
