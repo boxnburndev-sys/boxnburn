@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Support - Box N Burn</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <style>
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#233445;color:white;word-wrap:break-word}
+    .navbar{display:flex;align-items:center;justify-content:space-between;background:#0f2133;padding:12px 20px;box-shadow:0 4px 10px rgba(0,0,0,0.3);position:sticky;top:0;z-index:50}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand img{width:50px;height:50px;border-radius:50%;object-fit:cover}
+    .brand span{font-size:1.1rem;font-weight:700}
+    .content{padding:24px;max-width:800px;margin:0 auto}
+    h1{color:#0f93ff;font-size:1.4rem}
+    .options{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:20px}
+    .option{background:#384858;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all 0.2s ease}
+    .option:hover{background:#2e4054;transform:translateY(-2px)}
+    .option h2{margin:0;font-size:1.1rem;color:#0f93ff}
+    .option p{margin:6px 0 0 0;font-size:14px;opacity:0.85}
+    .section{display:none;margin-top:24px;background:#384858;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
+    .section.active{display:block;animation:fadeIn 0.3s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    form{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+    input,textarea{padding:10px;border-radius:8px;border:1px solid #233445;background:#233445;color:white}
+    input:focus,textarea:focus{outline:2px solid #0f93ff}
+    button{background:#0f93ff;border:none;padding:10px 14px;border-radius:8px;color:white;font-weight:700;cursor:pointer;transition:all 0.2s ease}
+    button:hover{background:#0d7cd6}
+    .phone{margin-top:10px;font-size:15px}
+    .back-btn{margin-top:12px;background:transparent;border:2px solid rgba(255,255,255,0.2);padding:8px 12px;border-radius:8px;color:white;cursor:pointer}
+    .back-btn:hover{background:rgba(255,255,255,0.1)}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="brand">
+      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn Logo">
+      <span>Box N Burn Support</span>
+    </div>
+    <a href="index.html" style="color:#0f93ff;text-decoration:none;font-weight:600">Terug naar Dashboard</a>
+  </nav>
+  <div class="content">
+    <h1>Kies het type support dat je nodig hebt</h1>
+    <div class="options">
+      <div class="option" onclick="openSection('tech')">
+        <h2>Technische Hulp</h2>
+        <p>Problemen of vragen met technische zaken.</p>
+      </div>
+      <div class="option" onclick="openSection('repair')">
+        <h2>Algemene Support</h2>
+        <p>Als je algemene support nodig hebt.</p>
+      </div>
+      <div class="option" onclick="openSection('other')">
+        <h2>Overig</h2>
+        <p>Andere vragen of hulp nodig met overige zaken.</p>
+      </div>
+    </div>
+
+    <div id="tech" class="section">
+      <h2>Technische Hulp</h2>
+      <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor directe hulp.</p>
+      <form action="https://formspree.io/f/yourformid" method="POST">
+        <input type="text" name="name" placeholder="Naam" required>
+        <input type="email" name="_replyto" placeholder="Email" required>
+        <textarea name="message" rows="5" placeholder="Beschrijf je probleem" required></textarea>
+        <button type="submit">Verstuur</button>
+      </form>
+      <button class="back-btn" onclick="backToOptions()">← Terug</button>
+    </div>
+
+    <div id="repair" class="section">
+      <h2>Algemene Support</h2>
+      <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor urgente zaken.</p>
+      <form action="https://formspree.io/f/yourformid" method="POST">
+        <input type="text" name="name" placeholder="Naam" required>
+        <input type="email" name="_replyto" placeholder="Email" required>
+        <textarea name="message" rows="5" placeholder="Beschrijf wat er kapot is" required></textarea>
+        <button type="submit">Verstuur</button>
+      </form>
+      <button class="back-btn" onclick="backToOptions()">← Terug</button>
+    </div>
+
+    <div id="other" class="section">
+      <h2>Overige Vragen</h2>
+      <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor andere vragen.</p>
+      <form action="https://formspree.io/f/yourformid" method="POST">
+        <input type="text" name="name" placeholder="Naam" required>
+        <input type="email" name="_replyto" placeholder="Email" required>
+        <textarea name="message" rows="5" placeholder="Schrijf hier je vraag of bericht" required></textarea>
+        <button type="submit">Verstuur</button>
+      </form>
+      <button class="back-btn" onclick="backToOptions()">← Terug</button>
+    </div>
+  </div>
+
+  <script>
+    function openSection(id){
+      document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+      document.querySelector(".options").style.display="none";
+      document.getElementById(id).classList.add("active");
+    }
+    function backToOptions(){
+      document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+      document.querySelector(".options").style.display="grid";
+    }
+  </script>
+</body>
+</html>
