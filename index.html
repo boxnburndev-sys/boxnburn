@@ -407,8 +407,7 @@ function renderSchedule(){
       div.className = 'lesson-row';
       div.innerHTML = `<div class="lesson-time">${item.time}</div>
         <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
-        <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
-        <div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;
+        <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>`;
       dayCard.appendChild(div);
     });
     tbody.appendChild(dayCard);
