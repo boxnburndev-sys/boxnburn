@@ -408,7 +408,7 @@ function renderSchedule(){
       div.innerHTML = `<div class="lesson-time">${item.time}</div>
         <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
         <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
-        <div><button class="btn primary" data-book='${item.id}'>Boek</button></div>`;
+        <div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;
       dayCard.appendChild(div);
     });
     tbody.appendChild(dayCard);
@@ -452,26 +452,18 @@ function openBook(opts={}){
     modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
       <label style="display:block;margin-top:8px">Naam<input id="bk-name"></label>
       <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email"></label>
-      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>
-      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-        <button class="btn ghost" id="modal-cancel">Sluit</button>
-        <button class="btn primary" id="modal-confirm">Bevestig boeking</button>
-      </div>`;
+      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>`;
     activeBooking = {type:'proefles'};
     showModal();
     return;
   }
   const id = opts.id || null;
-  const item = SCHEDULE.find(s=>s.id==id);
+  const item = SCHEDULE.find(s=>s.id===id);
   if(!item){ alert('Les niet gevonden'); return; }
   modalContent.innerHTML = `<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div>
     <label style="display:block;margin-top:8px">Je naam<input id="bk-name"></label>
     <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email"></label>
-    <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>
-    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-      <button class="btn ghost" id="modal-cancel">Sluit</button>
-      <button class="btn primary" id="modal-confirm">Bevestig boeking</button>
-    </div>`;
+    <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;
   activeBooking = {type:'lesson', id: item.id};
   showModal();
 }
@@ -486,12 +478,43 @@ function closeModal(){
   modal.style.display = 'none';
   document.body.style.overflow = 'auto';
   activeBooking = null;
-  const mc = document.getElementById('modal-confirm');
-  if(mc) mc.style.display = '';
 }
-
-document.addEventListener('click', (e)=>{
-  if(e.target && e.target.id === 'modal-cancel') closeModal();
+const modalCancel = $('#modal-cancel');
+if(modalCancel) modalCancel.addEventListener('click', closeModal);
+const modalConfirm = $('#modal-confirm');
+if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
+  if(!activeBooking){ closeModal(); return; }
+  const name = $('#bk-name')?.value || 'Onbekend';
+  const email = $('#bk-email')?.value || '';
+  const qty = Number($('#bk-qty')?.value || 1);
+  const item = SCHEDULE.find(s=>s.id===activeBooking.id);
+  if(item && item.spots < qty){ alert('Niet genoeg plekken beschikbaar'); return; }
+  if(item) item.spots -= qty;
+  renderSchedule();
+  try{
+    const payload = {
+      name,
+      email,
+      class: item?.class || 'Proefles',
+      day: item?.day || '',
+      time: item?.time || '',
+      spots: qty
+    };
+    const res = await fetch('https://formspree.io/f/xyzdazgz', {
+      method: 'POST',
+      headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(res.ok){
+      alert('Boeking verstuurd!');
+    } else {
+      alert('Er ging iets mis bij het versturen.');
+    }
+  } catch(e){
+    console.error(e);
+    alert('Er ging iets mis bij het versturen.');
+  }
+  closeModal();
 });
 
 document.addEventListener('click', (e)=>{
@@ -505,73 +528,61 @@ document.addEventListener('click', (e)=>{
         <p class="muted">${instr.role}</p>
         <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
         <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
-        <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-          <button class="btn ghost" id="modal-cancel">Sluit</button>
-        </div>
       `;
-      document.getElementById("modal-confirm")?.style.display = "none";
       activeBooking = null;
       showModal();
     }
   }
 });
 
-// Boek knop in rooster
-document.addEventListener('click', (e)=>{
-  const btn = e.target.closest('button[data-book]');
-  if(btn){
-    const id = btn.getAttribute('data-book');
-    openBook({id});
-  }
+$$('.nav-links a').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const target = a.getAttribute('data-page');
+    if(target){
+      e.preventDefault();
+      history.pushState({page:target}, '', `#${target}`);
+      showPage(target);
+    }
+  });
 });
 
-// Bevestig boeking
-document.addEventListener('click', (e)=>{
-  if(e.target && e.target.id === 'modal-confirm'){
-    if(!activeBooking) return;
+function showPage(page){
+  $$('.nav-links a').forEach(x=>x.classList.remove('active'));
+  $$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');
+  $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+window.addEventListener('popstate', ()=>{
+  const page = location.hash.replace('#','') || 'home';
+  showPage(page);
+});
+$('#mobile-toggle').addEventListener('click', ()=>{
+  const nav = document.querySelector('nav');
+  const expanded = nav.style.display === 'block';
+  nav.style.display = expanded ? '' : 'block';
+  $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
+});
 
-    const name = document.getElementById('bk-name')?.value.trim();
-    const email = document.getElementById('bk-email')?.value.trim();
-    const qty = document.getElementById('bk-qty')?.value || 1;
-    const chosenClass = document.getElementById('bk-class')?.value;
-
-    if(!name || !email){
-      alert('Vul je naam en e-mail in.');
-      return;
-    }
-
-    let payload = {
-      type: activeBooking.type,
-      name,
-      email,
-      qty
-    };
-
-    if(activeBooking.type === 'lesson'){
-      payload.lessonId = activeBooking.id;
-    }
-    if(activeBooking.type === 'proefles'){
-      payload.lessonId = chosenClass;
-    }
-
-    fetch("https://formspree.io/f/YOUR_FORM_ID", {
-      method:"POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify(payload)
-    })
-    .then(r=>{
+$('#contact-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const form = e.target;
+  fetch(form.action, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
+    .then(async r=>{
       if(r.ok){
-        alert("Boeking verstuurd!");
-        closeModal();
+        alert('Bedankt! We nemen contact op.');
+        form.reset();
       } else {
-        alert("Er ging iets mis bij versturen.");
+        try{
+          const j = await r.json();
+          alert(j?.error || 'Er ging iets mis');
+        }catch{
+          alert('Er ging iets mis');
+        }
       }
     })
-    .catch(()=>alert("Netwerkfout."));
-  }
+    .catch(()=>alert('Er ging iets mis bij versturen'));
 });
 
-// --- rest init en live info zoals eerder ---
 function ensureOpenBar(){
   if($('#open-bar')) return;
   const bar = document.createElement('div');
@@ -700,18 +711,22 @@ function initLocalSave(){
     try{
       const obj = JSON.parse(stored);
       for(const k in obj){
-        if(form[k]) form[k].value = obj[k];
+        if(form.elements[k]) form.elements[k].value = obj[k];
       }
-    }catch(e){}
+    } catch(e){}
   }
 }
 
-document.addEventListener('DOMContentLoaded', ()=>{
-  loadData();
+function init(){
+  renderPlans();
+  showPage(location.hash.replace('#','') || 'home');
+  ensureOpenBar();
   updateLiveInfo();
   startLiveUpdater();
+  loadData();
   initLocalSave();
-});
+}
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
