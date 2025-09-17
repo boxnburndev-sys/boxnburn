@@ -308,19 +308,13 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     </div>
   </div>
 
-  <script>
-/* ----------------------------
-   CONFIG
-   ---------------------------- */
+<script>
 const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
 const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
 const RANGE_INSTRUCTORS = "Instructors!A2:D";
 const RANGE_DETAILS = "InstructorDetails!A2:B";
-const RANGE_SCHEDULE = "Shedule!A2:E"; // match exact tab name in your sheet
+const RANGE_SCHEDULE = "Shedule!A2:E";
 
-/* ----------------------------
-   DATA + UI UTILITIES
-   ---------------------------- */
 let SCHEDULE = [];
 let INSTRUCTORS = [];
 let INSTRUCTOR_DETAILS = {};
@@ -340,13 +334,9 @@ function formatTime(d=new Date()){
   return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':');
 }
 
-/* Dutch day mapping (sheet strings -> getDay numbers)
-   Note: getDay: Sunday=0, Monday=1 ... Saturday=6
-*/
 const DUTCH_TO_DAY = {'Maandag':1,'Dinsdag':2,'Woensdag':3,'Donderdag':4,'Vrijdag':5,'Zaterdag':6,'Zondag':0};
 
 function parseTimes(timeString){
-  // expects "HH:MM - HH:MM"
   if(!timeString) return {start:{h:0,m:0},end:{h:0,m:0}};
   const [start,end]=timeString.split('-').map(t=>t.trim());
   const [sh,sm=0]=start.split(':').map(Number);
@@ -397,19 +387,15 @@ function timeUntilString(futureDate){
   return `${minutes}m`;
 }
 
-/* ----------------------------
-   RENDERING
-   ---------------------------- */
 function renderSchedule(){
   const tbody = $('#schedule-body');
+  if(!tbody) return;
   tbody.innerHTML = '';
   const grouped = {};
   SCHEDULE.forEach(item=>{
     if(!grouped[item.day]) grouped[item.day]=[];
     grouped[item.day].push(item);
   });
-
-  // keep order of days: Maandag..Zondag
   Object.keys(DUTCH_TO_DAY).forEach(day=>{
     if(!grouped[day]) return;
     const dayCard = document.createElement('div');
@@ -418,8 +404,6 @@ function renderSchedule(){
     grouped[day].forEach(item=>{
       const div = document.createElement('div');
       div.className = 'lesson-row';
-      // trainer link if instructor exists
-      const trainerDisplay = INSTRUCTORS.find(i=>i.name===item.trainer) ? `<a href="#${(item.trainer||'').toLowerCase().replace(/\s+/g,'-')}" style="color:var(--accent);font-weight:700">${item.trainer}</a>` : `<div class="small muted">${item.trainer||''}</div>`;
       div.innerHTML = `<div class="lesson-time">${item.time}</div>
         <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
         <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
@@ -433,12 +417,14 @@ function renderSchedule(){
 
 function renderInstructors(){
   const wrap = $('#instructors-list');
+  if(!wrap) return;
   wrap.innerHTML = '';
   INSTRUCTORS.forEach(i=>{
     const div = document.createElement('div');
     div.className = 'instructor card';
     const id = (i.name||'').toLowerCase().replace(/\s+/g,'-');
     div.id = id;
+    div.dataset.instructor = i.name;
     div.innerHTML = `<img loading="lazy" src="${i.img || 'https://via.placeholder.com/76'}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;
     wrap.appendChild(div);
   });
@@ -446,6 +432,7 @@ function renderInstructors(){
 
 function renderPlans(){
   const wrap = $('#plans-list');
+  if(!wrap) return;
   wrap.innerHTML = '';
   PLANS.forEach(p=>{
     const div = document.createElement('div');
@@ -455,9 +442,6 @@ function renderPlans(){
   });
 }
 
-/* ----------------------------
-   MODAL / BOOKING
-   ---------------------------- */
 const modal = $('#modal');
 const modalContent = $('#modal-content');
 let activeBooking = null;
@@ -484,16 +468,20 @@ function openBook(opts={}){
 }
 
 function showModal(){
+  if(!modal) return;
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
 function closeModal(){
+  if(!modal) return;
   modal.style.display = 'none';
   document.body.style.overflow = 'auto';
   activeBooking = null;
 }
-$('#modal-cancel').addEventListener('click', closeModal);
-$('#modal-confirm').addEventListener('click', async ()=>{
+const modalCancel = $('#modal-cancel');
+if(modalCancel) modalCancel.addEventListener('click', closeModal);
+const modalConfirm = $('#modal-confirm');
+if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   if(!activeBooking){ closeModal(); return; }
   const name = $('#bk-name')?.value || 'Onbekend';
   const email = $('#bk-email')?.value || '';
@@ -502,8 +490,6 @@ $('#modal-confirm').addEventListener('click', async ()=>{
   if(item && item.spots < qty){ alert('Niet genoeg plekken beschikbaar'); return; }
   if(item) item.spots -= qty;
   renderSchedule();
-
-  // send booking to Formspree (use your booking endpoint)
   try{
     const payload = {
       name,
@@ -513,7 +499,6 @@ $('#modal-confirm').addEventListener('click', async ()=>{
       time: item?.time || '',
       spots: qty
     };
-    // send to booking form endpoint (kept as previously used form)
     const res = await fetch('https://formspree.io/f/xyzdazgz', {
       method: 'POST',
       headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
@@ -531,7 +516,6 @@ $('#modal-confirm').addEventListener('click', async ()=>{
   closeModal();
 });
 
-/* Click handlers for dynamic buttons */
 document.addEventListener('click', (e)=>{
   const bookBtn = e.target.closest('[data-book]');
   if(bookBtn){
@@ -542,11 +526,23 @@ document.addEventListener('click', (e)=>{
   if(chooseBook){
     openBook({type:'proefles'});
   }
+  const card = e.target.closest('.instructor');
+  if(card && card.dataset.instructor){
+    const instr = INSTRUCTORS.find(i => i.name === card.dataset.instructor);
+    if(instr){
+      const fullBio = INSTRUCTOR_DETAILS[instr.name] || instr.bio || 'Geen extra info beschikbaar.';
+      modalContent.innerHTML = `
+        <h2>${instr.name}</h2>
+        <p class="muted">${instr.role}</p>
+        <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
+        <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
+      `;
+      activeBooking = null;
+      showModal();
+    }
+  }
 });
 
-/* ----------------------------
-   NAV + UI helpers
-   ---------------------------- */
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
     const target = a.getAttribute('data-page');
@@ -559,10 +555,8 @@ $$('.nav-links a').forEach(a=>{
 });
 
 function showPage(page){
-  // mark nav active
   $$('.nav-links a').forEach(x=>x.classList.remove('active'));
   $$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');
-  // show/hide sections
   $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -577,9 +571,6 @@ $('#mobile-toggle').addEventListener('click', ()=>{
   $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
 });
 
-/* ----------------------------
-   Contact form submit
-   ---------------------------- */
 $('#contact-form').addEventListener('submit', e=>{
   e.preventDefault();
   const form = e.target;
@@ -600,9 +591,6 @@ $('#contact-form').addEventListener('submit', e=>{
     .catch(()=>alert('Er ging iets mis bij versturen'));
 });
 
-/* ----------------------------
-   OPEN BAR / LIVE INFO
-   ---------------------------- */
 function ensureOpenBar(){
   if($('#open-bar')) return;
   const bar = document.createElement('div');
@@ -623,7 +611,6 @@ function updateLiveInfo(){
   } else {
     nextEl.innerHTML = `Geen komende lessen gevonden`;
   }
-
   const todayDateEl = $('#today-date');
   const todayScheduleEl = $('#today-schedule');
   const now = new Date();
@@ -642,7 +629,6 @@ function updateLiveInfo(){
     const list = todaysItems.map(it=>`<div style="margin-bottom:8px"><strong>${it.time}</strong> — ${it.class}<div class="small muted">${it.trainer} · <span class="tag">${it.spots} plekken</span></div></div>`).join('');
     todayScheduleEl.innerHTML = list;
   }
-
   const openBarText = $('#open-bar-text');
   if(todaysItems.length > 0){
     const anyOpen = todaysItems.some(it => it.spots > 0);
@@ -657,7 +643,6 @@ function updateLiveInfo(){
     openBarText.innerHTML = `Nu gesloten — er staan geen resterende lessen in de agenda.`;
     openBarText.style.color = '';
   }
-
   const newsEl = $('#news');
   if(next && next.item && next.date){
     newsEl.textContent = `Volgende: ${next.item.class} op ${formatDate(next.date)} om ${formatTime(next.date)} (${timeUntilString(next.date)}).`;
@@ -666,21 +651,16 @@ function updateLiveInfo(){
   }
 }
 
-/* live updater */
 let liveInterval = null;
 function startLiveUpdater(){
   if(liveInterval) clearInterval(liveInterval);
   liveInterval = setInterval(updateLiveInfo, 30000);
 }
 
-/* ----------------------------
-   GOOGLE SHEETS FETCHING
-   ---------------------------- */
 async function fetchSheetData(range){
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
   const res = await fetch(url);
   if(!res.ok){
-    // helpful console output for debugging in browser
     const text = await res.text().catch(()=>res.statusText);
     throw new Error(`Google Sheets API fout ${res.status}: ${text}`);
   }
@@ -690,7 +670,6 @@ async function fetchSheetData(range){
 
 async function loadData(){
   try{
-    // 1. Instructors basis
     const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
     INSTRUCTORS = instructors.map(r => ({
       name: r[0]||'',
@@ -698,15 +677,11 @@ async function loadData(){
       role: r[2]||'',
       img: r[3]||''
     }));
-
-    // 2. Details
     const details = await fetchSheetData(RANGE_DETAILS);
     INSTRUCTOR_DETAILS = {};
     details.forEach(r=>{
       if(r[0]) INSTRUCTOR_DETAILS[r[0]] = r[1]||'';
     });
-
-    // 3. Schedule
     const schedule = await fetchSheetData(RANGE_SCHEDULE);
     let idCounter = 1;
     SCHEDULE = schedule.map(r => ({
@@ -717,25 +692,7 @@ async function loadData(){
       trainer: r[3]||'',
       spots: Number(r[4]||0)
     }));
-
     renderInstructors();
-     document.addEventListener('click', (e)=>{
-  const card = e.target.closest('.instructor');
-  if(card && card.dataset.instructor){
-    const instr = INSTRUCTORS.find(i => i.name === card.dataset.instructor);
-    if(instr){
-      const fullBio = INSTRUCTOR_DETAILS[instr.name] || instr.bio || 'Geen extra info beschikbaar.';
-      modalContent.innerHTML = `
-        <h2>${instr.name}</h2>
-        <p class="muted">${instr.role}</p>
-        <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
-        <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
-      `;
-      activeBooking = null; // geen booking, alleen info
-      showModal();
-    }
-  }
-});
     renderPlans();
     renderSchedule();
   } catch(e){
@@ -745,10 +702,6 @@ async function loadData(){
   }
 }
 
-
-/* ----------------------------
-   LOCAL STORAGE: contact save
-   ---------------------------- */
 function initLocalSave(){
   const saveLocal = $('#save-local');
   const form = document.getElementById('contact-form');
@@ -761,7 +714,6 @@ function initLocalSave(){
       alert('Contactgegevens lokaal opgeslagen!');
     });
   }
-  // populate if stored
   const stored = localStorage.getItem('contactForm');
   if(stored){
     try{
@@ -773,9 +725,6 @@ function initLocalSave(){
   }
 }
 
-/* ----------------------------
-   INIT
-   ---------------------------- */
 function init(){
   renderPlans();
   showPage(location.hash.replace('#','') || 'home');
@@ -786,7 +735,6 @@ function init(){
   initLocalSave();
 }
 document.addEventListener('DOMContentLoaded', init);
-
-  </script>
+</script>
 </body>
 </html>
