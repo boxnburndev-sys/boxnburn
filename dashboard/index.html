@@ -333,7 +333,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   }
   async function loadUserInfo(){
     const user = localStorage.getItem("loggedInUser");
-    if(!user){ window.location.href = "login.html"; return; }
+    if(!user){ window.location.href = "/login"; return; }
     const rows = await fetchSheetData(USER_SHEET_ID, "Users!A2:E");
     const found = rows.find(r => r[0] === user);
     if(!found){
