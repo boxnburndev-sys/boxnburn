@@ -705,6 +705,52 @@ window.addEventListener('DOMContentLoaded', ()=>{
   showPage(initialPage);
   initLocalSave();
 });
+
+   document.addEventListener('click', (e)=>{
+  if(e.target && e.target.id === 'modal-confirm'){
+    if(!activeBooking) return;
+
+    const name = document.getElementById('bk-name')?.value.trim();
+    const email = document.getElementById('bk-email')?.value.trim();
+    const qty = document.getElementById('bk-qty')?.value || 1;
+    const chosenClass = document.getElementById('bk-class')?.value;
+
+    if(!name || !email){
+      alert('Vul je naam en e-mail in.');
+      return;
+    }
+
+    let payload = {
+      type: activeBooking.type,
+      name,
+      email,
+      qty
+    };
+
+    if(activeBooking.type === 'lesson'){
+      payload.lessonId = activeBooking.id;
+    }
+    if(activeBooking.type === 'proefles'){
+      payload.lessonId = chosenClass;
+    }
+
+    fetch("https://formspree.io/f/YOUR_FORM_ID", {
+      method:"POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(payload)
+    })
+    .then(r=>{
+      if(r.ok){
+        alert("Boeking verstuurd!");
+        closeModal();
+      } else {
+        alert("Er ging iets mis bij versturen.");
+      }
+    })
+    .catch(()=>alert("Netwerkfout."));
+  }
+});
+
 </script>
 </body>
 </html>
