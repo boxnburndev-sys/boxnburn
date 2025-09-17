@@ -1,13 +1,3 @@
-<!--
-   ____     U  ___ u __  __        _   _           ____     _   _    ____     _   _     
-U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \ |"|    
- \|  _ \/    | | | | /\  /\      <|  \| |>       \|  _ \/ \| |\| | \| |_) |/<|  \| |>   
-  | |_) |.-,_| |_| |U /  \ u     U| |\  |u        | |_) |  | |_| |  |  _ <  U| |\  |u   
-  |____/  \_)-\___/  /_/\_\       |_| \_|         |____/  <<\___/   |_| \_\  |_| \_|    
- _|| \\_       \\  ,-,>> \\_      ||   \\,-.     _|| \\_ (__) )(    //   \\_ ||   \\,-. 
-(__) (__)     (__)  \_)  (__)     (_")  (_/     (__) (__)    (__)  (__)  (__)(_")  (_/  
--->
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -16,224 +6,388 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   <title>Dashboard Box N Burn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <style>
-    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#233445;color:white;word-wrap:break-word;overflow-x:hidden}
-    .navbar{display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#0f2133;box-shadow:0 4px 10px rgba(0,0,0,0.3);position:sticky;top:0;z-index:50;flex-wrap:wrap;gap:10px}
-    .brand-logo{width:60px;height:60px;border-radius:50%;object-fit:cover;flex-shrink:0}
-    .brand{display:flex;align-items:center;gap:10px;font-size:1.2rem;font-weight:bold;flex:1 1 auto;min-width:140px}
-    .menu{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;flex:2 1 auto}
-    .menu button{background:#0f2133;border:2px solid #384858;padding:8px 16px;border-radius:20px;cursor:pointer;font-weight:600;color:white;transition:all 0.18s ease;flex-shrink:0}
-    .menu button:hover{transform:scale(1.08);background:#384858}
-    .menu button.active{background:#233445;transform:scale(1.05)}
-    .user-info{display:flex;align-items:center;gap:12px;flex-shrink:0}
-    .user-info img{width:40px;height:40px;border-radius:50%;border:2px solid white;object-fit:cover;flex-shrink:0}
-    .user-info .details{text-align:right;white-space:nowrap}
-    .user-info .details .name{font-weight:600}
-    .user-info .details .role{font-size:12px;opacity:0.85}
-    .content{padding:24px}
+    :root{--bg:#233445;--panel:#384858;--nav:#0f2133;--accent:#0f93ff;--muted:rgba(255,255,255,0.85);--danger:#ff4d4d}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:white;word-wrap:break-word;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    .navbar{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--nav);box-shadow:0 4px 14px rgba(0,0,0,0.35);position:sticky;top:0;z-index:60;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px;flex:1 1 220px;min-width:160px}
+    .brand-logo{width:56px;height:56px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,255,255,0.06)}
+    .brand span{font-weight:700;font-size:1.05rem;letter-spacing:0.2px}
+    .menu{display:flex;gap:10px;align-items:center;flex:2 1 420px;justify-content:flex-start;flex-wrap:wrap}
+    .menu-group{display:flex;gap:8px;align-items:center}
+    .menu button{background:transparent;border:2px solid rgba(255,255,255,0.06);padding:8px 14px;border-radius:12px;cursor:pointer;font-weight:600;color:white;transition:all 0.16s ease;flex-shrink:0}
+    .menu button:hover{transform:translateY(-2px);background:rgba(255,255,255,0.02)}
+    .menu button:focus{outline:3px solid rgba(15,147,255,0.12)}
+    .menu button.active{background:var(--panel);border-color:var(--accent);color:var(--accent)}
+    .menu .logout-btn{background:var(--danger);border-color:#e63737;margin-left:auto;padding:8px 16px;border-radius:12px}
+    .menu .logout-btn:hover{filter:brightness(0.95)}
+    .user-info{display:flex;align-items:center;gap:12px;flex:0 0 auto}
+    .user-info .details{text-align:right;white-space:nowrap;min-width:120px}
+    .user-info .name{font-weight:600}
+    .user-info .role{font-size:12px;opacity:0.85}
+    .user-info img{width:42px;height:42px;border-radius:50%;border:2px solid white;object-fit:cover;cursor:pointer}
+    .content{padding:22px;max-width:1200px;margin:0 auto}
     .hidden{display:none}
-    .card{background:#384858;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,0.2);animation:fadeIn 0.4s ease;overflow-x:auto}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    table{width:100%;border-collapse:collapse;margin-top:12px;background:#233445;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
-    table th,table td{padding:12px;border-bottom:1px solid #384858;text-align:left;word-break:break-word}
-    table th{background:#0f2133;font-weight:600}
-    table tr:hover{background:#384858}
-    .personnel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}
-    .person-card{background:#233445;border-radius:12px;padding:16px;box-shadow:0 4px 12px rgba(0,0,0,0.2);text-align:center;word-wrap:break-word}
-    .person-card img{width:100px;height:100px;border-radius:50%;border:3px solid #0f2133;object-fit:cover;margin-bottom:10px}
-    .person-card h3{margin:0;font-size:18px;color:#0f93ff;word-break:break-word}
-    .person-card p{margin:6px 0;font-size:14px;word-break:break-word}
-    .refresh-btn{margin-top:12px;padding:8px 16px;border-radius:10px;border:none;cursor:pointer;background:#0f93ff;color:white;font-weight:600;transition:all 0.2s ease}
-    .refresh-btn:hover{background:#0d7cd6;transform:scale(1.05)}
+    .card{background:var(--panel);border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 6px 18px rgba(0,0,0,0.28);animation:fadeIn .36s ease;overflow:hidden}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    h2{margin:0 0 8px 0;font-size:1.2rem;color:var(--accent)}
+    p{margin:0 0 12px 0;color:var(--muted)}
+    .personnel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
+    .person-card{background:transparent;border-radius:12px;padding:14px;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.02);text-align:center;word-wrap:break-word;display:flex;flex-direction:column;align-items:center;gap:8px}
+    .person-card img{width:94px;height:94px;border-radius:50%;border:3px solid var(--nav);object-fit:cover}
+    .person-card h3{margin:0;font-size:16px;color:var(--accent)}
+    .person-card p{margin:0;font-size:13px;color:var(--muted)}
+    .refresh-btn{margin-top:12px;padding:8px 16px;border-radius:10px;border:none;cursor:pointer;background:var(--accent);color:white;font-weight:700;transition:all .14s ease}
+    .refresh-btn:hover{transform:translateY(-2px)}
+    table{width:100%;border-collapse:collapse;margin-top:12px;background:var(--bg);border-radius:10px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+    table th,table td{padding:12px;border-bottom:1px solid rgba(255,255,255,0.04);text-align:left;word-break:break-word;font-size:14px}
+    table th{background:var(--nav);font-weight:700}
+    table tr:hover{background:rgba(255,255,255,0.02)}
+    .grid-two{display:grid;grid-template-columns:1fr 320px;gap:16px;align-items:start}
+    .profile-side{position:sticky;top:84px}
+    .profile-card{display:flex;gap:12px;align-items:center}
+    .profile-card img{width:88px;height:88px;border-radius:50%;border:3px solid var(--nav);object-fit:cover}
+    .profile-card .meta{display:flex;flex-direction:column;gap:6px}
+    .profile-card .meta .name{font-weight:700}
+    .profile-card .meta .role{font-size:13px;color:var(--muted)}
+    .search{display:flex;gap:8px;margin-top:8px}
+    .search input{flex:1;padding:8px 12px;border-radius:10px;border:2px solid rgba(255,255,255,0.04);background:transparent;color:white}
+    .search button{padding:8px 12px;border-radius:10px;border:2px solid rgba(255,255,255,0.06);background:transparent;color:white;cursor:pointer}
+    .small{font-size:13px;color:var(--muted)}
     @media(max-width:1024px){
-      .menu button{padding:6px 12px;font-size:14px}
-      .user-info .details{display:none}
+      .menu{justify-content:flex-end}
+      .brand span{font-size:0.98rem}
     }
     @media(max-width:768px){
-      .menu{justify-content:center;width:100%}
-      .menu button{flex:1 1 auto;min-width:100px}
-      .user-info img{width:32px;height:32px}
+      .grid-two{grid-template-columns:1fr}
+      .profile-side{position:static}
+      .menu .logout-btn{margin-left:0}
+      .user-info .details{display:none}
       .content{padding:16px}
-      table{display:block;overflow-x:auto;white-space:nowrap}
     }
     @media(max-width:480px){
-      .brand-logo{width:40px;height:40px}
-      .brand{font-size:1rem}
-      .menu{flex-direction:column;align-items:stretch}
-      .menu button{width:100%;border-radius:10px}
-      .person-card img{width:80px;height:80px}
-      .person-card h3{font-size:16px}
-      .person-card p{font-size:12px}
+      .brand-logo{width:44px;height:44px}
+      .brand span{font-size:0.95rem}
+      .menu button{padding:8px 12px}
     }
+    .empty{padding:18px;border-radius:10px;background:rgba(255,255,255,0.02);color:var(--muted)}
+    .busy{opacity:0.7;pointer-events:none}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="brand">
-      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn Logo" class="brand-logo">
-      Box N Burn Dashboard
+  <nav class="navbar" role="navigation" aria-label="Hoofdmenu">
+    <div class="brand" aria-hidden="false">
+      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn logo" class="brand-logo">
+      <span>Box N Burn Dashboard</span>
     </div>
-    <div class="menu" id="menuButtons">
-      <button onclick="goMain()">Home</button>
-      <button onclick="showPage('home',this)" class="active">Team</button>
-      <button onclick="showPage('leden',this)">Leden</button>
-      <button onclick="showPage('reserveringen',this)">Reserveringen</button>
-      <button onclick="logout()">Logout</button>
-      <button onclick="showPage('profiel',this)">Profiel</button>
+    <div class="menu" id="menuButtons" role="menubar" aria-label="Navigatieknoppen">
+      <div class="menu-group" role="group" aria-label="Hoofd">
+        <button role="menuitem" tabindex="0" id="btnHome">Home</button>
+        <button role="menuitem" tabindex="0" id="btnTeam" class="active">Team</button>
+        <button role="menuitem" tabindex="0" id="btnLeden">Leden</button>
+        <button role="menuitem" tabindex="0" id="btnReserveringen">Reserveringen</button>
+        <button role="menuitem" tabindex="0" id="btnSupport">Support</button>
+      </div>
+      <button class="logout-btn" id="btnLogout" aria-label="Uitloggen">Logout</button>
     </div>
-    <div class="user-info">
-      <div class="details">
+    <div class="user-info" aria-hidden="false">
+      <div class="details" aria-hidden="true">
         <div class="name" id="username"></div>
         <div class="role" id="role"></div>
       </div>
-      <img id="pfp" alt="User profile picture">
+      <img id="pfp" alt="Gebruikersfoto" tabindex="0" role="button" aria-label="Open profiel">
     </div>
   </nav>
-  <div class="content">
-    <div id="home" class="page card">
-      <h2>Welkom bij Box N Burn!</h2>
-      <p>We zijn blij dat je er bent. Hier kun je reserveringen maken, je status bekijken en meer.</p>
-      <h2>Ons Team</h2>
-      <div id="personnelGrid" class="personnel-grid"></div>
-      <button class="refresh-btn" onclick="loadPersonnel()">Ververs Team</button>
-    </div>
-    <div id="leden" class="page hidden card">
-      <h2>Leden</h2>
+  <main class="content" id="mainContent">
+    <section id="home" class="page card" aria-labelledby="homeHeading">
+      <h2 id="homeHeading">Welkom bij Box N Burn!</h2>
+      <p>Hier kun je reserveringen maken, je status bekijken en meer.</p>
+      <div class="grid-two">
+        <div>
+          <h2>Ons Team</h2>
+          <div id="personnelGrid" class="personnel-grid" aria-live="polite"></div>
+          <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
+            <button class="refresh-btn" id="refreshTeam">Ververs Team</button>
+            <span class="small" id="teamStatus"></span>
+          </div>
+        </div>
+        <aside class="profile-side">
+          <div class="card profile-card" id="miniProfile">
+            <img id="miniPic" alt="Mini profiel foto">
+            <div class="meta">
+              <div class="name" id="miniName"></div>
+              <div class="role small" id="miniRole"></div>
+              <div class="small" id="miniBio"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+    <section id="leden" class="page hidden card" aria-labelledby="ledenHeading">
+      <h2 id="ledenHeading">Leden</h2>
+      <div class="search" role="search">
+        <input id="searchLeden" placeholder="Zoek op naam of contact" aria-label="Zoek leden">
+        <button id="clearSearch">Zoek</button>
+      </div>
       <h3>Boksen</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenBoksen"></tbody></table>
+      <table role="table" aria-label="Leden Boksen"><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenBoksen"></tbody></table>
       <h3>Yoga</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenYoga"></tbody></table>
+      <table role="table" aria-label="Leden Yoga"><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenYoga"></tbody></table>
       <h3>Spinning</h3>
-      <table><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenSpinning"></tbody></table>
-      <button class="refresh-btn" onclick="loadLedenFromSheet()">Ververs Leden</button>
-    </div>
-    <div id="reserveringen" class="page hidden card">
-      <h2>Reserveringen</h2>
-      <table>
+      <table role="table" aria-label="Leden Spinning"><thead><tr><th>ID</th><th>Naam</th><th>Contact</th></tr></thead><tbody id="ledenSpinning"></tbody></table>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
+        <button class="refresh-btn" id="refreshLeden">Ververs Leden</button>
+        <span class="small" id="ledenStatus"></span>
+      </div>
+    </section>
+    <section id="reserveringen" class="page hidden card" aria-labelledby="reserveringenHeading">
+      <h2 id="reserveringenHeading">Reserveringen</h2>
+      <table role="table" aria-label="Reserveringen">
         <thead><tr><th>ID</th><th>Naam</th><th>Les</th><th>Datum</th><th>Tijd</th><th>Contact</th></tr></thead>
         <tbody id="reservationTable"></tbody>
       </table>
-      <button class="refresh-btn" onclick="loadReserveringenFromSheet()">Ververs Reserveringen</button>
-    </div>
-    <div id="profiel" class="page hidden card">
-      <h2>Mijn Profiel</h2>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
+        <button class="refresh-btn" id="refreshRes">Ververs Reserveringen</button>
+        <span class="small" id="resStatus"></span>
+      </div>
+    </section>
+    <section id="profiel" class="page hidden card" aria-labelledby="profielHeading">
+      <h2 id="profielHeading">Mijn Profiel</h2>
       <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
-        <img id="profilePic" style="width:120px;height:120px;border-radius:50%;border:3px solid #0f2133;object-fit:cover">
+        <img id="profilePic" style="width:120px;height:120px;border-radius:50%;border:3px solid var(--nav);object-fit:cover" alt="Profiel foto">
         <div>
           <p><b>Naam:</b> <span id="profileName"></span></p>
           <p><b>Rol:</b> <span id="profileRole"></span></p>
           <p><b>Bio:</b> <span id="profileBio"></span></p>
+          <div style="margin-top:10px;display:flex;gap:10px">
+            <button class="refresh-btn" id="refreshProfile">Ververs Profiel</button>
+            <button id="closeProfile" style="background:transparent;border:2px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:white;cursor:pointer">Sluit</button>
+          </div>
         </div>
       </div>
-      <button class="refresh-btn" onclick="refreshProfile()">Ververs Profiel</button>
-    </div>
-  </div>
+    </section>
+  </main>
+  <div id="toast" class="sr-only" role="status" aria-live="polite"></div>
 <script>
-  // Two different sheets
-  const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48"; // leden + reserveringen
-  const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; // users, login, profile
-  const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4"; // your API key
-
-  // Show specific page
-  window.showPage=function(pageId,btn){
-    document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
-    document.getElementById(pageId).classList.remove("hidden");
-    document.querySelectorAll(".navbar .menu button").forEach(b=>b.classList.remove("active"));
-    if(btn)btn.classList.add("active")
+  const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
+  const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo";
+  const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
+  const selectors = {
+    btnHome: document.getElementById("btnHome"),
+    btnTeam: document.getElementById("btnTeam"),
+    btnLeden: document.getElementById("btnLeden"),
+    btnReserveringen: document.getElementById("btnReserveringen"),
+    btnSupport: document.getElementById("btnSupport"),
+    btnLogout: document.getElementById("btnLogout"),
+    pfp: document.getElementById("pfp"),
+    profilePic: document.getElementById("profilePic"),
+    profileName: document.getElementById("profileName"),
+    profileRole: document.getElementById("profileRole"),
+    profileBio: document.getElementById("profileBio"),
+    miniPic: document.getElementById("miniPic"),
+    miniName: document.getElementById("miniName"),
+    miniRole: document.getElementById("miniRole"),
+    miniBio: document.getElementById("miniBio"),
+    personnelGrid: document.getElementById("personnelGrid"),
+    refreshTeam: document.getElementById("refreshTeam"),
+    refreshLeden: document.getElementById("refreshLeden"),
+    refreshRes: document.getElementById("refreshRes"),
+    refreshProfileBtn: document.getElementById("refreshProfile"),
+    closeProfileBtn: document.getElementById("closeProfile"),
+    ledenBoksen: document.getElementById("ledenBoksen"),
+    ledenYoga: document.getElementById("ledenYoga"),
+    ledenSpinning: document.getElementById("ledenSpinning"),
+    reservationTable: document.getElementById("reservationTable"),
+    teamStatus: document.getElementById("teamStatus"),
+    ledenStatus: document.getElementById("ledenStatus"),
+    resStatus: document.getElementById("resStatus"),
+    toast: document.getElementById("toast"),
+    searchLeden: document.getElementById("searchLeden"),
+    clearSearch: document.getElementById("clearSearch")
   };
-
-  function goMain(){window.location.href="index.html"}
-
-  function logout(){
-    localStorage.removeItem("loggedInUser");
-    window.location.href="login.html"
+  function setActiveButton(btn){
+    document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
+    if(btn) btn.classList.add("active");
   }
-
-  // Fetch data helper
-  async function fetchSheetData(sheetId,range){
+  function showPage(pageId, btn){
+    document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+    const el = document.getElementById(pageId);
+    if(el) el.classList.remove("hidden");
+    setActiveButton(btn);
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+  selectors.btnHome.addEventListener("click", ()=> showPage("home", selectors.btnHome));
+  selectors.btnTeam.addEventListener("click", ()=> showPage("home", selectors.btnTeam));
+  selectors.btnLeden.addEventListener("click", ()=> showPage("leden", selectors.btnLeden));
+  selectors.btnReserveringen.addEventListener("click", ()=> showPage("reserveringen", selectors.btnReserveringen));
+  selectors.btnSupport.addEventListener("click", ()=> { window.location.href = "support.html"; });
+  selectors.btnLogout.addEventListener("click", ()=> { localStorage.removeItem("loggedInUser"); window.location.href = "login.html"; });
+  selectors.pfp.addEventListener("click", openProfileFromPfp);
+  selectors.pfp.addEventListener("keydown", (e)=> { if(e.key === "Enter" || e.key === " ") openProfileFromPfp(); });
+  selectors.closeProfileBtn.addEventListener("click", ()=> showPage("home", selectors.btnTeam));
+  selectors.refreshTeam.addEventListener("click", loadPersonnel);
+  selectors.refreshLeden.addEventListener("click", loadLedenFromSheet);
+  selectors.refreshRes.addEventListener("click", loadReserveringenFromSheet);
+  selectors.refreshProfileBtn.addEventListener("click", loadUserInfo);
+  selectors.clearSearch.addEventListener("click", ()=> { selectors.searchLeden.value=""; filterLeden(); });
+  selectors.searchLeden.addEventListener("input", debounce(filterLeden,300));
+  function toast(message, srOnly=true){
+    if(srOnly){
+      selectors.toast.textContent = message;
+      selectors.toast.classList.remove("sr-only");
+      setTimeout(()=> { selectors.toast.classList.add("sr-only"); selectors.toast.textContent=""; }, 2500);
+    } else {
+      alert(message);
+    }
+  }
+  async function fetchSheetData(sheetId, range){
     try{
-      const url=`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${API_KEY}`;
-      const res=await fetch(url);
-      const data=await res.json();
-      return data.values||[]
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      return data.values || [];
     }catch(e){
-      console.error("Fout bij ophalen van gegevens:",e);
-      return[]
+      return [];
     }
   }
-
-  // Load leden (main sheet)
   async function loadLedenFromSheet(){
-    const rows=await fetchSheetData(SHEET_ID,"Leden!A2:D");
-    const boksen=document.getElementById("ledenBoksen");
-    const yoga=document.getElementById("ledenYoga");
-    const spinning=document.getElementById("ledenSpinning");
-    boksen.innerHTML="";yoga.innerHTML="";spinning.innerHTML="";
-    rows.forEach(r=>{
-      const[id,naam,les,contact]=r;
-      const row=`<tr><td>${id}</td><td>${naam}</td><td>${contact}</td></tr>`;
-      if(les==="Boksen")boksen.innerHTML+=row;
-      if(les==="Yoga")yoga.innerHTML+=row;
-      if(les==="Spinning")spinning.innerHTML+=row
-    })
-  }
-
-  // Load reserveringen (main sheet)
-  async function loadReserveringenFromSheet(){
-    const rows=await fetchSheetData(SHEET_ID,"Reserveringen!A2:F");
-    const table=document.getElementById("reservationTable");
-    table.innerHTML="";
-    rows.forEach(r=>{
-      const[id,naam,les,datum,tijd,contact]=r;
-      table.innerHTML+=`<tr><td>${id}</td><td>${naam}</td><td>${les}</td><td>${datum}</td><td>${tijd}</td><td>${contact}</td></tr>`
-    })
-  }
-
-  // Load personnel (user sheet)
-  async function loadPersonnel(){
-    const rows=await fetchSheetData(USER_SHEET_ID,"Users!A2:E");
-    const grid=document.getElementById("personnelGrid");
-    grid.innerHTML="";
-    rows.forEach(r=>{
-      const[username,,role,bio,pfp]=r;
-      const card=document.createElement("div");
-      card.className="person-card";
-      card.innerHTML=`<img src="${pfp}" alt="${username}"><h3>${username}</h3><p><b>Rol:</b> ${role}</p><p><b>Bio:</b> ${bio}</p>`;
-      grid.appendChild(card)
-    })
-  }
-
-  // Load logged-in user info (user sheet)
-  async function loadUserInfo(){
-    const user=localStorage.getItem("loggedInUser");
-    if(!user){window.location.href="login.html";return}
-    const rows=await fetchSheetData(USER_SHEET_ID,"Users!A2:E");
-    const found=rows.find(r=>r[0]===user);
-    if(found){
-      const[username,,role,bio,pfp]=found;
-      document.getElementById("username").textContent=username;
-      document.getElementById("role").textContent=role;
-      document.getElementById("pfp").src=pfp;
-      document.getElementById("profileName").textContent=username;
-      document.getElementById("profileRole").textContent=role;
-      document.getElementById("profileBio").textContent=bio;
-      document.getElementById("profilePic").src=pfp;
+    selectors.ledenStatus.textContent = "Laden...";
+    const rows = await fetchSheetData(SHEET_ID, "Leden!A2:D");
+    selectors.ledenBoksen.innerHTML = "";
+    selectors.ledenYoga.innerHTML = "";
+    selectors.ledenSpinning.innerHTML = "";
+    if(rows.length === 0){
+      selectors.ledenBoksen.innerHTML = `<tr><td colspan="3" class="empty">Geen leden gevonden</td></tr>`;
+      selectors.ledenYoga.innerHTML = `<tr><td colspan="3" class="empty">Geen leden gevonden</td></tr>`;
+      selectors.ledenSpinning.innerHTML = `<tr><td colspan="3" class="empty">Geen leden gevonden</td></tr>`;
+      selectors.ledenStatus.textContent = "";
+      return;
     }
+    rows.forEach(r=>{
+      const id = r[0] || "";
+      const naam = r[1] || "";
+      const les = r[2] || "";
+      const contact = r[3] || "";
+      const row = `<tr><td>${escapeHtml(id)}</td><td>${escapeHtml(naam)}</td><td>${escapeHtml(contact)}</td></tr>`;
+      if(les === "Boksen") selectors.ledenBoksen.insertAdjacentHTML("beforeend", row);
+      else if(les === "Yoga") selectors.ledenYoga.insertAdjacentHTML("beforeend", row);
+      else if(les === "Spinning") selectors.ledenSpinning.insertAdjacentHTML("beforeend", row);
+      else selectors.ledenBoksen.insertAdjacentHTML("beforeend", row);
+    });
+    selectors.ledenStatus.textContent = "";
+    filterLeden();
   }
-
-  async function refreshProfile(){await loadUserInfo()}
-
-  // Auto refresh
+  async function loadReserveringenFromSheet(){
+    selectors.resStatus.textContent = "Laden...";
+    const rows = await fetchSheetData(SHEET_ID, "Reserveringen!A2:F");
+    selectors.reservationTable.innerHTML = "";
+    if(rows.length === 0){
+      selectors.reservationTable.innerHTML = `<tr><td colspan="6" class="empty">Geen reserveringen</td></tr>`;
+      selectors.resStatus.textContent = "";
+      return;
+    }
+    rows.forEach(r=>{
+      const id = r[0] || "";
+      const naam = r[1] || "";
+      const les = r[2] || "";
+      const datum = r[3] || "";
+      const tijd = r[4] || "";
+      const contact = r[5] || "";
+      const row = `<tr><td>${escapeHtml(id)}</td><td>${escapeHtml(naam)}</td><td>${escapeHtml(les)}</td><td>${escapeHtml(datum)}</td><td>${escapeHtml(tijd)}</td><td>${escapeHtml(contact)}</td></tr>`;
+      selectors.reservationTable.insertAdjacentHTML("beforeend", row);
+    });
+    selectors.resStatus.textContent = "";
+  }
+  async function loadPersonnel(){
+    selectors.teamStatus.textContent = "Laden...";
+    const rows = await fetchSheetData(USER_SHEET_ID, "Users!A2:E");
+    selectors.personnelGrid.innerHTML = "";
+    if(rows.length === 0){
+      selectors.personnelGrid.innerHTML = `<div class="empty">Geen teamleden gevonden</div>`;
+      selectors.teamStatus.textContent = "";
+      return;
+    }
+    rows.forEach(r=>{
+      const username = r[0] || "Onbekend";
+      const role = r[2] || "";
+      const bio = r[3] || "";
+      const pfp = r[4] || "https://i.ibb.co/2yP0J5k/default-pfp.png";
+      const card = document.createElement("div");
+      card.className = "person-card";
+      card.innerHTML = `<img src="${escapeAttr(pfp)}" alt="${escapeAttr(username)}"><h3>${escapeHtml(username)}</h3><p><b>Rol:</b> ${escapeHtml(role)}</p><p>${escapeHtml(bio)}</p>`;
+      selectors.personnelGrid.appendChild(card);
+    });
+    selectors.teamStatus.textContent = "";
+  }
+  async function loadUserInfo(){
+    const user = localStorage.getItem("loggedInUser");
+    if(!user){ window.location.href = "login.html"; return; }
+    const rows = await fetchSheetData(USER_SHEET_ID, "Users!A2:E");
+    const found = rows.find(r => r[0] === user);
+    if(!found){
+      document.getElementById("username").textContent = user;
+      document.getElementById("role").textContent = "";
+      selectors.pfp.src = "https://i.ibb.co/2yP0J5k/default-pfp.png";
+      selectors.profileName.textContent = user;
+      selectors.profileRole.textContent = "";
+      selectors.profileBio.textContent = "";
+      selectors.miniName.textContent = user;
+      selectors.miniRole.textContent = "";
+      selectors.miniBio.textContent = "";
+      selectors.miniPic.src = "https://i.ibb.co/2yP0J5k/default-pfp.png";
+      return;
+    }
+    const username = found[0] || "";
+    const role = found[2] || "";
+    const bio = found[3] || "";
+    const pfp = found[4] || "https://i.ibb.co/2yP0J5k/default-pfp.png";
+    document.getElementById("username").textContent = username;
+    document.getElementById("role").textContent = role;
+    selectors.pfp.src = pfp;
+    selectors.profileName.textContent = username;
+    selectors.profileRole.textContent = role;
+    selectors.profileBio.textContent = bio;
+    selectors.profilePic.src = pfp;
+    selectors.miniName.textContent = username;
+    selectors.miniRole.textContent = role;
+    selectors.miniBio.textContent = bio;
+    selectors.miniPic.src = pfp;
+  }
+  function openProfileFromPfp(){
+    showPage("profiel");
+  }
+  function escapeHtml(s){ if(!s) return ""; return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+  function escapeAttr(s){ if(!s) return ""; return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function debounce(fn, ms){
+    let t;
+    return function(...a){ clearTimeout(t); t = setTimeout(()=> fn.apply(this,a), ms); };
+  }
+  function filterLeden(){
+    const q = selectors.searchLeden.value.trim().toLowerCase();
+    [selectors.ledenBoksen, selectors.ledenYoga, selectors.ledenSpinning].forEach(tbody=>{
+      Array.from(tbody.querySelectorAll("tr")).forEach(tr=>{
+        const text = tr.textContent.toLowerCase();
+        tr.style.display = q === "" ? "" : (text.includes(q) ? "" : "none");
+      });
+    });
+  }
   setInterval(()=>{
     loadLedenFromSheet();
     loadReserveringenFromSheet();
-    loadPersonnel()
-  },60000);
-
-  // Init
+    loadPersonnel();
+  }, 60000);
   loadLedenFromSheet();
   loadReserveringenFromSheet();
   loadPersonnel();
   loadUserInfo();
+  document.addEventListener("keydown", (e)=> {
+    if(e.key === "Escape") showPage("home", document.getElementById("btnTeam"));
+  });
+  window.addEventListener("error", (ev) => {
+    toast("Er is een fout opgetreden", true);
+  });
 </script>
 </body>
 </html>
