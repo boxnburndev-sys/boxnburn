@@ -518,15 +518,6 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
 });
 
 document.addEventListener('click', (e)=>{
-  const bookBtn = e.target.closest('[data-book]');
-  if(bookBtn){
-    const id = Number(bookBtn.getAttribute('data-book'));
-    openBook({id});
-  }
-  const chooseBook = e.target.closest('#cta-book, #open-book');
-  if(chooseBook){
-    openBook({type:'proefles'});
-  }
   const card = e.target.closest('.instructor');
   if(card && card.dataset.instructor){
     const instr = INSTRUCTORS.find(i => i.name === card.dataset.instructor);
@@ -538,6 +529,7 @@ document.addEventListener('click', (e)=>{
         <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
         <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
       `;
+      activeBooking = null;
       showModal();
     }
   }
