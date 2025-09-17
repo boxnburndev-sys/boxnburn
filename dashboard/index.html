@@ -228,8 +228,9 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     setActiveButton(btn);
     window.scrollTo({top:0,behavior:"smooth"});
   }
-  selectors.btnHome.addEventListener("click", ()=> showPage("home", selectors.btnHome));
-  selectors.btnTeam.addEventListener("click", ()=> showPage("home", selectors.btnTeam));
+  selectors.btnHome.addEventListener("click", () => {
+   window.location.href = "/";
+  });
   selectors.btnLeden.addEventListener("click", ()=> showPage("leden", selectors.btnLeden));
   selectors.btnReserveringen.addEventListener("click", ()=> showPage("reserveringen", selectors.btnReserveringen));
   selectors.btnSupport.addEventListener("click", ()=> { window.location.href = "/support"; });
