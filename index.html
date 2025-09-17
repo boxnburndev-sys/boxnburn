@@ -408,7 +408,7 @@ function renderSchedule(){
       div.innerHTML = `<div class="lesson-time">${item.time}</div>
         <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
         <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
-        <div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;
+        <div><button class="btn primary" data-book='${item.id}'>Boek</button></div>`;
       dayCard.appendChild(div);
     });
     tbody.appendChild(dayCard);
@@ -462,7 +462,7 @@ function openBook(opts={}){
     return;
   }
   const id = opts.id || null;
-  const item = SCHEDULE.find(s=>s.id===id);
+  const item = SCHEDULE.find(s=>s.id==id);
   if(!item){ alert('Les niet gevonden'); return; }
   modalContent.innerHTML = `<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div>
     <label style="display:block;margin-top:8px">Je naam<input id="bk-name"></label>
@@ -481,7 +481,6 @@ function showModal(){
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
-
 function closeModal(){
   if(!modal) return;
   modal.style.display = 'none';
@@ -490,6 +489,10 @@ function closeModal(){
   const mc = document.getElementById('modal-confirm');
   if(mc) mc.style.display = '';
 }
+
+document.addEventListener('click', (e)=>{
+  if(e.target && e.target.id === 'modal-cancel') closeModal();
+});
 
 document.addEventListener('click', (e)=>{
   const card = e.target.closest('.instructor');
@@ -506,65 +509,69 @@ document.addEventListener('click', (e)=>{
           <button class="btn ghost" id="modal-cancel">Sluit</button>
         </div>
       `;
-      document.getElementById("modal-confirm").style.display = "none";
+      document.getElementById("modal-confirm")?.style.display = "none";
       activeBooking = null;
       showModal();
     }
   }
 });
 
+// Boek knop in rooster
 document.addEventListener('click', (e)=>{
-  if (e.target && e.target.id === 'modal-cancel') closeModal();
+  const btn = e.target.closest('button[data-book]');
+  if(btn){
+    const id = btn.getAttribute('data-book');
+    openBook({id});
+  }
 });
 
-$$('.nav-links a').forEach(a=>{
-  a.addEventListener('click', e=>{
-    const target = a.getAttribute('data-page');
-    if(target){
-      e.preventDefault();
-      history.pushState({page:target}, '', `#${target}`);
-      showPage(target);
+// Bevestig boeking
+document.addEventListener('click', (e)=>{
+  if(e.target && e.target.id === 'modal-confirm'){
+    if(!activeBooking) return;
+
+    const name = document.getElementById('bk-name')?.value.trim();
+    const email = document.getElementById('bk-email')?.value.trim();
+    const qty = document.getElementById('bk-qty')?.value || 1;
+    const chosenClass = document.getElementById('bk-class')?.value;
+
+    if(!name || !email){
+      alert('Vul je naam en e-mail in.');
+      return;
     }
-  });
-});
 
-function showPage(page){
-  $$('.nav-links a').forEach(x=>x.classList.remove('active'));
-  $$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');
-  $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-window.addEventListener('popstate', ()=>{
-  const page = location.hash.replace('#','') || 'home';
-  showPage(page);
-});
-$('#mobile-toggle').addEventListener('click', ()=>{
-  const nav = document.querySelector('nav');
-  const expanded = nav.style.display === 'block';
-  nav.style.display = expanded ? '' : 'block';
-  $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
-});
+    let payload = {
+      type: activeBooking.type,
+      name,
+      email,
+      qty
+    };
 
-$('#contact-form').addEventListener('submit', e=>{
-  e.preventDefault();
-  const form = e.target;
-  fetch(form.action, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
-    .then(async r=>{
+    if(activeBooking.type === 'lesson'){
+      payload.lessonId = activeBooking.id;
+    }
+    if(activeBooking.type === 'proefles'){
+      payload.lessonId = chosenClass;
+    }
+
+    fetch("https://formspree.io/f/YOUR_FORM_ID", {
+      method:"POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(payload)
+    })
+    .then(r=>{
       if(r.ok){
-        alert('Bedankt! We nemen contact op.');
-        form.reset();
+        alert("Boeking verstuurd!");
+        closeModal();
       } else {
-        try{
-          const j = await r.json();
-          alert(j?.error || 'Er ging iets mis');
-        }catch{
-          alert('Er ging iets mis');
-        }
+        alert("Er ging iets mis bij versturen.");
       }
     })
-    .catch(()=>alert('Er ging iets mis bij versturen'));
+    .catch(()=>alert("Netwerkfout."));
+  }
 });
 
+// --- rest init en live info zoals eerder ---
 function ensureOpenBar(){
   if($('#open-bar')) return;
   const bar = document.createElement('div');
@@ -695,62 +702,16 @@ function initLocalSave(){
       for(const k in obj){
         if(form[k]) form[k].value = obj[k];
       }
-    }catch{}
+    }catch(e){}
   }
 }
 
-window.addEventListener('DOMContentLoaded', ()=>{
-  loadData().then(()=>{ updateLiveInfo(); startLiveUpdater(); });
-  const initialPage = location.hash.replace('#','') || 'home';
-  showPage(initialPage);
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadData();
+  updateLiveInfo();
+  startLiveUpdater();
   initLocalSave();
 });
-
-   document.addEventListener('click', (e)=>{
-  if(e.target && e.target.id === 'modal-confirm'){
-    if(!activeBooking) return;
-
-    const name = document.getElementById('bk-name')?.value.trim();
-    const email = document.getElementById('bk-email')?.value.trim();
-    const qty = document.getElementById('bk-qty')?.value || 1;
-    const chosenClass = document.getElementById('bk-class')?.value;
-
-    if(!name || !email){
-      alert('Vul je naam en e-mail in.');
-      return;
-    }
-
-    let payload = {
-      type: activeBooking.type,
-      name,
-      email,
-      qty
-    };
-
-    if(activeBooking.type === 'lesson'){
-      payload.lessonId = activeBooking.id;
-    }
-    if(activeBooking.type === 'proefles'){
-      payload.lessonId = chosenClass;
-    }
-
-    fetch("https://formspree.io/f/YOUR_FORM_ID", {
-      method:"POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify(payload)
-    })
-    .then(r=>{
-      if(r.ok){
-        alert("Boeking verstuurd!");
-        closeModal();
-      } else {
-        alert("Er ging iets mis bij versturen.");
-      }
-    })
-    .catch(()=>alert("Netwerkfout."));
-  }
-});
-
 </script>
 </body>
 </html>
