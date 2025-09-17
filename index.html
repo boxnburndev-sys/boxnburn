@@ -478,44 +478,8 @@ function closeModal(){
   modal.style.display = 'none';
   document.body.style.overflow = 'auto';
   activeBooking = null;
+  document.getElementById("modal-confirm").style.display = "";
 }
-const modalCancel = $('#modal-cancel');
-if(modalCancel) modalCancel.addEventListener('click', closeModal);
-const modalConfirm = $('#modal-confirm');
-if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
-  if(!activeBooking){ closeModal(); return; }
-  const name = $('#bk-name')?.value || 'Onbekend';
-  const email = $('#bk-email')?.value || '';
-  const qty = Number($('#bk-qty')?.value || 1);
-  const item = SCHEDULE.find(s=>s.id===activeBooking.id);
-  if(item && item.spots < qty){ alert('Niet genoeg plekken beschikbaar'); return; }
-  if(item) item.spots -= qty;
-  renderSchedule();
-  try{
-    const payload = {
-      name,
-      email,
-      class: item?.class || 'Proefles',
-      day: item?.day || '',
-      time: item?.time || '',
-      spots: qty
-    };
-    const res = await fetch('https://formspree.io/f/xyzdazgz', {
-      method: 'POST',
-      headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    if(res.ok){
-      alert('Boeking verstuurd!');
-    } else {
-      alert('Er ging iets mis bij het versturen.');
-    }
-  } catch(e){
-    console.error(e);
-    alert('Er ging iets mis bij het versturen.');
-  }
-  closeModal();
-});
 
 document.addEventListener('click', (e)=>{
   const card = e.target.closest('.instructor');
@@ -529,11 +493,14 @@ document.addEventListener('click', (e)=>{
         <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
         <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
       `;
+      document.getElementById("modal-confirm").style.display = "none";
       activeBooking = null;
       showModal();
     }
   }
 });
+
+
 
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
