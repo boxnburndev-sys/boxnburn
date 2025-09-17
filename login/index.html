@@ -271,7 +271,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       document.getElementById("welcomePfp").src = users[user].pfp;
       document.getElementById("welcomeMessage").textContent = `Welkom, ${user}`;
       ws.style.display = "flex";
-      setTimeout(()=> window.location.href = "dashboard.html", 2500);
+      setTimeout(()=> window.location.href = "/dashboard", 2500);
     } else {
       error.style.display = "block";
       setTimeout(() => error.style.display = "none", 3000);
