@@ -232,8 +232,8 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   selectors.btnTeam.addEventListener("click", ()=> showPage("home", selectors.btnTeam));
   selectors.btnLeden.addEventListener("click", ()=> showPage("leden", selectors.btnLeden));
   selectors.btnReserveringen.addEventListener("click", ()=> showPage("reserveringen", selectors.btnReserveringen));
-  selectors.btnSupport.addEventListener("click", ()=> { window.location.href = "support.html"; });
-  selectors.btnLogout.addEventListener("click", ()=> { localStorage.removeItem("loggedInUser"); window.location.href = "login.html"; });
+  selectors.btnSupport.addEventListener("click", ()=> { window.location.href = "/support"; });
+  selectors.btnLogout.addEventListener("click", ()=> { localStorage.removeItem("loggedInUser"); window.location.href = "/login"; });
   selectors.pfp.addEventListener("click", openProfileFromPfp);
   selectors.pfp.addEventListener("keydown", (e)=> { if(e.key === "Enter" || e.key === " ") openProfileFromPfp(); });
   selectors.closeProfileBtn.addEventListener("click", ()=> showPage("home", selectors.btnTeam));
