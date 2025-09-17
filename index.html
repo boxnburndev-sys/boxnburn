@@ -452,7 +452,11 @@ function openBook(opts={}){
     modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
       <label style="display:block;margin-top:8px">Naam<input id="bk-name"></label>
       <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email"></label>
-      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>`;
+      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>
+      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+        <button class="btn ghost" id="modal-cancel">Sluit</button>
+        <button class="btn primary" id="modal-confirm">Bevestig boeking</button>
+      </div>`;
     activeBooking = {type:'proefles'};
     showModal();
     return;
@@ -463,7 +467,11 @@ function openBook(opts={}){
   modalContent.innerHTML = `<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div>
     <label style="display:block;margin-top:8px">Je naam<input id="bk-name"></label>
     <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email"></label>
-    <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;
+    <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <button class="btn ghost" id="modal-cancel">Sluit</button>
+      <button class="btn primary" id="modal-confirm">Bevestig boeking</button>
+    </div>`;
   activeBooking = {type:'lesson', id: item.id};
   showModal();
 }
@@ -473,12 +481,14 @@ function showModal(){
   modal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
+
 function closeModal(){
   if(!modal) return;
   modal.style.display = 'none';
   document.body.style.overflow = 'auto';
   activeBooking = null;
-  document.getElementById("modal-confirm").style.display = "";
+  const mc = document.getElementById('modal-confirm');
+  if(mc) mc.style.display = '';
 }
 
 document.addEventListener('click', (e)=>{
@@ -492,6 +502,9 @@ document.addEventListener('click', (e)=>{
         <p class="muted">${instr.role}</p>
         <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
         <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
+        <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+          <button class="btn ghost" id="modal-cancel">Sluit</button>
+        </div>
       `;
       document.getElementById("modal-confirm").style.display = "none";
       activeBooking = null;
@@ -500,7 +513,9 @@ document.addEventListener('click', (e)=>{
   }
 });
 
-
+document.addEventListener('click', (e)=>{
+  if (e.target && e.target.id === 'modal-cancel') closeModal();
+});
 
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
@@ -678,22 +693,18 @@ function initLocalSave(){
     try{
       const obj = JSON.parse(stored);
       for(const k in obj){
-        if(form.elements[k]) form.elements[k].value = obj[k];
+        if(form[k]) form[k].value = obj[k];
       }
-    } catch(e){}
+    }catch{}
   }
 }
 
-function init(){
-  renderPlans();
-  showPage(location.hash.replace('#','') || 'home');
-  ensureOpenBar();
-  updateLiveInfo();
-  startLiveUpdater();
-  loadData();
+window.addEventListener('DOMContentLoaded', ()=>{
+  loadData().then(()=>{ updateLiveInfo(); startLiveUpdater(); });
+  const initialPage = location.hash.replace('#','') || 'home';
+  showPage(initialPage);
   initLocalSave();
-}
-document.addEventListener('DOMContentLoaded', init);
+});
 </script>
 </body>
 </html>
