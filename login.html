@@ -36,8 +36,8 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       backdrop-filter: blur(10px);
       z-index: 0;
     }
-    .back-btn {
-      position: absolute;
+    .home-btn {
+      position: fixed;
       top: 15px;
       left: 15px;
       background: rgba(0,120,215,0.9);
@@ -51,7 +51,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       z-index: 10;
       transition: background 0.2s;
     }
-    .back-btn:hover {background: #005a9e;}
+    .home-btn:hover {background: #005a9e;}
     .login-container {
       position: relative;
       z-index: 1;
@@ -192,7 +192,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       button {font-size:15px;padding:12px}
     }
     @media (max-width:480px){
-      .back-btn {font-size:12px;padding:6px 10px}
+      .home-btn {font-size:12px;padding:6px 10px}
       .login-container img {width:75px;height:75px}
       .welcome {font-size:14px}
       input {font-size:14px}
@@ -201,7 +201,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   </style>
 </head>
 <body>
-  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Terug</button>
+  <button class="home-btn" onclick="window.location.href='index.html'">🏠 Home</button>
   <div class="login-container">
     <img id="pfp" src="" alt="Profile Picture">
     <div class="welcome" id="welcomeText"></div>
@@ -291,11 +291,5 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   fetchUsers();
 </script>
    <script src="cookie.js"></script>
-</body>
-</html>
-
-
-  fetchUsers();
-</script>
 </body>
 </html>
