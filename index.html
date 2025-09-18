@@ -314,8 +314,6 @@ const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
 const RANGE_INSTRUCTORS = "Instructors!A2:D";
 const RANGE_DETAILS = "InstructorDetails!A2:B";
 const RANGE_SCHEDULE = "Shedule!A2:E";
-const WEB3_ENDPOINT = "https://api.web3forms.com/submit";
-const WEB3_KEY = "3287ed1d-2d60-4665-b739-2cf29b3de670";
 
 let SCHEDULE = [];
 let INSTRUCTORS = [];
@@ -494,7 +492,6 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   renderSchedule();
   try{
     const payload = {
-      access_key: WEB3_KEY,
       name,
       email,
       class: item?.class || 'Proefles',
@@ -502,9 +499,9 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
       time: item?.time || '',
       spots: qty
     };
-    const res = await fetch(WEB3_ENDPOINT, {
+    const res = await fetch('https://formspree.io/f/xyzdazgz', {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
       body: JSON.stringify(payload)
     });
     if(res.ok){
@@ -577,9 +574,7 @@ $('#mobile-toggle').addEventListener('click', ()=>{
 $('#contact-form').addEventListener('submit', e=>{
   e.preventDefault();
   const form = e.target;
-  const data = new FormData(form);
-  data.append("access_key", WEB3_KEY);
-  fetch(WEB3_ENDPOINT, {method:'POST', body:data})
+  fetch(form.action, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
     .then(async r=>{
       if(r.ok){
         alert('Bedankt! We nemen contact op.');
@@ -587,7 +582,7 @@ $('#contact-form').addEventListener('submit', e=>{
       } else {
         try{
           const j = await r.json();
-          alert(j?.message || 'Er ging iets mis');
+          alert(j?.error || 'Er ging iets mis');
         }catch{
           alert('Er ging iets mis');
         }
@@ -707,20 +702,39 @@ async function loadData(){
   }
 }
 
-window.addEventListener('load', ()=>{
-  setTimeout(()=>{
-    $('#preloader').classList.add('fade');
-    document.body.classList.add('loaded');
-    $$('header, .container, footer').forEach(el=>el.classList.add('visible'));
-    loadData().then(()=>{
-      updateLiveInfo();
-      startLiveUpdater();
+function initLocalSave(){
+  const saveLocal = $('#save-local');
+  const form = document.getElementById('contact-form');
+  if(saveLocal){
+    saveLocal.addEventListener('click', ()=>{
+      const data = new FormData(form);
+      const obj = {};
+      for(const [k,v] of data.entries()) obj[k]=v;
+      localStorage.setItem('contactForm', JSON.stringify(obj));
+      alert('Contactgegevens lokaal opgeslagen!');
     });
-    const page = location.hash.replace('#','') || 'home';
-    showPage(page);
-  }, 800);
-});
-</script>
+  }
+  const stored = localStorage.getItem('contactForm');
+  if(stored){
+    try{
+      const obj = JSON.parse(stored);
+      for(const k in obj){
+        if(form.elements[k]) form.elements[k].value = obj[k];
+      }
+    } catch(e){}
+  }
+}
 
+function init(){
+  renderPlans();
+  showPage(location.hash.replace('#','') || 'home');
+  ensureOpenBar();
+  updateLiveInfo();
+  startLiveUpdater();
+  loadData();
+  initLocalSave();
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
