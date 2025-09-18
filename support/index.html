@@ -49,8 +49,10 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     </div>
     <a href="/dashboard" style="color:#0f93ff;text-decoration:none;font-weight:600">Terug naar Dashboard</a>
   </nav>
+
   <div class="content">
     <h1>Kies het type support dat je nodig hebt</h1>
+
     <div class="options">
       <div class="option" onclick="openSection('tech')">
         <h2>Technische Hulp</h2>
@@ -66,34 +68,43 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       </div>
     </div>
 
+    <!-- Tech Section -->
     <div id="tech" class="section">
       <h2>Technische Hulp</h2>
       <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor directe hulp.</p>
-      <form action="https://formspree.io/f/mblavpnv" method="POST">
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
         <input type="text" name="name" placeholder="Naam" required>
         <textarea name="message" rows="5" placeholder="Beschrijf je probleem" required></textarea>
+        <input type="checkbox" name="botcheck" class="hidden" style="display:none">
         <button type="submit">Verstuur</button>
       </form>
       <button class="back-btn" onclick="backToOptions()">← Terug</button>
     </div>
 
+    <!-- Repair Section -->
     <div id="repair" class="section">
       <h2>Algemene Support</h2>
       <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor urgente zaken.</p>
-      <form action="https://formspree.io/f/mblavpnv" method="POST">
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
         <input type="text" name="name" placeholder="Naam" required>
         <textarea name="message" rows="5" placeholder="Beschrijf wat er kapot is" required></textarea>
+        <input type="checkbox" name="botcheck" class="hidden" style="display:none">
         <button type="submit">Verstuur</button>
       </form>
       <button class="back-btn" onclick="backToOptions()">← Terug</button>
     </div>
 
+    <!-- Other Section -->
     <div id="other" class="section">
       <h2>Overige Vragen</h2>
       <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor andere vragen.</p>
-      <form action="https://formspree.io/f/mblavpnv" method="POST">
+      <form action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
         <input type="text" name="name" placeholder="Naam" required>
         <textarea name="message" rows="5" placeholder="Schrijf hier je vraag of bericht" required></textarea>
+        <input type="checkbox" name="botcheck" class="hidden" style="display:none">
         <button type="submit">Verstuur</button>
       </form>
       <button class="back-btn" onclick="backToOptions()">← Terug</button>
@@ -113,3 +124,4 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   </script>
 </body>
 </html>
+
