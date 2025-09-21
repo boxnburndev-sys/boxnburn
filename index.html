@@ -1,3 +1,13 @@
+<!--
+   ____     U  ___ u __  __        _   _           ____     _   _    ____     _   _     
+U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \ |"|    
+ \|  _ \/    | | | | /\  /\      <|  \| |>       \|  _ \/ \| |\| | \| |_) |/<|  \| |>   
+  | |_) |.-,_| |_| |U /  \ u     U| |\  |u        | |_) |  | |_| |  |  _ <  U| |\  |u   
+  |____/  \_)-\___/  /_/\_\       |_| \_|         |____/  <<\___/   |_| \_\  |_| \_|    
+ _|| \\_       \\  ,-,>> \\_      ||   \\,-.     _|| \\_ (__) )(    //   \\_ ||   \\,-. 
+(__) (__)     (__)  \_)  (__)     (_")  (_/     (__) (__)    (__)  (__)  (__)(_")  (_/  
+-->
+
 <!doctype html>
 <html lang="nl">
 <head>
@@ -8,121 +18,84 @@
   <meta name="description" content="Box N Burn: Bokstraining, spinning en yoga. Boek lessen, beheer abonnementen en bekijk onze kalender." />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0f1724;
-  --card:#0b1220;
-  --muted:#94a3b8;
-  --accent:#ff6b6b;
-  --accent-2:#06b6d4;
-  --glass:rgba(255,255,255,0.03);
-  --radius:14px;
-  --max-w:1200px;
-  --transition:250ms cubic-bezier(.2,.9,.3,1);
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:Roboto,system-ui,Arial;
-  background:linear-gradient(135deg,#071021 0%,#071833 60%);
-  color:#e6eef8;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-a{color:inherit}
-.container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
-header{
-  position:fixed;
-  inset:0 0 auto 0;
-  height:78px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px 24px;
-  backdrop-filter:blur(6px);
-  background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));
-  border-bottom:1px solid rgba(255,255,255,0.03);
-  z-index:1200
-}
-.brand{display:flex;gap:12px;align-items:center}
-.brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
-.brand .title{font-weight:700;font-size:18px;color:var(--accent)}
-nav{display:flex;gap:8px}
-.nav-links{display:flex;gap:6px;align-items:center}
-.nav-links a{
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:500;
-  color:var(--muted);
-  text-decoration:none;
-  cursor:pointer
-}
-.nav-links a.active,.nav-links a:hover{background:var(--glass);color:#fff}
-.actions{display:flex;gap:8px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0}
-.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
-.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-.hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
-.hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
-.hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
-.kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
-.hero p{color:var(--muted);margin-bottom:18px}
-.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-.card h3{margin:0 0 8px}
-.small{font-size:13px;color:var(--muted)}
-.schedule{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:12px;margin-top:22px}
-.day-card{border-radius:12px;padding:14px;box-shadow:0 2px 6px rgba(0,0,0,0.15);background:none;border:1px solid rgba(255,255,255,0.08)}
-.day-title{margin:0 0 12px 0;font-weight:700;font-size:1.1rem}
-.lesson-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);flex-wrap:wrap}
-.lesson-row:last-child{border-bottom:none}
-.lesson-time{font-weight:600;min-width:80px}
-.lesson-info{flex:1;min-width:120px}
-.lesson-spots{white-space:nowrap;margin-left:auto}
-.lesson-row button{flex-shrink:0}
-@media (max-width:768px){
-  .lesson-row{flex-direction:column;align-items:flex-start}
-  .lesson-spots,.lesson-time,.lesson-info,.lesson-row button{margin:4px 0}
-}
-.instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
-.instructor{display:flex;gap:12px;align-items:center}
-.instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
-.plan{padding:18px;border-radius:12px;text-align:center}
-.plan .price{font-size:20px;font-weight:800;margin-top:8px}
-.contact{margin-top:18px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-input,textarea,select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
-textarea{min-height:120px}
-select{background-color:#000033;color:white}
-footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
-@media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
-@media (max-width:760px){
-  header{padding:8px 12px}
-  .hamburger{display:inline-flex}
-  nav{display:none}
-  .container{margin-top:86px;padding:12px}
-  .grid,.instructors,.plans{grid-template-columns:1fr}
-  .hero{padding:18px}
-}
-.muted{color:var(--muted)}
-.center{display:flex;justify-content:center;align-items:center}
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
-.modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
-.modal.show{display:flex}
-.click{transition:transform var(--transition)}
-.click:active{transform:scale(.98)}
-input[type="tel"]{letter-spacing:0.5px}
-.form-note{font-size:12px;color:var(--muted);margin-top:6px}
-img{max-width:100%;height:auto;display:block}
-main > section{display:none}
-main > section.active{display:block}
-.lesson-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .25s ease, box-shadow .25s ease}
-.lesson-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.5)}
-.lesson-card .overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4));color:#fff;padding:18px;opacity:0;transition:opacity .25s ease;display:flex;align-items:center;justify-content:center;text-align:center}
-.lesson-card:hover .overlay{opacity:1}
-.lesson-brief{min-height:46px}
+  :root{
+    --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
+    --radius:14px; --max-w:1200px; --transition:250ms cubic-bezier(.2,.9,.3,1);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;font-family:Roboto,system-ui,Arial; background:linear-gradient(135deg,#071021 0%,#071833 60%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  a{color:inherit}
+  .container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
+  header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200}
+  .brand{display:flex;gap:12px;align-items:center}
+  .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+  .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
+  nav{display:flex;gap:8px}
+  .nav-links{display:flex;gap:6px;align-items:center}
+  .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none}
+  .nav-links a.active, .nav-links a:hover{background:var(--glass);color:#fff}
+  .actions{display:flex;gap:8px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+  .hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
+  .hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
+  .hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
+  .kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
+  .hero p{color:var(--muted);margin-bottom:18px}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .card h3{margin:0 0 8px}
+  .small{font-size:13px;color:var(--muted)}
+  .schedule{margin-top:22px}
+  .schedule {display: grid;grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));gap: 12px;margin-top: 22px;}
+  .day-card {border-radius: 12px;padding: 14px;box-shadow: 0 2px 6px rgba(0,0,0,0.15);background: none;border: 1px solid rgba(255,255,255,0.08);}
+  .day-title {margin: 0 0 12px 0;font-weight: 700;font-size: 1.1rem;}
+  .lesson-row {display: flex;justify-content: space-between;align-items: center;gap: 12px;padding: 8px 0;border-bottom: 1px solid rgba(255,255,255,0.06);flex-wrap:wrap;}
+  .lesson-row:last-child {border-bottom: none;}
+  .lesson-time {font-weight: 600;min-width: 80px;}
+  .lesson-info {flex: 1;min-width: 120px;}
+  .lesson-spots {white-space: nowrap;margin-left: auto;}
+  .lesson-row button {flex-shrink: 0;}
+  @media (max-width: 768px) {
+    .lesson-row {flex-direction: column;align-items: flex-start;}
+    .lesson-spots,.lesson-time,.lesson-info,.lesson-row button {margin: 4px 0;}
+  }
+  .instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .instructor{display:flex;gap:12px;align-items:center}
+  .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .plan{padding:18px;border-radius:12px;text-align:center}
+  .plan .price{font-size:20px;font-weight:800;margin-top:8px}
+  .contact{margin-top:18px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  input,textarea,select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
+  textarea{min-height:120px}
+  select{background-color:#000033;color:white}
+  footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
+  @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
+  @media (max-width:760px){
+    header{padding:8px 12px}
+    .hamburger{display:inline-flex}
+    nav{display:none}
+    .container{margin-top:86px;padding:12px}
+    .grid,.instructors,.plans{grid-template-columns:1fr}
+    .hero{padding:18px}
+  }
+  .muted{color:var(--muted)}
+  .center{display:flex;justify-content:center;align-items:center}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
+  .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
+  .modal.show{display:flex}
+  .click{transition:transform var(--transition)}
+  .click:active{transform:scale(.98)}
+  input[type="tel"]{letter-spacing:0.5px}
+  .form-note{font-size:12px;color:var(--muted);margin-top:6px}
+  img{max-width:100%;height:auto;display:block}
 </style>
 </head>
 <body>
@@ -136,104 +109,88 @@ main > section.active{display:block}
     </div>
     <nav aria-label="Hoofd navigatie">
       <div class="nav-links" role="navigation">
-        <a data-page="home" class="active">Home</a>
-        <a data-page="lessen">Lessen</a>
-        <a data-page="instructeurs">Instructeurs</a>
-        <a data-page="abonnementen">Abonnementen</a>
-        <a data-page="contact">Contact</a>
+        <a href="#home" data-page="home" class="active">Home</a>
+        <a href="#lessen" data-page="lessen">Lessen</a>
+        <a href="#instructeurs" data-page="instructeurs">Instructeurs</a>
+        <a href="#abonnementen" data-page="abonnementen">Abonnementen</a>
+        <a href="#contact" data-page="contact">Contact</a>
         <a href="/jobs">Jobs</a>
         <a href="/login">Dashboard</a>
       </div>
     </nav>
     <div class="actions">
       <button class="btn primary" id="open-book">Boek Nu</button>
-      <button class="hamburger" id="mobile-toggle" aria-expanded="false" aria-controls="main-nav">☰</button>
+      <button class="hamburger" id="mobile-toggle" aria-expanded="false">☰</button>
     </div>
   </header>
 
   <main class="container" id="app">
-    <!-- HOME -->
-    <section id="home" class="active">
-      <section class="hero" id="hero">
-        <div class="hero-left">
-          <span class="kicker">Word sterker. Voel je beter.</span>
-          <h1>Ontdek jouw Energie & Kracht Box N Burn</h1>
-          <p>Mix van bokstraining, spinning en yoga voor beginners en gevorderden. Boek snel, bekijk instructeurs en kies een abonnement.</p>
-          <div class="cta">
-            <button class="btn primary" id="cta-book">Boek een proefles</button>
-            <a href="#" class="btn ghost" data-page-link="abonnementen">Bekijk abonnementen</a>
-          </div>
-          <div class="grid" style="margin-top:18px">
-            <div class="card">
-              <h3>Over onze lessen</h3>
-              <div class="small muted">We bieden bokstraining, spinning en yoga — voor elk niveau.</div>
-              <div style="margin-top:12px">
-                <strong id="home-lesson-summary">Lessen laden…</strong>
-                <div class="small muted">Klik op Lessen voor de uitgebreide agenda</div>
-              </div>
-            </div>
-            <div class="card">
-              <h3>Proefles</h3>
-              <div class="small muted">€10 direct online boeken</div>
-              <div style="margin-top:12px"><button class="btn primary" onclick="openBook({type:'proefles'})">Boek proefles</button></div>
-            </div>
-            <div class="card">
-              <h3>Nieuws & Meldingen</h3>
-              <div class="small muted" id="news">Geen nieuwe meldingen</div>
-            </div>
-          </div>
+    <section class="hero" id="home">
+      <div class="hero-left">
+        <span class="kicker">Word sterker. Voel je beter.</span>
+        <h1>Ontdek jouw Energie & Kracht Box N Burn</h1>
+        <p>Mix van bokstraining, spinning en yoga voor beginners en gevorderden. Boek snel, bekijk instructeurs en kies een abonnement.</p>
+        <div class="cta">
+          <button class="btn primary" id="cta-book">Boek een proefles</button>
+          <a href="#abonnementen" class="btn ghost">Bekijk abonnementen</a>
         </div>
-        <aside style="padding:12px">
+        <div class="grid" style="margin-top:18px">
           <div class="card">
-            <h3>Vandaag</h3>
-            <div class="small muted" id="today-date"></div>
-            <div style="margin-top:10px">
-              <div id="today-schedule">Laden…</div>
+            <h3>Live planning</h3>
+            <div class="small muted">Realtime beschikbaarheid & reminders</div>
+            <div style="margin-top:12px">
+              <strong id="next-class">Geen data geladen</strong>
+              <div class="small muted">Volgende les</div>
             </div>
           </div>
-          <div class="card" style="margin-top:12px">
-            <h3>Zo vind je ons</h3>
-            <div class="small muted">Adres: Sint Lambertusstraat 33 B 2260 Westerlo</div>
-            <div style="margin-top:12px"><a class="btn ghost" href="https://www.google.com/maps/place/Sint-Lambertusstraat+33B,+2260+Westerlo/@51.0900508,4.9163804,17z/data=!3m1!4b1!4m6!3m5!1s0x47c14f6e5a5445c7:0xd350a5fc4db12996!8m2!3d51.0900475!4d4.9189607!16s%2Fg%2F11v3pzzwy6?entry=ttu&g_ep=EgoyMDI1MDkxNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Open in Maps</a></div>
+          <div class="card">
+            <h3>Proefles</h3>
+            <div class="small muted">€10 direct online boeken</div>
+            <div style="margin-top:12px"><button class="btn primary" onclick="openBook({type:'proefles'})">Boek proefles</button></div>
           </div>
-        </aside>
-      </section>
-      <section style="margin-top:18px">
-        <h2>Wat we aanbieden</h2>
-        <div id="lesson-info-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px">
-          <!-- LessonInfo cards populated from sheet -->
+          <div class="card">
+            <h3>Nieuws & Meldingen</h3>
+            <div class="small muted" id="news">Geen nieuwe meldingen</div>
+          </div>
         </div>
-      </section>
-    </section>
-
-    <!-- LESSEN -->
-    <section id="lessen" aria-live="polite">
-      <h2>Lessen & Agenda</h2>
-      <p class="muted">Klik op een les om te boeken.</p>
-      <div class="schedule" id="schedule-body">
-        <!-- populated by JS -->
       </div>
+      <aside style="padding:12px">
+        <div class="card">
+          <h3>Vandaag</h3>
+          <div class="small muted" id="today-date"></div>
+          <div style="margin-top:10px">
+            <div id="today-schedule">Laden…</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h3>Zo vind je ons</h3>
+          <div class="small muted">Adres: Sint Lambertusstraat 33 B 2260 Westerlo</div>
+          <div style="margin-top:12px"><a class="btn ghost" href="https://www.google.com/maps/place/Sint-Lambertusstraat+33B,+2260+Westerlo/@51.0900508,4.9163804,17z/data=!3m1!4b1!4m6!3m5!1s0x47c14f6e5a5445c7:0xd350a5fc4db12996!8m2!3d51.0900475!4d4.9189607!16s%2Fg%2F11v3pzzwy6?entry=ttu&g_ep=EgoyMDI1MDkxNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Open in Maps</a></div>
+        </div>
+      </aside>
     </section>
 
-    <!-- INSTRUCTEURS -->
+<section id="lessen">
+  <h2>Lessen & Agenda</h2>
+  <p class="muted">Klik op een les om te boeken.</p>
+  <div class="schedule" id="schedule-body" aria-live="polite">
+  </div>
+</section>
+
     <section id="instructeurs">
       <h2>Onze Instructeurs</h2>
       <div class="instructors" id="instructors-list">
-        <!-- populated by JS -->
       </div>
     </section>
 
-    <!-- ABONNEMENTEN -->
     <section id="abonnementen">
       <h2>Abonnementen</h2>
       <p class="muted">Betaal ter plaatse via cash of Payqonic.</p>
       <div class="plans" id="plans-list">
-        <!-- populated by JS -->
       </div>
-      <button class="btn primary" onclick="showPage('contact')">Kies</button>
+      <button class="btn primary" onclick="window.location.href='#contact';">Kies</button>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact">
       <h2>Neem contact op</h2>
       <form id="contact-form" class="contact" action="https://api.web3forms.com/submit" method="POST">
@@ -242,10 +199,10 @@ main > section.active{display:block}
         <div class="form-row">
           <input name="name" placeholder="Je naam" required autocomplete="name">
           <input name="email" type="email" placeholder="E-mail" required autocomplete="email">
-          <input name="telefoonnummer" type="tel" placeholder="+32 123 45 67 89" required autocomplete="tel">
+          <input name="telefoonnummer" type="Nummer" placeholder="+32 123 45 67 89" required autocomplete="email">
         </div>
         <div class="form-row" style="margin-top:8px">
-          <select name="plan" aria-label="Kies een plan" id="contact-plan">
+          <select name="plan" aria-label="Kies een plan">
             <option value="">Kies een plan (optioneel)</option>
             <option value="proefles">Proefles</option>
             <option value="1 Keer">1 Keer</option>
@@ -265,11 +222,13 @@ main > section.active{display:block}
 
     <footer>
       <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
-      <a href="/privacy"><div class="muted">Privacy Beleid</div></a>
+      <a href="/privacy">
+       <div class="muted">Privacy Beleid</div>
+      </a>
     </footer>
   </main>
 
-  <div class="modal-backdrop" id="modal" aria-hidden="true">
+  <div class="modal-backdrop" id="modal">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Boek les">
       <div id="modal-content"></div>
       <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
@@ -280,19 +239,15 @@ main > section.active{display:block}
   </div>
 
 <script>
-// ---------- CONFIG ----------
 const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
-const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4"; // still using the same key
+const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
 const RANGE_INSTRUCTORS = "Instructors!A2:D";
 const RANGE_DETAILS = "InstructorDetails!A2:B";
-const RANGE_SCHEDULE = "Sheet7!A2:E";
-const RANGE_LESSON_INFO = "LessonInfo!A2:C";
+const RANGE_SCHEDULE = "Shedule!A2:E";
 
-// ---------- STATE ----------
 let SCHEDULE = [];
 let INSTRUCTORS = [];
-let LESSON_INFO = [];
-
+let INSTRUCTOR_DETAILS = {};
 const PLANS = [
   {id:'trial', title:'Proef Les', desc:'1 les naar keuze (1ste keer gratis)', price:10, period:'eenmalig'},
   {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
@@ -302,7 +257,6 @@ const PLANS = [
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-// ---------- HELPERS ----------
 function formatDate(d=new Date()){
   return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
 }
@@ -363,86 +317,6 @@ function timeUntilString(futureDate){
   return `${minutes}m`;
 }
 
-// Debounce utility for smoother UX
-function debounce(fn, wait=100){
-  let t;
-  return (...args)=>{
-    clearTimeout(t);
-    t = setTimeout(()=>fn(...args), wait);
-  };
-}
-
-// ---------- MODAL ----------
-const modal = $('#modal');
-const modalContent = $('#modal-content');
-let activeBooking = null;
-
-function showModal(){
-  if(!modal) return;
-  modal.style.display = 'flex';
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(){
-  if(!modal) return;
-  modal.style.display = 'none';
-  modal.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = 'auto';
-  activeBooking = null;
-}
-
-$('#modal-cancel')?.addEventListener('click', closeModal);
-
-// close on ESC
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape'){
-    if(modal && modal.style.display === 'flex') closeModal();
-    const nav = document.querySelector('nav');
-    if(window.innerWidth <= 760 && nav && nav.style.display === 'block'){
-      nav.style.display = '';
-      $('#mobile-toggle')?.setAttribute('aria-expanded','false');
-    }
-  }
-});
-
-// ---------- RENDERERS ----------
-function renderLessonInfoCards(){
-  const wrap = $('#lesson-info-cards');
-  if(!wrap) return;
-  wrap.innerHTML = '';
-  if(LESSON_INFO.length === 0){
-    wrap.innerHTML = `<div class="card muted">Geen informatie beschikbaar over lessen.</div>`;
-    return;
-  }
-  LESSON_INFO.forEach((l, idx)=>{
-    const div = document.createElement('div');
-    div.className = 'lesson-card';
-    // remove any buttons inside lesson info; only make it clickable to open detail modal
-    div.innerHTML = `<h3>${escapeHtml(l.title)}</h3>
-      <div class="lesson-brief small muted">${escapeHtml(l.short)}</div>
-      <div class="overlay small" aria-hidden="true">${escapeHtml(l.long)}</div>`;
-    div.addEventListener('click', ()=>openLessonInfo(l));
-    wrap.appendChild(div);
-  });
-}
-
-function openLessonInfo(info){
-  // Modal content: only Sluit (close) button — no booking buttons per request
-  modalContent.innerHTML = `
-    <div style="text-align:center">
-      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn" style="width:80px;height:80px;margin-bottom:12px">
-    </div>
-    <h3>${escapeHtml(info.title)}</h3>
-    <p class="muted">${escapeHtml(info.short)}</p>
-    <div style="white-space:pre-line;max-height:400px;overflow:auto;margin-top:8px">${escapeHtml(info.long)}</div>
-    <div style="display:flex;justify-content:flex-end;margin-top:12px">
-      <button class="btn ghost" onclick="closeModal()">Sluit</button>
-    </div>
-  `;
-  activeBooking = null;
-  showModal();
-}
-
 function renderSchedule(){
   const tbody = $('#schedule-body');
   if(!tbody) return;
@@ -452,7 +326,6 @@ function renderSchedule(){
     if(!grouped[item.day]) grouped[item.day]=[];
     grouped[item.day].push(item);
   });
-  // use ordered days by DUTCH_TO_DAY keys for consistent ordering
   Object.keys(DUTCH_TO_DAY).forEach(day=>{
     if(!grouped[day]) return;
     const dayCard = document.createElement('div');
@@ -461,16 +334,15 @@ function renderSchedule(){
     grouped[day].forEach(item=>{
       const div = document.createElement('div');
       div.className = 'lesson-row';
-      // add aria attributes for accessibility
-      div.setAttribute('role','listitem');
-      div.innerHTML = `<div class="lesson-time">${escapeHtml(item.time)}</div>
-        <div class="lesson-info"><strong>${escapeHtml(item.class)}</strong><div class="small muted">${escapeHtml(item.trainer)}</div></div>
-        <div class="lesson-spots"><span class="tag">${escapeHtml(String(item.spots))} plekken</span></div>
-        <div><button class="btn primary click" data-book='${escapeHtml(item.id)}'>Boek</button></div>`;
+      div.innerHTML = `<div class="lesson-time">${item.time}</div>
+        <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
+        <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
+        <div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;
       dayCard.appendChild(div);
     });
     tbody.appendChild(dayCard);
   });
+  updateLiveInfo();
 }
 
 function renderInstructors(){
@@ -483,7 +355,7 @@ function renderInstructors(){
     const id = (i.name||'').toLowerCase().replace(/\s+/g,'-');
     div.id = id;
     div.dataset.instructor = i.name;
-    div.innerHTML = `<img loading="lazy" src="${escapeHtml(i.img || 'https://via.placeholder.com/76')}" alt="${escapeHtml(i.name)}"><div><div style="font-weight:800">${escapeHtml(i.name)}</div><div class="small muted">${escapeHtml(i.role)}</div><div class="small" style="margin-top:6px">${escapeHtml(i.bio)}</div></div>`;
+    div.innerHTML = `<img loading="lazy" src="${i.img || 'https://via.placeholder.com/76'}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;
     wrap.appendChild(div);
   });
 }
@@ -495,53 +367,21 @@ function renderPlans(){
   PLANS.forEach(p=>{
     const div = document.createElement('div');
     div.className = 'plan card';
-    div.innerHTML = `<h3>${escapeHtml(p.title)}</h3><div class="small muted">${escapeHtml(p.desc)}</div><div class="price">€${escapeHtml(String(p.price))}${p.period!=='eenmalig'? ' / '+escapeHtml(p.period):''}</div>`;
+    div.innerHTML = `<h3>${p.title}</h3><div class="small muted">${p.desc}</div><div class="price">€${p.price}${p.period!=='eenmalig'?' / '+p.period:''}</div>`;
     wrap.appendChild(div);
   });
 }
 
-function updateHomeSummary(){
-  const next = getNextLesson();
-  const summaryEl = $('#home-lesson-summary');
-  if(next && next.item && next.date){
-    const when = formatDate(next.date) + ' — ' + formatTime(next.date);
-    summaryEl.innerHTML = `${escapeHtml(next.item.class)} — ${escapeHtml(next.item.trainer)}<div class="small muted" style="margin-top:6px">${when} · over ${timeUntilString(next.date)}</div>`;
-  } else {
-    summaryEl.innerHTML = `Geen komende lessen gevonden`;
-  }
-  const todayDateEl = $('#today-date');
-  const todayScheduleEl = $('#today-schedule');
-  const now = new Date();
-  todayDateEl.textContent = formatDate(now);
-  const todayDayNum = now.getDay();
-  let todaysItems = SCHEDULE.filter(s => DUTCH_TO_DAY[s.day] === todayDayNum);
-  todaysItems = todaysItems.filter(item=>{
-    const {end} = parseTimes(item.time);
-    const endTime = new Date(now);
-    endTime.setHours(end.h, end.m, 0, 0);
-    return endTime > now;
-  });
-  if(todaysItems.length === 0){
-    todayScheduleEl.innerHTML = `<div class="muted">Vandaag geen resterende lessen.</div>`;
-  } else {
-    const list = todaysItems.map(it=>`<div style="margin-bottom:8px"><strong>${escapeHtml(it.time)}</strong> — ${escapeHtml(it.class)}<div class="small muted">${escapeHtml(it.trainer)} · <span class="tag">${escapeHtml(String(it.spots))} plekken</span></div></div>`).join('');
-    todayScheduleEl.innerHTML = list;
-  }
-  const newsEl = $('#news');
-  if(next && next.item && next.date){
-    newsEl.textContent = `Volgende: ${next.item.class} op ${formatDate(next.date)} om ${formatTime(next.date)} (${timeUntilString(next.date)}).`;
-  } else {
-    newsEl.textContent = 'Geen nieuwe meldingen';
-  }
-}
+const modal = $('#modal');
+const modalContent = $('#modal-content');
+let activeBooking = null;
 
-// ---------- BOOKING ----------
 function openBook(opts={}){
   if(opts.type==='proefles'){
     modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
       <label style="display:block;margin-top:8px">Naam<input id="bk-name" autocomplete="name"></label>
       <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
-      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${escapeHtml(s.id)}'>${escapeHtml(s.day)} • ${escapeHtml(s.time)} — ${escapeHtml(s.class)}</option>`).join('')}</select></label>`;
+      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>`;
     activeBooking = {type:'proefles'};
     showModal();
     return;
@@ -549,7 +389,7 @@ function openBook(opts={}){
   const id = opts.id || null;
   const item = SCHEDULE.find(s=>s.id===id);
   if(!item){ alert('Les niet gevonden'); return; }
-  modalContent.innerHTML = `<h3>Boek: ${escapeHtml(item.class)}</h3><div class="muted">${escapeHtml(item.day)} — ${escapeHtml(item.time)} — ${escapeHtml(item.trainer)}</div>
+  modalContent.innerHTML = `<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div>
     <label style="display:block;margin-top:8px">Je naam<input id="bk-name" autocomplete="name"></label>
     <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
     <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;
@@ -557,7 +397,21 @@ function openBook(opts={}){
   showModal();
 }
 
-$('#modal-confirm')?.addEventListener('click', async ()=>{
+function showModal(){
+  if(!modal) return;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  if(!modal) return;
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+  activeBooking = null;
+}
+const modalCancel = $('#modal-cancel');
+if(modalCancel) modalCancel.addEventListener('click', closeModal);
+const modalConfirm = $('#modal-confirm');
+if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   if(!activeBooking){ closeModal(); return; }
   const name = $('#bk-name')?.value || 'Onbekend';
   const email = $('#bk-email')?.value || '';
@@ -594,203 +448,231 @@ $('#modal-confirm')?.addEventListener('click', async ()=>{
   closeModal();
 });
 
-// ---------- NAVIGATION ----------
-function showPage(page){
-  $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
-  $$('.nav-links a').forEach(a=>a.classList.remove('active'));
-  $$('.nav-links a').find(a=>a.dataset.page===page)?.classList.add('active');
-  if(page === 'lessen'){ renderSchedule(); }
-  if(page === 'instructeurs'){ renderInstructors(); }
-  if(page === 'abonnementen'){ renderPlans(); }
-  if(page === 'home'){ renderLessonInfoCards(); updateHomeSummary(); }
-  history.replaceState({page}, '', `#${page}`);
-  window.scrollTo({top:0, behavior:'instant'});
-}
+document.addEventListener('click', (e)=>{
+  const bookBtn = e.target.closest('[data-book]');
+  if(bookBtn){
+    const id = Number(bookBtn.getAttribute('data-book'));
+    openBook({id});
+  }
+  const chooseBook = e.target.closest('#cta-book, #open-book');
+  if(chooseBook){
+    openBook({type:'proefles'});
+  }
+  const card = e.target.closest('.instructor');
+  if(card && card.dataset.instructor){
+    const instr = INSTRUCTORS.find(i => i.name === card.dataset.instructor);
+    if(instr){
+      const fullBio = INSTRUCTOR_DETAILS[instr.name] || instr.bio || 'Geen extra info beschikbaar.';
+      modalContent.innerHTML = `
+        <h2>${instr.name}</h2>
+        <p class="muted">${instr.role}</p>
+        <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
+        <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
+      `;
+      activeBooking = null;
+      showModal();
+    }
+  }
+});
 
-// click handlers for nav
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
-    const target = a.dataset.page;
+    const target = a.getAttribute('data-page');
     if(target){
       e.preventDefault();
+      history.pushState({page:target}, '', `#${target}`);
       showPage(target);
-      // close mobile nav if open
-      const nav = document.querySelector('nav');
-      if(window.innerWidth <= 760 && nav) nav.style.display = '';
-      $('#mobile-toggle')?.setAttribute('aria-expanded','false');
     }
   });
 });
 
-// mobile toggle with simple animation
-$('#mobile-toggle')?.addEventListener('click', ()=>{
+function showPage(page){
+  $$('.nav-links a').forEach(x=>x.classList.remove('active'));
+  $$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');
+  $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+window.addEventListener('popstate', ()=>{
+  const page = location.hash.replace('#','') || 'home';
+  showPage(page);
+});
+$('#mobile-toggle').addEventListener('click', ()=>{
   const nav = document.querySelector('nav');
   const expanded = nav.style.display === 'block';
   nav.style.display = expanded ? '' : 'block';
   $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
 });
 
-// delegate booking buttons
-document.addEventListener('click', (e)=>{
-  const bookBtn = e.target.closest('button[data-book]');
-  if(bookBtn){
-    const id = bookBtn.dataset.book;
-    openBook({id});
-  }
-  const pageLink = e.target.closest('[data-page-link]');
-  if(pageLink){
-    const p = pageLink.dataset.pageLink;
-    if(p) showPage(p);
-  }
-});
-
-window.addEventListener('popstate', (e)=>{
-  if(e.state?.page) showPage(e.state.page);
-  else showPage(location.hash?.substring(1) || 'home');
-});
-
-// ---------- GOOGLE SHEETS FETCH (improved) ----------
-async function fetchSheet(range, attempts=0){
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
-  try{
-    const res = await fetch(url);
-    if(!res.ok){
-      if(attempts < 3){
-        await new Promise(r=>setTimeout(r, 500 * (attempts+1)));
-        return fetchSheet(range, attempts+1);
+$('#contact-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  const accessKey = form.querySelector('input[name="access_key"]')?.value;
+  fetch(form.action, {method:'POST', body:data, headers:{'Accept':'application/json'}})
+    .then(async r=>{
+      if(r.ok){
+        alert('Bedankt! We nemen contact op.');
+        form.reset();
+      } else {
+        try{
+          const j = await r.json();
+          alert(j?.error || 'Er ging iets mis');
+        }catch{
+          alert('Er ging iets mis');
+        }
       }
-      console.warn('Sheets fetch failed', res.status);
-      return [];
+    })
+    .catch(()=>alert('Er ging iets mis bij versturen'));
+});
+
+function ensureOpenBar(){
+  if($('#open-bar')) return;
+  const bar = document.createElement('div');
+  bar.id = 'open-bar';
+  bar.style.cssText = 'margin-bottom:16px;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)';
+  bar.innerHTML = `<div id="open-bar-text" style="font-weight:700">Laden…</div><div class="small muted" id="open-bar-sub">Gebaseerd op onze agenda</div>`;
+  const container = document.querySelector('.container');
+  if(container) container.prepend(bar);
+}
+
+function updateLiveInfo(){
+  ensureOpenBar();
+  const next = getNextLesson();
+  const nextEl = $('#next-class');
+  if(next && next.item && next.date){
+    const when = formatDate(next.date) + ' — ' + formatTime(next.date);
+    nextEl.innerHTML = `${next.item.class} — ${next.item.trainer}<div class="small muted" style="margin-top:6px">${when} · over ${timeUntilString(next.date)}</div>`;
+  } else {
+    nextEl.innerHTML = `Geen komende lessen gevonden`;
+  }
+  const todayDateEl = $('#today-date');
+  const todayScheduleEl = $('#today-schedule');
+  const now = new Date();
+  todayDateEl.textContent = formatDate(now);
+  const todayDayNum = now.getDay();
+  let todaysItems = SCHEDULE.filter(s => DUTCH_TO_DAY[s.day] === todayDayNum);
+  todaysItems = todaysItems.filter(item=>{
+    const {end} = parseTimes(item.time);
+    const endTime = new Date(now);
+    endTime.setHours(end.h, end.m, 0, 0);
+    return endTime > now;
+  });
+  if(todaysItems.length === 0){
+    todayScheduleEl.innerHTML = `<div class="muted">Vandaag geen resterende lessen.</div>`;
+  } else {
+    const list = todaysItems.map(it=>`<div style="margin-bottom:8px"><strong>${it.time}</strong> — ${it.class}<div class="small muted">${it.trainer} · <span class="tag">${it.spots} plekken</span></div></div>`).join('');
+    todayScheduleEl.innerHTML = list;
+  }
+  const openBarText = $('#open-bar-text');
+  if(todaysItems.length > 0){
+    const anyOpen = todaysItems.some(it => it.spots > 0);
+    if(anyOpen){
+      openBarText.innerHTML = `We zijn open vandaag er zijn lessen gepland. <span class="small muted">Bekijk het schema</span>`;
+      openBarText.style.color = '';
+    } else {
+      openBarText.innerHTML = `We zijn open vandaag maar alle plekken zijn vol. <span class="small muted">Check andere dagen of meld je aan voor de wachtlijst</span>`;
+      openBarText.style.color = '';
     }
-    const data = await res.json();
-    if(!data || !data.values) return [];
-    return data.values;
-  } catch(err){
-    console.error('Error fetching sheet', err);
-    if(attempts < 3){
-      await new Promise(r=>setTimeout(r, 500 * (attempts+1)));
-      return fetchSheet(range, attempts+1);
-    }
-    return [];
+  } else {
+    openBarText.innerHTML = `Nu gesloten — er staan geen resterende lessen in de agenda.`;
+    openBarText.style.color = '';
+  }
+  const newsEl = $('#news');
+  if(next && next.item && next.date){
+    newsEl.textContent = `Volgende: ${next.item.class} op ${formatDate(next.date)} om ${formatTime(next.date)} (${timeUntilString(next.date)}).`;
+  } else {
+    newsEl.textContent = 'Geen nieuwe meldingen';
   }
 }
 
-// resilient mapping: tolerate missing columns and trim
-function safeMapRow(row, idxMap){
-  const out = {};
-  Object.keys(idxMap).forEach(k=>{
-    const idx = idxMap[k];
-    out[k] = row[idx] !== undefined ? String(row[idx]).trim() : '';
-  });
-  return out;
+let liveInterval = null;
+function startLiveUpdater(){
+  if(liveInterval) clearInterval(liveInterval);
+  liveInterval = setInterval(updateLiveInfo, 30000);
 }
 
-// parse schedule rows robustly (handles both A,B,C,D,E or shifted columns)
-function parseScheduleRows(rows){
-  // heuristic: find which column contains day/time/class/trainer/spots
-  // We'll try common patterns: [day,time,class,trainer,spots] or [id,day,time,class,trainer,spots]
-  const parsed = [];
-  rows.forEach((r, i)=>{
-    // skip empty rows
-    if(!r || r.length === 0) return;
-    // find candidates
-    const row = r.map(c=>String(c||'').trim());
-    // attempt patterns
-    let day = row[0] || '';
-    let time = row[1] || '';
-    let klass = row[2] || row[1] || 'Onbekende les';
-    let trainer = row[3] || '';
-    let spots = Number(row[4] || 10);
-    // if first row looks like a time (contains ':'), maybe columns shifted
-    if(!/^[A-Za-z]/.test(day) && /^[0-2]?\d:[0-5]\d/.test(day)){
-      // shift left
-      day = row[1] || '';
-      time = row[0] || '';
-      klass = row[2] || 'Onbekende les';
-      trainer = row[3] || '';
-      spots = Number(row[4] || 10);
-    }
-    // fallback: try to find a day word inside row
-    const dayCandidate = row.find(c=>c && Object.keys(DUTCH_TO_DAY).some(d=>c.toLowerCase().includes(d.toLowerCase())));
-    if(dayCandidate) day = dayCandidate;
+async function fetchSheetData(range){
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+  const res = await fetch(url);
+  if(!res.ok){
+    const text = await res.text().catch(()=>res.statusText);
+    throw new Error(`Google Sheets API fout ${res.status}: ${text}`);
+  }
+  const data = await res.json();
+  return data.values || [];
+}
 
-    parsed.push({
-      id: row[5] || row[2] || Math.random().toString(36).substr(2,6),
-      day: day || 'Onbekend',
-      time: time || '',
-      class: klass || 'Onbekende les',
-      trainer: trainer || 'Team',
-      spots: Number(isNaN(spots) ? 10 : spots)
+async function loadData(){
+  try{
+    const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
+    INSTRUCTORS = instructors.map(r => ({
+      name: r[0]||'',
+      bio: r[1]||'',
+      role: r[2]||'',
+      img: r[3]||''
+    }));
+    const details = await fetchSheetData(RANGE_DETAILS);
+    INSTRUCTOR_DETAILS = {};
+    details.forEach(r=>{
+      if(r[0]) INSTRUCTOR_DETAILS[r[0]] = r[1]||'';
     });
-  });
-  return parsed;
+    const schedule = await fetchSheetData(RANGE_SCHEDULE);
+    let idCounter = 1;
+    SCHEDULE = schedule.map(r => ({
+      id: idCounter++,
+      day: r[0]||'',
+      time: r[1]||'',
+      class: r[2]||'',
+      trainer: r[3]||'',
+      spots: Number(r[4]||0)
+    }));
+    renderInstructors();
+    renderPlans();
+    renderSchedule();
+  } catch(e){
+    console.error('LoadData error: ', e);
+    const scheduleBody = $('#schedule-body');
+    if(scheduleBody) scheduleBody.innerHTML = `<div class="muted">Kon de agenda niet laden. Controleer dat het sheet publiek is en de API key correct is.</div>`;
+  }
 }
 
-// ---------- INIT ----------
-async function init(){
-  // show light loading states
-  $('#home-lesson-summary').textContent = 'Laden…';
-  $('#today-schedule').textContent = 'Laden…';
+function initLocalSave(){
+  const saveLocal = $('#save-local');
+  const form = document.getElementById('contact-form');
+  if(saveLocal){
+    saveLocal.addEventListener('click', ()=>{
+      const data = new FormData(form);
+      const obj = {};
+      for(const [k,v] of data.entries()) obj[k]=v;
+      localStorage.setItem('contactForm', JSON.stringify(obj));
+      alert('Contactgegevens lokaal opgeslagen!');
+    });
+  }
+  const stored = localStorage.getItem('contactForm');
+  if(stored){
+    try{
+      const obj = JSON.parse(stored);
+      for(const k in obj){
+        if(form.elements[k]) form.elements[k].value = obj[k];
+      }
+    } catch(e){}
+  }
+}
 
-  // fetch concurrently with resilience
-  const [scheduleData, instructorsData, lessonInfoData] = await Promise.all([
-    fetchSheet(RANGE_SCHEDULE).catch(()=>[]),
-    fetchSheet(RANGE_INSTRUCTORS).catch(()=>[]),
-    fetchSheet(RANGE_LESSON_INFO).catch(()=>[])
-  ]);
-
-  // parse schedule robustly
-  SCHEDULE = parseScheduleRows(scheduleData || []).filter(s=>s.day && s.time);
-
-  // instructors - safe mapping
-  INSTRUCTORS = (instructorsData||[]).map(r=>({
-    name: r[0] || 'Onbekende',
-    role: r[1] || 'Instructeur',
-    img: r[2] || '',
-    bio: r[3] || ''
-  }));
-
-  // lesson info - ensure long text exists
-  LESSON_INFO = (lessonInfoData||[]).map(r=>({
-    title: r[0] || 'Titel',
-    short: r[1] || '',
-    long: r[2] || ''
-  }));
-
-  // sort schedule by weekday order and time for nicer display
-  SCHEDULE.sort((a,b)=>{
-    const da = DUTCH_TO_DAY[a.day] ?? 99;
-    const db = DUTCH_TO_DAY[b.day] ?? 99;
-    if(da !== db) return da - db;
-    // compare times "HH:MM - HH:MM" or "HH:MM"
-    const ta = (a.time||'').split('-')[0].trim();
-    const tb = (b.time||'').split('-')[0].trim();
-    return (ta.localeCompare(tb));
-  });
-
-  // render
-  renderLessonInfoCards();
-  renderSchedule();
-  renderInstructors();
+function init(){
   renderPlans();
-  updateHomeSummary();
-
-  // apply page from hash
-  showPage(location.hash?.substring(1)||'home');
+  showPage(location.hash.replace('#','') || 'home');
+  ensureOpenBar();
+  updateLiveInfo();
+  startLiveUpdater();
+  loadData();
+  initLocalSave();
 }
+document.addEventListener('DOMContentLoaded', init);
 
-// helper to escape HTML inserted from sheets
-function escapeHtml(str){
-  if(!str && str !== 0) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-init();
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') closeModal();
+});
 </script>
 </body>
 </html>
