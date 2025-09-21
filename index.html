@@ -32,29 +32,17 @@
   .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
   .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
   .hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
-  .hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
+  .hero{display:grid;grid-template-columns:1fr;gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
   .hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
   .kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
   .hero p{color:var(--muted);margin-bottom:18px}
-  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-  .card h3{margin:0 0 8px}
+  .lessons-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:22px}
+  .lesson-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .3s ease, box-shadow .3s ease}
+  .lesson-card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,0.3)}
+  .lesson-card h3{margin:0 0 8px}
+  .lesson-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);color:#fff;padding:14px;opacity:0;transition:opacity .3s ease;display:flex;align-items:center;justify-content:center;text-align:center}
+  .lesson-card:hover .lesson-overlay{opacity:1}
   .small{font-size:13px;color:var(--muted)}
-  .schedule{margin-top:22px}
-  .schedule {display: grid;grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));gap: 12px;margin-top: 22px;}
-  .day-card {border-radius: 12px;padding: 14px;box-shadow: 0 2px 6px rgba(0,0,0,0.15);background: none;border: 1px solid rgba(255,255,255,0.08);}
-  .day-title {margin: 0 0 12px 0;font-weight: 700;font-size: 1.1rem;}
-  .lesson-row {display: flex;justify-content: space-between;align-items: center;gap: 12px;padding: 8px 0;border-bottom: 1px solid rgba(255,255,255,0.06);flex-wrap:wrap;}
-  .lesson-row:last-child {border-bottom: none;}
-  .lesson-time {font-weight: 600;min-width: 80px;}
-  .lesson-info {flex: 1;min-width: 120px;}
-  .lesson-spots {white-space: nowrap;margin-left: auto;}
-  .lesson-row button {flex-shrink: 0;}
-  @media (max-width: 768px) {
-    .lesson-row {flex-direction: column;align-items: flex-start;}
-    .lesson-spots,.lesson-time,.lesson-info,.lesson-row button {margin: 4px 0;}
-  }
   .instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
   .instructor{display:flex;gap:12px;align-items:center}
   .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
@@ -67,24 +55,12 @@
   textarea{min-height:120px}
   select{background-color:#000033;color:white}
   footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
-  @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
-  @media (max-width:760px){
-    header{padding:8px 12px}
-    .hamburger{display:inline-flex}
-    nav{display:none}
-    .container{margin-top:86px;padding:12px}
-    .grid,.instructors,.plans{grid-template-columns:1fr}
-    .hero{padding:18px}
-  }
+  @media (max-width:1000px){.instructors,.plans{grid-template-columns:1fr} }
+  @media (max-width:760px){header{padding:8px 12px}.hamburger{display:inline-flex}nav{display:none}.container{margin-top:86px;padding:12px}.hero{padding:18px}}
   .muted{color:var(--muted)}
-  .center{display:flex;justify-content:center;align-items:center}
   .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
   .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
   .modal.show{display:flex}
-  .click{transition:transform var(--transition)}
-  .click:active{transform:scale(.98)}
-  input[type="tel"]{letter-spacing:0.5px}
-  .form-note{font-size:12px;color:var(--muted);margin-top:6px}
   img{max-width:100%;height:auto;display:block}
 </style>
 </head>
@@ -118,54 +94,27 @@
     <section class="hero" id="home">
       <div class="hero-left">
         <span class="kicker">Word sterker. Voel je beter.</span>
-        <h1>Ontdek jouw Energie & Kracht Box N Burn</h1>
-        <p>Mix van bokstraining, spinning en yoga voor beginners en gevorderden. Boek snel, bekijk instructeurs en kies een abonnement.</p>
-        <div class="cta">
-          <button class="btn primary" id="cta-book">Boek een proefles</button>
-          <a href="#abonnementen" class="btn ghost">Bekijk abonnementen</a>
-        </div>
-        <div class="grid" style="margin-top:18px">
-          <div class="card click" data-lesson="Boxing">
-            <h3>Boxing</h3>
-            <div class="small muted">Kracht en conditie</div>
-          </div>
-          <div class="card click" data-lesson="Spinning">
-            <h3>Spinning</h3>
-            <div class="small muted">Intensieve cardio</div>
-          </div>
-          <div class="card click" data-lesson="Yoga">
-            <h3>Yoga</h3>
-            <div class="small muted">Balans en flexibiliteit</div>
-          </div>
-        </div>
+        <h1>Ontdek onze lessen bij Box N Burn</h1>
+        <p>Bekijk hieronder welke lessen we aanbieden. Zweef met je muis over een kaart voor meer informatie.</p>
+        <div class="lessons-info" id="lessons-info"></div>
       </div>
-      <aside style="padding:12px">
-        <div class="card">
-          <h3>Zo vind je ons</h3>
-          <div class="small muted">Adres: Sint Lambertusstraat 33 B 2260 Westerlo</div>
-          <div style="margin-top:12px"><a class="btn ghost" href="https://www.google.com/maps/place/Sint-Lambertusstraat+33B,+2260+Westerlo/@51.0900508,4.9163804,17z/data=!3m1!4b1!4m6!3m5!1s0x47c14f6e5a5445c7:0xd350a5fc4db12996!8m2!3d51.0900475!4d4.9189607!16s%2Fg%2F11v3pzzwy6?entry=ttu&g_ep=EgoyMDI1MDkxNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Open in Maps</a></div>
-        </div>
-      </aside>
     </section>
 
-<section id="lessen">
-  <h2>Lessen & Agenda</h2>
-  <p class="muted">Klik op een les om te boeken.</p>
-  <div class="schedule" id="schedule-body" aria-live="polite">
-  </div>
-</section>
+    <section id="lessen">
+      <h2>Lessen & Agenda</h2>
+      <p class="muted">Klik op een les om te boeken.</p>
+      <div class="schedule" id="schedule-body" aria-live="polite"></div>
+    </section>
 
     <section id="instructeurs">
       <h2>Onze Instructeurs</h2>
-      <div class="instructors" id="instructors-list">
-      </div>
+      <div class="instructors" id="instructors-list"></div>
     </section>
 
     <section id="abonnementen">
       <h2>Abonnementen</h2>
       <p class="muted">Betaal ter plaatse via cash of Payqonic.</p>
-      <div class="plans" id="plans-list">
-      </div>
+      <div class="plans" id="plans-list"></div>
       <button class="btn primary" onclick="window.location.href='#contact';">Kies</button>
     </section>
 
@@ -200,9 +149,7 @@
 
     <footer>
       <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
-      <a href="/privacy">
-       <div class="muted">Privacy Beleid</div>
-      </a>
+      <a href="/privacy"><div class="muted">Privacy Beleid</div></a>
     </footer>
   </main>
 
@@ -210,7 +157,8 @@
     <div class="modal" role="dialog" aria-modal="true" aria-label="Boek les">
       <div id="modal-content"></div>
       <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-        <button class="btn ghost" id="modal-cancel">Sluit</button>
+        <button class="btn ghost" id="modal-cancel">Annuleer</button>
+        <button class="btn primary" id="modal-confirm">Bevestig boeking</button>
       </div>
     </div>
   </div>
@@ -218,49 +166,90 @@
 <script>
 const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
 const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
-const RANGE_LESSONS = "Lessons!A2:B";
-let LESSON_INFO = {};
+const RANGE_INSTRUCTORS = "Instructors!A2:D";
+const RANGE_DETAILS = "InstructorDetails!A2:B";
+const RANGE_SCHEDULE = "Shedule!A2:E";
+const RANGE_LESSON_INFO = "LessonInfo!A2:C";
+
+let SCHEDULE = [];
+let INSTRUCTORS = [];
+let INSTRUCTOR_DETAILS = {};
+let LESSON_INFO = [];
+const PLANS = [
+  {id:'trial', title:'Proef Les', desc:'1 les naar keuze (1ste keer gratis)', price:10, period:'eenmalig'},
+  {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
+  {id:'Maand', title:'Maan Abonnement', desc:'Maandelijks Abonnoment', price:40, period:'Maandelijks'}
+];
 
 const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-const modal = $('#modal');
-const modalContent = $('#modal-content');
-function showModal(){modal.style.display='flex';document.body.style.overflow='hidden'}
-function closeModal(){modal.style.display='none';document.body.style.overflow='auto'}
-$('#modal-cancel').addEventListener('click',closeModal);
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()})
-
-document.addEventListener('click',e=>{
-  const card=e.target.closest('[data-lesson]');
-  if(card){
-    const lesson=card.dataset.lesson;
-    const info=LESSON_INFO[lesson]||'Geen info beschikbaar.';
-    modalContent.innerHTML=`<h2>${lesson}</h2><div style="white-space:pre-line">${info}</div>`;
-    showModal();
-  }
-});
-
-async function fetchSheetData(range){
-  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
-  const res=await fetch(url);
-  if(!res.ok)throw new Error('Sheet load error');
-  const data=await res.json();
-  return data.values||[];
+function renderInstructors(){
+  const wrap = $('#instructors-list');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  INSTRUCTORS.forEach(i=>{
+    const div = document.createElement('div');
+    div.className = 'instructor card';
+    div.innerHTML = `<img loading="lazy" src="${i.img || 'https://via.placeholder.com/76'}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;
+    wrap.appendChild(div);
+  });
 }
 
-async function loadLessons(){
+function renderPlans(){
+  const wrap = $('#plans-list');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  PLANS.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'plan card';
+    div.innerHTML = `<h3>${p.title}</h3><div class="small muted">${p.desc}</div><div class="price">€${p.price}${p.period!=='eenmalig'?' / '+p.period:''}</div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function renderLessonsInfo(){
+  const wrap = $('#lessons-info');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  LESSON_INFO.forEach(l=>{
+    const card = document.createElement('div');
+    card.className = 'lesson-card';
+    card.innerHTML = `<h3>${l.title}</h3><div class="small muted">${l.short}</div><div class="lesson-overlay">${l.long}</div>`;
+    wrap.appendChild(card);
+  });
+}
+
+async function fetchSheetData(range){
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+  const res = await fetch(url);
+  if(!res.ok){throw new Error('API fout');}
+  const data = await res.json();
+  return data.values || [];
+}
+
+async function loadData(){
   try{
-    const lessons=await fetchSheetData(RANGE_LESSONS);
-    LESSON_INFO={};
-    lessons.forEach(r=>{if(r[0])LESSON_INFO[r[0]]=r[1]||''});
-  }catch(e){console.error(e)}
+    const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
+    INSTRUCTORS = instructors.map(r => ({name:r[0]||'',bio:r[1]||'',role:r[2]||'',img:r[3]||''}));
+    const details = await fetchSheetData(RANGE_DETAILS);
+    INSTRUCTOR_DETAILS = {};
+    details.forEach(r=>{if(r[0]) INSTRUCTOR_DETAILS[r[0]] = r[1]||'';});
+    const schedule = await fetchSheetData(RANGE_SCHEDULE);
+    let idCounter = 1;
+    SCHEDULE = schedule.map(r => ({id:idCounter++,day:r[0]||'',time:r[1]||'',class:r[2]||'',trainer:r[3]||'',spots:Number(r[4]||0)}));
+    const lessonInfo = await fetchSheetData(RANGE_LESSON_INFO);
+    LESSON_INFO = lessonInfo.map(r=>({title:r[0]||'',short:r[1]||'',long:r[2]||''}));
+    renderInstructors();
+    renderPlans();
+    renderLessonsInfo();
+  }catch(e){console.error('LoadData error',e);}
 }
 
 function init(){
-  loadLessons();
+  renderPlans();
+  loadData();
 }
-document.addEventListener('DOMContentLoaded',init);
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
