@@ -1,12 +1,3 @@
-<!--
-   ____     U  ___ u __  __        _   _           ____     _   _    ____     _   _     
-U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \ |"|    
- \|  _ \/    | | | | /\  /\      <|  \| |>       \|  _ \/ \| |\| | \| |_) |/<|  \| |>   
-  | |_) |.-,_| |_| |U /  \ u     U| |\  |u        | |_) |  | |_| |  |  _ <  U| |\  |u   
-  |____/  \_)-\___/  /_/\_\       |_| \_|         |____/  <<\___/   |_| \_\  |_| \_|    
- _|| \\_       \\  ,-,>> \\_      ||   \\,-.     _|| \\_ (__) )(    //   \\_ ||   \\,-. 
-(__) (__)     (__)  \_)  (__)     (_")  (_/     (__) (__)    (__)  (__)  (__)(_")  (_/  
--->
 <!doctype html>
 <html lang="nl">
 <head>
@@ -156,7 +147,7 @@ main > section.active{display:block}
     </nav>
     <div class="actions">
       <button class="btn primary" id="open-book">Boek Nu</button>
-      <button class="hamburger" id="mobile-toggle" aria-expanded="false">☰</button>
+      <button class="hamburger" id="mobile-toggle" aria-expanded="false" aria-controls="main-nav">☰</button>
     </div>
   </header>
 
@@ -278,7 +269,7 @@ main > section.active{display:block}
     </footer>
   </main>
 
-  <div class="modal-backdrop" id="modal">
+  <div class="modal-backdrop" id="modal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Boek les">
       <div id="modal-content"></div>
       <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
@@ -289,16 +280,17 @@ main > section.active{display:block}
   </div>
 
 <script>
+// ---------- CONFIG ----------
 const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
-const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
+const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4"; // still using the same key
 const RANGE_INSTRUCTORS = "Instructors!A2:D";
 const RANGE_DETAILS = "InstructorDetails!A2:B";
 const RANGE_SCHEDULE = "Sheet7!A2:E";
 const RANGE_LESSON_INFO = "LessonInfo!A2:C";
 
+// ---------- STATE ----------
 let SCHEDULE = [];
 let INSTRUCTORS = [];
-let INSTRUCTOR_DETAILS = {};
 let LESSON_INFO = [];
 
 const PLANS = [
@@ -310,6 +302,7 @@ const PLANS = [
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
+// ---------- HELPERS ----------
 function formatDate(d=new Date()){
   return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
 }
@@ -370,6 +363,16 @@ function timeUntilString(futureDate){
   return `${minutes}m`;
 }
 
+// Debounce utility for smoother UX
+function debounce(fn, wait=100){
+  let t;
+  return (...args)=>{
+    clearTimeout(t);
+    t = setTimeout(()=>fn(...args), wait);
+  };
+}
+
+// ---------- MODAL ----------
 const modal = $('#modal');
 const modalContent = $('#modal-content');
 let activeBooking = null;
@@ -377,19 +380,32 @@ let activeBooking = null;
 function showModal(){
   if(!modal) return;
   modal.style.display = 'flex';
+  modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 }
-
 function closeModal(){
   if(!modal) return;
   modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = 'auto';
   activeBooking = null;
 }
 
-const modalCancel = $('#modal-cancel');
-if(modalCancel) modalCancel.addEventListener('click', closeModal);
+$('#modal-cancel')?.addEventListener('click', closeModal);
 
+// close on ESC
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape'){
+    if(modal && modal.style.display === 'flex') closeModal();
+    const nav = document.querySelector('nav');
+    if(window.innerWidth <= 760 && nav && nav.style.display === 'block'){
+      nav.style.display = '';
+      $('#mobile-toggle')?.setAttribute('aria-expanded','false');
+    }
+  }
+});
+
+// ---------- RENDERERS ----------
 function renderLessonInfoCards(){
   const wrap = $('#lesson-info-cards');
   if(!wrap) return;
@@ -401,24 +417,26 @@ function renderLessonInfoCards(){
   LESSON_INFO.forEach((l, idx)=>{
     const div = document.createElement('div');
     div.className = 'lesson-card';
-    div.innerHTML = `<h3>${l.title}</h3>
-      <div class="lesson-brief small muted">${l.short}</div>
-      <div class="overlay small" aria-hidden="true">${l.long}</div>`;
+    // remove any buttons inside lesson info; only make it clickable to open detail modal
+    div.innerHTML = `<h3>${escapeHtml(l.title)}</h3>
+      <div class="lesson-brief small muted">${escapeHtml(l.short)}</div>
+      <div class="overlay small" aria-hidden="true">${escapeHtml(l.long)}</div>`;
     div.addEventListener('click', ()=>openLessonInfo(l));
     wrap.appendChild(div);
   });
 }
 
 function openLessonInfo(info){
+  // Modal content: only Sluit (close) button — no booking buttons per request
   modalContent.innerHTML = `
     <div style="text-align:center">
       <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn" style="width:80px;height:80px;margin-bottom:12px">
     </div>
-    <h3>${info.title}</h3>
-    <p class="muted">${info.short}</p>
-    <div style="white-space:pre-line;max-height:400px;overflow:auto;margin-top:8px">${info.long}</div>
+    <h3>${escapeHtml(info.title)}</h3>
+    <p class="muted">${escapeHtml(info.short)}</p>
+    <div style="white-space:pre-line;max-height:400px;overflow:auto;margin-top:8px">${escapeHtml(info.long)}</div>
     <div style="display:flex;justify-content:flex-end;margin-top:12px">
-      <button class="btn ghost" onclick="closeModal()">Sluiten</button>
+      <button class="btn ghost" onclick="closeModal()">Sluit</button>
     </div>
   `;
   activeBooking = null;
@@ -434,6 +452,7 @@ function renderSchedule(){
     if(!grouped[item.day]) grouped[item.day]=[];
     grouped[item.day].push(item);
   });
+  // use ordered days by DUTCH_TO_DAY keys for consistent ordering
   Object.keys(DUTCH_TO_DAY).forEach(day=>{
     if(!grouped[day]) return;
     const dayCard = document.createElement('div');
@@ -442,10 +461,12 @@ function renderSchedule(){
     grouped[day].forEach(item=>{
       const div = document.createElement('div');
       div.className = 'lesson-row';
-      div.innerHTML = `<div class="lesson-time">${item.time}</div>
-        <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
-        <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
-        <div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;
+      // add aria attributes for accessibility
+      div.setAttribute('role','listitem');
+      div.innerHTML = `<div class="lesson-time">${escapeHtml(item.time)}</div>
+        <div class="lesson-info"><strong>${escapeHtml(item.class)}</strong><div class="small muted">${escapeHtml(item.trainer)}</div></div>
+        <div class="lesson-spots"><span class="tag">${escapeHtml(String(item.spots))} plekken</span></div>
+        <div><button class="btn primary click" data-book='${escapeHtml(item.id)}'>Boek</button></div>`;
       dayCard.appendChild(div);
     });
     tbody.appendChild(dayCard);
@@ -462,7 +483,7 @@ function renderInstructors(){
     const id = (i.name||'').toLowerCase().replace(/\s+/g,'-');
     div.id = id;
     div.dataset.instructor = i.name;
-    div.innerHTML = `<img loading="lazy" src="${i.img || 'https://via.placeholder.com/76'}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;
+    div.innerHTML = `<img loading="lazy" src="${escapeHtml(i.img || 'https://via.placeholder.com/76')}" alt="${escapeHtml(i.name)}"><div><div style="font-weight:800">${escapeHtml(i.name)}</div><div class="small muted">${escapeHtml(i.role)}</div><div class="small" style="margin-top:6px">${escapeHtml(i.bio)}</div></div>`;
     wrap.appendChild(div);
   });
 }
@@ -474,7 +495,7 @@ function renderPlans(){
   PLANS.forEach(p=>{
     const div = document.createElement('div');
     div.className = 'plan card';
-    div.innerHTML = `<h3>${p.title}</h3><div class="small muted">${p.desc}</div><div class="price">€${p.price}${p.period!=='eenmalig'?' / '+p.period:''}</div>`;
+    div.innerHTML = `<h3>${escapeHtml(p.title)}</h3><div class="small muted">${escapeHtml(p.desc)}</div><div class="price">€${escapeHtml(String(p.price))}${p.period!=='eenmalig'? ' / '+escapeHtml(p.period):''}</div>`;
     wrap.appendChild(div);
   });
 }
@@ -484,7 +505,7 @@ function updateHomeSummary(){
   const summaryEl = $('#home-lesson-summary');
   if(next && next.item && next.date){
     const when = formatDate(next.date) + ' — ' + formatTime(next.date);
-    summaryEl.innerHTML = `${next.item.class} — ${next.item.trainer}<div class="small muted" style="margin-top:6px">${when} · over ${timeUntilString(next.date)}</div>`;
+    summaryEl.innerHTML = `${escapeHtml(next.item.class)} — ${escapeHtml(next.item.trainer)}<div class="small muted" style="margin-top:6px">${when} · over ${timeUntilString(next.date)}</div>`;
   } else {
     summaryEl.innerHTML = `Geen komende lessen gevonden`;
   }
@@ -503,7 +524,7 @@ function updateHomeSummary(){
   if(todaysItems.length === 0){
     todayScheduleEl.innerHTML = `<div class="muted">Vandaag geen resterende lessen.</div>`;
   } else {
-    const list = todaysItems.map(it=>`<div style="margin-bottom:8px"><strong>${it.time}</strong> — ${it.class}<div class="small muted">${it.trainer} · <span class="tag">${it.spots} plekken</span></div></div>`).join('');
+    const list = todaysItems.map(it=>`<div style="margin-bottom:8px"><strong>${escapeHtml(it.time)}</strong> — ${escapeHtml(it.class)}<div class="small muted">${escapeHtml(it.trainer)} · <span class="tag">${escapeHtml(String(it.spots))} plekken</span></div></div>`).join('');
     todayScheduleEl.innerHTML = list;
   }
   const newsEl = $('#news');
@@ -514,12 +535,13 @@ function updateHomeSummary(){
   }
 }
 
+// ---------- BOOKING ----------
 function openBook(opts={}){
   if(opts.type==='proefles'){
     modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
       <label style="display:block;margin-top:8px">Naam<input id="bk-name" autocomplete="name"></label>
       <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
-      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>`;
+      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${escapeHtml(s.id)}'>${escapeHtml(s.day)} • ${escapeHtml(s.time)} — ${escapeHtml(s.class)}</option>`).join('')}</select></label>`;
     activeBooking = {type:'proefles'};
     showModal();
     return;
@@ -527,7 +549,7 @@ function openBook(opts={}){
   const id = opts.id || null;
   const item = SCHEDULE.find(s=>s.id===id);
   if(!item){ alert('Les niet gevonden'); return; }
-  modalContent.innerHTML = `<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div>
+  modalContent.innerHTML = `<h3>Boek: ${escapeHtml(item.class)}</h3><div class="muted">${escapeHtml(item.day)} — ${escapeHtml(item.time)} — ${escapeHtml(item.trainer)}</div>
     <label style="display:block;margin-top:8px">Je naam<input id="bk-name" autocomplete="name"></label>
     <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
     <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;
@@ -535,8 +557,7 @@ function openBook(opts={}){
   showModal();
 }
 
-const modalConfirm = $('#modal-confirm');
-if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
+$('#modal-confirm')?.addEventListener('click', async ()=>{
   if(!activeBooking){ closeModal(); return; }
   const name = $('#bk-name')?.value || 'Onbekend';
   const email = $('#bk-email')?.value || '';
@@ -573,6 +594,7 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   closeModal();
 });
 
+// ---------- NAVIGATION ----------
 function showPage(page){
   $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
   $$('.nav-links a').forEach(a=>a.classList.remove('active'));
@@ -581,20 +603,26 @@ function showPage(page){
   if(page === 'instructeurs'){ renderInstructors(); }
   if(page === 'abonnementen'){ renderPlans(); }
   if(page === 'home'){ renderLessonInfoCards(); updateHomeSummary(); }
-  history.pushState({page}, '', `#${page}`);
+  history.replaceState({page}, '', `#${page}`);
   window.scrollTo({top:0, behavior:'instant'});
 }
 
+// click handlers for nav
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
     const target = a.dataset.page;
     if(target){
       e.preventDefault();
       showPage(target);
+      // close mobile nav if open
+      const nav = document.querySelector('nav');
+      if(window.innerWidth <= 760 && nav) nav.style.display = '';
+      $('#mobile-toggle')?.setAttribute('aria-expanded','false');
     }
   });
 });
 
+// mobile toggle with simple animation
 $('#mobile-toggle')?.addEventListener('click', ()=>{
   const nav = document.querySelector('nav');
   const expanded = nav.style.display === 'block';
@@ -602,50 +630,164 @@ $('#mobile-toggle')?.addEventListener('click', ()=>{
   $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
 });
 
+// delegate booking buttons
 document.addEventListener('click', (e)=>{
   const bookBtn = e.target.closest('button[data-book]');
   if(bookBtn){
     const id = bookBtn.dataset.book;
     openBook({id});
   }
+  const pageLink = e.target.closest('[data-page-link]');
+  if(pageLink){
+    const p = pageLink.dataset.pageLink;
+    if(p) showPage(p);
+  }
 });
 
 window.addEventListener('popstate', (e)=>{
   if(e.state?.page) showPage(e.state.page);
-  else showPage('home');
+  else showPage(location.hash?.substring(1) || 'home');
 });
 
-async function fetchSheet(range){
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  return data.values || [];
+// ---------- GOOGLE SHEETS FETCH (improved) ----------
+async function fetchSheet(range, attempts=0){
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+  try{
+    const res = await fetch(url);
+    if(!res.ok){
+      if(attempts < 3){
+        await new Promise(r=>setTimeout(r, 500 * (attempts+1)));
+        return fetchSheet(range, attempts+1);
+      }
+      console.warn('Sheets fetch failed', res.status);
+      return [];
+    }
+    const data = await res.json();
+    if(!data || !data.values) return [];
+    return data.values;
+  } catch(err){
+    console.error('Error fetching sheet', err);
+    if(attempts < 3){
+      await new Promise(r=>setTimeout(r, 500 * (attempts+1)));
+      return fetchSheet(range, attempts+1);
+    }
+    return [];
+  }
 }
 
-async function init(){
-  const scheduleData = await fetchSheet(RANGE_SCHEDULE);
-  const instructorsData = await fetchSheet(RANGE_INSTRUCTORS);
-  const lessonInfoData = await fetchSheet(RANGE_LESSON_INFO);
+// resilient mapping: tolerate missing columns and trim
+function safeMapRow(row, idxMap){
+  const out = {};
+  Object.keys(idxMap).forEach(k=>{
+    const idx = idxMap[k];
+    out[k] = row[idx] !== undefined ? String(row[idx]).trim() : '';
+  });
+  return out;
+}
 
-  SCHEDULE = scheduleData.map(r=>({
-    id:r[0]||r[2]||Math.random().toString(36).substr(2,6),
-    day:r[0],
-    time:r[1],
-    class:r[2],
-    trainer:r[3],
-    spots:Number(r[4]||10)
+// parse schedule rows robustly (handles both A,B,C,D,E or shifted columns)
+function parseScheduleRows(rows){
+  // heuristic: find which column contains day/time/class/trainer/spots
+  // We'll try common patterns: [day,time,class,trainer,spots] or [id,day,time,class,trainer,spots]
+  const parsed = [];
+  rows.forEach((r, i)=>{
+    // skip empty rows
+    if(!r || r.length === 0) return;
+    // find candidates
+    const row = r.map(c=>String(c||'').trim());
+    // attempt patterns
+    let day = row[0] || '';
+    let time = row[1] || '';
+    let klass = row[2] || row[1] || 'Onbekende les';
+    let trainer = row[3] || '';
+    let spots = Number(row[4] || 10);
+    // if first row looks like a time (contains ':'), maybe columns shifted
+    if(!/^[A-Za-z]/.test(day) && /^[0-2]?\d:[0-5]\d/.test(day)){
+      // shift left
+      day = row[1] || '';
+      time = row[0] || '';
+      klass = row[2] || 'Onbekende les';
+      trainer = row[3] || '';
+      spots = Number(row[4] || 10);
+    }
+    // fallback: try to find a day word inside row
+    const dayCandidate = row.find(c=>c && Object.keys(DUTCH_TO_DAY).some(d=>c.toLowerCase().includes(d.toLowerCase())));
+    if(dayCandidate) day = dayCandidate;
+
+    parsed.push({
+      id: row[5] || row[2] || Math.random().toString(36).substr(2,6),
+      day: day || 'Onbekend',
+      time: time || '',
+      class: klass || 'Onbekende les',
+      trainer: trainer || 'Team',
+      spots: Number(isNaN(spots) ? 10 : spots)
+    });
+  });
+  return parsed;
+}
+
+// ---------- INIT ----------
+async function init(){
+  // show light loading states
+  $('#home-lesson-summary').textContent = 'Laden…';
+  $('#today-schedule').textContent = 'Laden…';
+
+  // fetch concurrently with resilience
+  const [scheduleData, instructorsData, lessonInfoData] = await Promise.all([
+    fetchSheet(RANGE_SCHEDULE).catch(()=>[]),
+    fetchSheet(RANGE_INSTRUCTORS).catch(()=>[]),
+    fetchSheet(RANGE_LESSON_INFO).catch(()=>[])
+  ]);
+
+  // parse schedule robustly
+  SCHEDULE = parseScheduleRows(scheduleData || []).filter(s=>s.day && s.time);
+
+  // instructors - safe mapping
+  INSTRUCTORS = (instructorsData||[]).map(r=>({
+    name: r[0] || 'Onbekende',
+    role: r[1] || 'Instructeur',
+    img: r[2] || '',
+    bio: r[3] || ''
   }));
 
-  INSTRUCTORS = instructorsData.map(r=>({name:r[0], role:r[1], img:r[2], bio:r[3]}));
+  // lesson info - ensure long text exists
+  LESSON_INFO = (lessonInfoData||[]).map(r=>({
+    title: r[0] || 'Titel',
+    short: r[1] || '',
+    long: r[2] || ''
+  }));
 
-  LESSON_INFO = lessonInfoData.map(r=>({title:r[0], short:r[1], long:r[2]}));
+  // sort schedule by weekday order and time for nicer display
+  SCHEDULE.sort((a,b)=>{
+    const da = DUTCH_TO_DAY[a.day] ?? 99;
+    const db = DUTCH_TO_DAY[b.day] ?? 99;
+    if(da !== db) return da - db;
+    // compare times "HH:MM - HH:MM" or "HH:MM"
+    const ta = (a.time||'').split('-')[0].trim();
+    const tb = (b.time||'').split('-')[0].trim();
+    return (ta.localeCompare(tb));
+  });
 
+  // render
   renderLessonInfoCards();
   renderSchedule();
   renderInstructors();
   renderPlans();
   updateHomeSummary();
+
+  // apply page from hash
   showPage(location.hash?.substring(1)||'home');
+}
+
+// helper to escape HTML inserted from sheets
+function escapeHtml(str){
+  if(!str && str !== 0) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 init();
