@@ -255,15 +255,12 @@
   </div>
 
 <script>
-/* ================ CONFIG ================ */
 const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
 const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
 const RANGE_INSTRUCTORS = "Instructors!A2:D";
 const RANGE_DETAILS = "InstructorDetails!A2:B";
-const RANGE_SCHEDULE = "Shedule!A2:E";
+const RANGE_SCHEDULE = "Sheet7!A2:E";
 const RANGE_LESSON_INFO = "LessonInfo!A2:C";
-
-/* ================ STATE ================ */
 let SCHEDULE = [];
 let INSTRUCTORS = [];
 let INSTRUCTOR_DETAILS = {};
@@ -273,11 +270,8 @@ const PLANS = [
   {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
   {id:'Maand', title:'Maan Abonnement', desc:'Maandelijks Abonnoment', price:40, period:'Maandelijks'}
 ];
-
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
-
-/* ================ UTIL ================ */
 function formatDate(d=new Date()){
   return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
 }
@@ -332,8 +326,6 @@ function timeUntilString(futureDate){
   if(hours>0) return `${hours}u ${minutes}m`;
   return `${minutes}m`;
 }
-
-/* ================ RENDER ================ */
 function renderLessonInfoCards(){
   const wrap = $('#lesson-info-cards');
   if(!wrap) return;
@@ -348,12 +340,10 @@ function renderLessonInfoCards(){
     div.innerHTML = `<h3>${l.title}</h3>
       <div class="lesson-brief small muted">${l.short}</div>
       <div class="overlay small" aria-hidden="true">${l.long}</div>`;
-    // click to go to lessons section
     div.addEventListener('click', ()=> showPage('lessen'));
     wrap.appendChild(div);
   });
 }
-
 function renderSchedule(){
   const tbody = $('#schedule-body');
   if(!tbody) return;
@@ -380,8 +370,6 @@ function renderSchedule(){
     tbody.appendChild(dayCard);
   });
 }
-
-/* instructors & plans */
 function renderInstructors(){
   const wrap = $('#instructors-list');
   if(!wrap) return;
@@ -396,7 +384,6 @@ function renderInstructors(){
     wrap.appendChild(div);
   });
 }
-
 function renderPlans(){
   const wrap = $('#plans-list');
   if(!wrap) return;
@@ -408,8 +395,6 @@ function renderPlans(){
     wrap.appendChild(div);
   });
 }
-
-/* live-ish info on home (summary) */
 function updateHomeSummary(){
   const next = getNextLesson();
   const summaryEl = $('#home-lesson-summary');
@@ -444,12 +429,9 @@ function updateHomeSummary(){
     newsEl.textContent = 'Geen nieuwe meldingen';
   }
 }
-
-/* ================ MODAL / BOOKING ================ */
 const modal = $('#modal');
 const modalContent = $('#modal-content');
 let activeBooking = null;
-
 function openBook(opts={}){
   if(opts.type==='proefles'){
     modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
@@ -470,7 +452,6 @@ function openBook(opts={}){
   activeBooking = {type:'lesson', id: item.id};
   showModal();
 }
-
 function showModal(){
   if(!modal) return;
   modal.style.display = 'flex';
@@ -521,25 +502,17 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   }
   closeModal();
 });
-
-/* ================ SPA NAVIGATION ================ */
 function showPage(page){
-  // hide others
   $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
-  // nav active state
   $$('.nav-links a').forEach(a=>a.classList.remove('active'));
   $$('.nav-links a').find(a=>a.dataset.page===page)?.classList.add('active');
-  // load data for page
   if(page === 'lessen'){ renderSchedule(); }
   if(page === 'instructeurs'){ renderInstructors(); }
   if(page === 'abonnementen'){ renderPlans(); }
   if(page === 'home'){ renderLessonInfoCards(); updateHomeSummary(); }
-  // update history hash
   history.pushState({page}, '', `#${page}`);
   window.scrollTo({top:0, behavior:'instant'});
 }
-
-/* nav links click */
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
     const target = a.dataset.page;
@@ -549,16 +522,12 @@ $$('.nav-links a').forEach(a=>{
     }
   });
 });
-
-/* mobile nav toggle */
 $('#mobile-toggle')?.addEventListener('click', ()=>{
   const nav = document.querySelector('nav');
   const expanded = nav.style.display === 'block';
   nav.style.display = expanded ? '' : 'block';
   $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
 });
-
-/* instructor card click to open modal with full bio */
 document.addEventListener('click', (e)=>{
   const bookBtn = e.target.closest('[data-book]');
   if(bookBtn){
@@ -585,13 +554,9 @@ document.addEventListener('click', (e)=>{
     }
   }
 });
-
-/* intercept instructor clicks for accessibility */
 document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape') closeModal();
 });
-
-/* contact form handling (keeps using web3forms endpoint) */
 $('#contact-form')?.addEventListener('submit', e=>{
   e.preventDefault();
   const form = e.target;
@@ -612,8 +577,6 @@ $('#contact-form')?.addEventListener('submit', e=>{
     })
     .catch(()=>alert('Er ging iets mis bij versturen'));
 });
-
-/* ================ GOOGLE SHEETS FETCH ================ */
 async function fetchSheetData(range){
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
   try{
@@ -629,10 +592,7 @@ async function fetchSheetData(range){
     return [];
   }
 }
-
-/* ================ LOAD DATA ================ */
 async function loadData(){
-  // instructors
   const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
   INSTRUCTORS = instructors.map(r => ({
     name: r[0]||'',
@@ -640,13 +600,11 @@ async function loadData(){
     role: r[2]||'',
     img: r[3]||''
   }));
-  // instructor details
   const details = await fetchSheetData(RANGE_DETAILS);
   INSTRUCTOR_DETAILS = {};
   details.forEach(r=>{
     if(r[0]) INSTRUCTOR_DETAILS[r[0]] = r[1]||'';
   });
-  // schedule
   const schedule = await fetchSheetData(RANGE_SCHEDULE);
   let idCounter = 1;
   SCHEDULE = schedule.map(r => ({
@@ -657,37 +615,29 @@ async function loadData(){
     trainer: r[3]||'',
     spots: Number(r[4]||0)
   }));
-  // lesson info
   const lessonInfo = await fetchSheetData(RANGE_LESSON_INFO);
   LESSON_INFO = lessonInfo.map(r=>({title:r[0]||'',short:r[1]||'',long:r[2]||''}));
-
-  // Render where appropriate for the currently visible page
   const visible = document.querySelector('main > section:not([style*="display: none"])')?.id || 'home';
   if(visible === 'home'){ renderLessonInfoCards(); updateHomeSummary(); }
   if(visible === 'lessen'){ renderSchedule(); }
   if(visible === 'instructeurs'){ renderInstructors(); }
   renderPlans();
 }
-
-/* ================ INITIALIZE ================ */
 function init(){
-  // ensure sections exist and set up initial visibility according to hash
   const initial = (location.hash.replace('#','') || 'home');
   $$('#app > section').forEach(s => s.style.display = 'none');
   const targetEl = document.getElementById(initial) || document.getElementById('home');
   targetEl.style.display = 'block';
   $$('.nav-links a').forEach(a=>a.classList.remove('active'));
-  $$('.nav-links a').find(a=>a.dataset.page===initial)?.classList.add('active');
-  // load data
+  $$('.nav-links a').find(a=>a.dataset.page===targetEl.id)?.classList.add('active');
   loadData();
-  // update some home bits every 30s
-  setInterval(()=>{ updateHomeSummary(); }, 30000);
+  setInterval(updateHomeSummary, 60000);
 }
+window.addEventListener('popstate', (e)=>{
+  const page = e.state?.page || 'home';
+  showPage(page);
+});
 document.addEventListener('DOMContentLoaded', init);
-
-/* expose showPage to global (used by some inline onclicks) */
-window.showPage = showPage;
-window.openBook = openBook;
 </script>
 </body>
 </html>
