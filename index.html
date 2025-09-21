@@ -17,77 +17,86 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   <title>Box N Burn</title>
   <meta name="description" content="Box N Burn: Bokstraining, spinning en yoga. Boek lessen, beheer abonnementen en bekijk onze kalender." />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#ff6b6b;--accent-2:#06b6d4;--glass:rgba(255,255,255,0.03);--radius:14px;--max-w:1200px;--transition:250ms cubic-bezier(.2,.9,.3,1)}
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Roboto,system-ui,Arial;background:linear-gradient(135deg,#071021 0%,#071833 60%);color:#e6eef8;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-    a{color:inherit}
-    .container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
-    header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
-    .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
-    nav{display:flex;gap:8px}
-    .nav-links{display:flex;gap:6px;align-items:center}
-    .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none}
-    .nav-links a.active,.nav-links a:hover{background:var(--glass);color:#fff}
-    .actions{display:flex;gap:8px}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
-    .hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
-    .hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
-    .kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
-    .hero p{color:var(--muted);margin-bottom:18px}
-    .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-    .card h3{margin:0 0 8px}
-    .small{font-size:13px;color:var(--muted)}
-    .schedule{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:22px}
-    .day-card{border-radius:12px;padding:14px;box-shadow:0 2px 6px rgba(0,0,0,0.15);background:none;border:1px solid rgba(255,255,255,0.08)}
-    .day-title{margin:0 0 12px;font-weight:700;font-size:1.1rem}
-    .lesson-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);flex-wrap:wrap}
-    .lesson-row:last-child{border-bottom:none}
-    .lesson-time{font-weight:600;min-width:80px}
-    .lesson-info{flex:1;min-width:120px}
-    .lesson-spots{white-space:nowrap;margin-left:auto}
-    .lesson-row button{flex-shrink:0}
-    @media(max-width:768px){.lesson-row{flex-direction:column;align-items:flex-start}.lesson-spots,.lesson-time,.lesson-info,.lesson-row button{margin:4px 0}}
-    .instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
-    .instructor{display:flex;gap:12px;align-items:center}
-    .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
-    .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
-    .plan{padding:18px;border-radius:12px;text-align:center}
-    .plan .price{font-size:20px;font-weight:800;margin-top:8px}
-    .contact{margin-top:18px}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    input,textarea,select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
-    textarea{min-height:120px}
-    select{background-color:#000033;color:white}
-    footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
-    @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.hero{grid-template-columns:1fr}}
-    @media(max-width:760px){header{padding:8px 12px}.hamburger{display:inline-flex}nav{display:none}.container{margin-top:86px;padding:12px}.grid,.instructors,.plans{grid-template-columns:1fr}.hero{padding:18px}}
-    .muted{color:var(--muted)}
-    .center{display:flex;justify-content:center;align-items:center}
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
-    .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
-    .modal.show{display:flex}
-    .click{transition:transform var(--transition)}
-    .click:active{transform:scale(.98)}
-    input[type=tel]{letter-spacing:.5px}
-    .form-note{font-size:12px;color:var(--muted);margin-top:6px}
-    img{max-width:100%;height:auto;display:block}
-    .mobile-sidebar{position:fixed;top:0;left:-100%;width:260px;max-width:100%;height:100%;background:linear-gradient(180deg,#0b1220,#071833);box-shadow:4px 0 12px rgba(0,0,0,0.4);padding:80px 20px 20px;display:flex;flex-direction:column;gap:14px;transition:left .3s ease;z-index:1501}
-    .mobile-sidebar nav{display:flex;flex-direction:column;gap:10px}
-    .mobile-sidebar nav a{display:block;padding:10px 12px;border-radius:8px;color:var(--muted);text-decoration:none;font-weight:500}
-    .mobile-sidebar nav a:hover{background:var(--glass);color:#fff}
-    .mobile-sidebar.show{left:0}
-    .sidebar-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity .3s ease;z-index:1500}
-    .sidebar-backdrop.show{opacity:1;pointer-events:auto}
-  </style>
+<style>
+  :root{
+    --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
+    --radius:14px; --max-w:1200px; --transition:250ms cubic-bezier(.2,.9,.3,1);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;font-family:Roboto,system-ui,Arial; background:linear-gradient(135deg,#071021 0%,#071833 60%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  a{color:inherit}
+  .container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
+  header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200}
+  .brand{display:flex;gap:12px;align-items:center}
+  .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+  .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
+  nav{display:flex;gap:8px}
+  .nav-links{display:flex;gap:6px;align-items:center}
+  .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none}
+  .nav-links a.active, .nav-links a:hover{background:var(--glass);color:#fff}
+  .actions{display:flex;gap:8px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+  .hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
+  .hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
+  .hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
+  .kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
+  .hero p{color:var(--muted);margin-bottom:18px}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .card h3{margin:0 0 8px}
+  .small{font-size:13px;color:var(--muted)}
+  .schedule{margin-top:22px}
+  .schedule {display: grid;grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));gap: 12px;margin-top: 22px;}
+  .day-card {border-radius: 12px;padding: 14px;box-shadow: 0 2px 6px rgba(0,0,0,0.15);background: none;border: 1px solid rgba(255,255,255,0.08);}
+  .day-title {margin: 0 0 12px 0;font-weight: 700;font-size: 1.1rem;}
+  .lesson-row {display: flex;justify-content: space-between;align-items: center;gap: 12px;padding: 8px 0;border-bottom: 1px solid rgba(255,255,255,0.06);flex-wrap:wrap;}
+  .lesson-row:last-child {border-bottom: none;}
+  .lesson-time {font-weight: 600;min-width: 80px;}
+  .lesson-info {flex: 1;min-width: 120px;}
+  .lesson-spots {white-space: nowrap;margin-left: auto;}
+  .lesson-row button {flex-shrink: 0;}
+  @media (max-width: 768px) {
+    .lesson-row {flex-direction: column;align-items: flex-start;}
+    .lesson-spots,.lesson-time,.lesson-info,.lesson-row button {margin: 4px 0;}
+  }
+  .instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .instructor{display:flex;gap:12px;align-items:center}
+  .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+  .plan{padding:18px;border-radius:12px;text-align:center}
+  .plan .price{font-size:20px;font-weight:800;margin-top:8px}
+  .contact{margin-top:18px}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  input,textarea,select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
+  textarea{min-height:120px}
+  select{background-color:#000033;color:white}
+  footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
+  @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
+  @media (max-width:760px){
+    header{padding:8px 12px}
+    .hamburger{display:inline-flex}
+    nav{display:none}
+    .container{margin-top:86px;padding:12px}
+    .grid,.instructors,.plans{grid-template-columns:1fr}
+    .hero{padding:18px}
+  }
+  .muted{color:var(--muted)}
+  .center{display:flex;justify-content:center;align-items:center}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
+  .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
+  .modal.show{display:flex}
+  .click{transition:transform var(--transition)}
+  .click:active{transform:scale(.98)}
+  input[type="tel"]{letter-spacing:0.5px}
+  .form-note{font-size:12px;color:var(--muted);margin-top:6px}
+  img{max-width:100%;height:auto;display:block}
+</style>
 </head>
 <body>
   <header role="banner">
@@ -114,18 +123,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       <button class="hamburger" id="mobile-toggle" aria-expanded="false">☰</button>
     </div>
   </header>
-  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
-  <div class="mobile-sidebar" id="mobile-sidebar">
-    <nav>
-      <a href="#home" data-page="home">Home</a>
-      <a href="#lessen" data-page="lessen">Lessen</a>
-      <a href="#instructeurs" data-page="instructeurs">Instructeurs</a>
-      <a href="#abonnementen" data-page="abonnementen">Abonnementen</a>
-      <a href="#contact" data-page="contact">Contact</a>
-      <a href="/jobs">Jobs</a>
-      <a href="/login">Dashboard</a>
-    </nav>
-  </div>
+
   <main class="container" id="app">
     <section class="hero" id="home">
       <div class="hero-left">
@@ -136,14 +134,100 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
           <button class="btn primary" id="cta-book">Boek een proefles</button>
           <a href="#abonnementen" class="btn ghost">Bekijk abonnementen</a>
         </div>
+        <div class="grid" style="margin-top:18px">
+          <div class="card">
+            <h3>Live planning</h3>
+            <div class="small muted">Realtime beschikbaarheid & reminders</div>
+            <div style="margin-top:12px">
+              <strong id="next-class">Geen data geladen</strong>
+              <div class="small muted">Volgende les</div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Proefles</h3>
+            <div class="small muted">€10 direct online boeken</div>
+            <div style="margin-top:12px"><button class="btn primary" onclick="openBook({type:'proefles'})">Boek proefles</button></div>
+          </div>
+          <div class="card">
+            <h3>Nieuws & Meldingen</h3>
+            <div class="small muted" id="news">Geen nieuwe meldingen</div>
+          </div>
+        </div>
       </div>
-      <aside style="padding:12px"></aside>
+      <aside style="padding:12px">
+        <div class="card">
+          <h3>Vandaag</h3>
+          <div class="small muted" id="today-date"></div>
+          <div style="margin-top:10px">
+            <div id="today-schedule">Laden…</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h3>Zo vind je ons</h3>
+          <div class="small muted">Adres: Sint Lambertusstraat 33 B 2260 Westerlo</div>
+          <div style="margin-top:12px"><a class="btn ghost" href="https://www.google.com/maps/place/Sint-Lambertusstraat+33B,+2260+Westerlo/@51.0900508,4.9163804,17z/data=!3m1!4b1!4m6!3m5!1s0x47c14f6e5a5445c7:0xd350a5fc4db12996!8m2!3d51.0900475!4d4.9189607!16s%2Fg%2F11v3pzzwy6?entry=ttu&g_ep=EgoyMDI1MDkxNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Open in Maps</a></div>
+        </div>
+      </aside>
     </section>
+
+<section id="lessen">
+  <h2>Lessen & Agenda</h2>
+  <p class="muted">Klik op een les om te boeken.</p>
+  <div class="schedule" id="schedule-body" aria-live="polite">
+  </div>
+</section>
+
+    <section id="instructeurs">
+      <h2>Onze Instructeurs</h2>
+      <div class="instructors" id="instructors-list">
+      </div>
+    </section>
+
+    <section id="abonnementen">
+      <h2>Abonnementen</h2>
+      <p class="muted">Betaal ter plaatse via cash of Payqonic.</p>
+      <div class="plans" id="plans-list">
+      </div>
+      <button class="btn primary" onclick="window.location.href='#contact';">Kies</button>
+    </section>
+
+    <section id="contact">
+      <h2>Neem contact op</h2>
+      <form id="contact-form" class="contact" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
+        <input type="hidden" name="subject" value="Nieuwe contactaanvraag Box N Burn">
+        <div class="form-row">
+          <input name="name" placeholder="Je naam" required autocomplete="name">
+          <input name="email" type="email" placeholder="E-mail" required autocomplete="email">
+          <input name="telefoonnummer" type="Nummer" placeholder="+32 123 45 67 89" required autocomplete="email">
+        </div>
+        <div class="form-row" style="margin-top:8px">
+          <select name="plan" aria-label="Kies een plan">
+            <option value="">Kies een plan (optioneel)</option>
+            <option value="proefles">Proefles</option>
+            <option value="1 Keer">1 Keer</option>
+            <option value="Maand">Maandelijks</option>
+          </select>
+          <div></div>
+        </div>
+        <div style="margin-top:8px">
+          <textarea name="message" placeholder="Je bericht" required></textarea>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button type="submit" class="btn primary">Verstuur bericht</button>
+        </div>
+        <div class="muted" style="margin-top:8px">Alle betalingen gebeuren ter plaatse via Paqconiq of Cash.</div>
+      </form>
+    </section>
+
     <footer>
       <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
-      <a href="/privacy"><div class="muted">Privacy Beleid</div></a>
+      <a href="/privacy">
+       <div class="muted">Privacy Beleid</div>
+      </a>
     </footer>
   </main>
+
   <div class="modal-backdrop" id="modal">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Boek les">
       <div id="modal-content"></div>
@@ -153,16 +237,8 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       </div>
     </div>
   </div>
-<script>
-const sidebar=document.getElementById("mobile-sidebar");
-const backdrop=document.getElementById("sidebar-backdrop");
-const toggle=document.getElementById("mobile-toggle");
-function closeSidebar(){sidebar.classList.remove("show");backdrop.classList.remove("show");toggle.setAttribute("aria-expanded","false")}
-toggle.addEventListener("click",()=>{const expanded=toggle.getAttribute("aria-expanded")==="true";if(expanded){closeSidebar()}else{sidebar.classList.add("show");backdrop.classList.add("show");toggle.setAttribute("aria-expanded","true")}})
-backdrop.addEventListener("click",closeSidebar);
-document.querySelectorAll("#mobile-sidebar nav a").forEach(link=>{link.addEventListener("click",closeSidebar)});
-function adjustSidebarWidth(){if(window.innerWidth<480){sidebar.style.width="100%"}else{sidebar.style.width="260px"}}window.addEventListener("resize",adjustSidebarWidth);adjustSidebarWidth();
 
+<script>
 const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
 const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
 const RANGE_INSTRUCTORS = "Instructors!A2:D";
