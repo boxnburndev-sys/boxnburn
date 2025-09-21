@@ -17,96 +17,121 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   <meta name="description" content="Box N Burn: Bokstraining, spinning en yoga. Boek lessen, beheer abonnementen en bekijk onze kalender." />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
-    --radius:14px; --max-w:1200px; --transition:250ms cubic-bezier(.2,.9,.3,1);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;font-family:Roboto,system-ui,Arial; background:linear-gradient(135deg,#071021 0%,#071833 60%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-  }
-  a{color:inherit}
-  .container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
-  header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200}
-  .brand{display:flex;gap:12px;align-items:center}
-  .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
-  .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
-  nav{display:flex;gap:8px}
-  .nav-links{display:flex;gap:6px;align-items:center}
-  .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none;cursor:pointer}
-  .nav-links a.active, .nav-links a:hover{background:var(--glass);color:#fff}
-  .actions{display:flex;gap:8px}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0}
-  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
-  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-  .hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
-  /* hero / home */
-  .hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
-  .hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
-  .kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
-  .hero p{color:var(--muted);margin-bottom:18px}
-  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
-  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-  .card h3{margin:0 0 8px}
-  .small{font-size:13px;color:var(--muted)}
-  /* schedule (lessen page) */
-  .schedule{margin-top:22px}
-  .schedule {display: grid;grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));gap: 12px;margin-top: 22px;}
-  .day-card {border-radius: 12px;padding: 14px;box-shadow: 0 2px 6px rgba(0,0,0,0.15);background: none;border: 1px solid rgba(255,255,255,0.08);}
-  .day-title {margin: 0 0 12px 0;font-weight: 700;font-size: 1.1rem;}
-  .lesson-row {display: flex;justify-content: space-between;align-items: center;gap: 12px;padding: 8px 0;border-bottom: 1px solid rgba(255,255,255,0.06);flex-wrap:wrap;}
-  .lesson-row:last-child {border-bottom: none;}
-  .lesson-time {font-weight: 600;min-width: 80px;}
-  .lesson-info {flex: 1;min-width: 120px;}
-  .lesson-spots {white-space: nowrap;margin-left: auto;}
-  .lesson-row button {flex-shrink: 0;}
-  @media (max-width: 768px) {
-    .lesson-row {flex-direction: column;align-items: flex-start;}
-    .lesson-spots,.lesson-time,.lesson-info,.lesson-row button {margin: 4px 0;}
-  }
-  .instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
-  .instructor{display:flex;gap:12px;align-items:center}
-  .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
-  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
-  .plan{padding:18px;border-radius:12px;text-align:center}
-  .plan .price{font-size:20px;font-weight:800;margin-top:8px}
-  .contact{margin-top:18px}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  input,textarea,select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
-  textarea{min-height:120px}
-  select{background-color:#000033;color:white}
-  footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
-  @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
-  @media (max-width:760px){
-    header{padding:8px 12px}
-    .hamburger{display:inline-flex}
-    nav{display:none}
-    .container{margin-top:86px;padding:12px}
-    .grid,.instructors,.plans{grid-template-columns:1fr}
-    .hero{padding:18px}
-  }
-  .muted{color:var(--muted)}
-  .center{display:flex;justify-content:center;align-items:center}
-  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
-  .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
-  .modal.show{display:flex}
-  .click{transition:transform var(--transition)}
-  .click:active{transform:scale(.98)}
-  input[type="tel"]{letter-spacing:0.5px}
-  .form-note{font-size:12px;color:var(--muted);margin-top:6px}
-  img{max-width:100%;height:auto;display:block}
-
-  /* SPA helpers */
-  main > section { display: none; }
-  main > section.active { display: block; }
-  /* lesson info card hover style (LessonInfo data) */
-  .lesson-card {background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .25s ease, box-shadow .25s ease}
-  .lesson-card:hover { transform:translateY(-6px); box-shadow:0 12px 30px rgba(0,0,0,0.5); }
-  .lesson-card .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4)); color:#fff; padding:18px; opacity:0; transition:opacity .25s ease; display:flex; align-items:center; justify-content:center; text-align:center; }
-  .lesson-card:hover .overlay { opacity:1; }
-  .lesson-brief { min-height:46px; }
+:root{
+  --bg:#0f1724;
+  --card:#0b1220;
+  --muted:#94a3b8;
+  --accent:#ff6b6b;
+  --accent-2:#06b6d4;
+  --glass:rgba(255,255,255,0.03);
+  --radius:14px;
+  --max-w:1200px;
+  --transition:250ms cubic-bezier(.2,.9,.3,1);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Roboto,system-ui,Arial;
+  background:linear-gradient(135deg,#071021 0%,#071833 60%);
+  color:#e6eef8;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+a{color:inherit}
+.container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
+header{
+  position:fixed;
+  inset:0 0 auto 0;
+  height:78px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 24px;
+  backdrop-filter:blur(6px);
+  background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  z-index:1200
+}
+.brand{display:flex;gap:12px;align-items:center}
+.brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+.brand .title{font-weight:700;font-size:18px;color:var(--accent)}
+nav{display:flex;gap:8px}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{
+  padding:8px 12px;
+  border-radius:10px;
+  font-weight:500;
+  color:var(--muted);
+  text-decoration:none;
+  cursor:pointer
+}
+.nav-links a.active,.nav-links a:hover{background:var(--glass);color:#fff}
+.actions{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+.hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
+.hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
+.hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
+.kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
+.hero p{color:var(--muted);margin-bottom:18px}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+.card h3{margin:0 0 8px}
+.small{font-size:13px;color:var(--muted)}
+.schedule{display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:12px;margin-top:22px}
+.day-card{border-radius:12px;padding:14px;box-shadow:0 2px 6px rgba(0,0,0,0.15);background:none;border:1px solid rgba(255,255,255,0.08)}
+.day-title{margin:0 0 12px 0;font-weight:700;font-size:1.1rem}
+.lesson-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);flex-wrap:wrap}
+.lesson-row:last-child{border-bottom:none}
+.lesson-time{font-weight:600;min-width:80px}
+.lesson-info{flex:1;min-width:120px}
+.lesson-spots{white-space:nowrap;margin-left:auto}
+.lesson-row button{flex-shrink:0}
+@media (max-width:768px){
+  .lesson-row{flex-direction:column;align-items:flex-start}
+  .lesson-spots,.lesson-time,.lesson-info,.lesson-row button{margin:4px 0}
+}
+.instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+.instructor{display:flex;gap:12px;align-items:center}
+.instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.plan{padding:18px;border-radius:12px;text-align:center}
+.plan .price{font-size:20px;font-weight:800;margin-top:8px}
+.contact{margin-top:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+input,textarea,select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
+textarea{min-height:120px}
+select{background-color:#000033;color:white}
+footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
+@media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
+@media (max-width:760px){
+  header{padding:8px 12px}
+  .hamburger{display:inline-flex}
+  nav{display:none}
+  .container{margin-top:86px;padding:12px}
+  .grid,.instructors,.plans{grid-template-columns:1fr}
+  .hero{padding:18px}
+}
+.muted{color:var(--muted)}
+.center{display:flex;justify-content:center;align-items:center}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
+.modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
+.modal.show{display:flex}
+.click{transition:transform var(--transition)}
+.click:active{transform:scale(.98)}
+input[type="tel"]{letter-spacing:0.5px}
+.form-note{font-size:12px;color:var(--muted);margin-top:6px}
+img{max-width:100%;height:auto;display:block}
+main > section{display:none}
+main > section.active{display:block}
+.lesson-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .25s ease, box-shadow .25s ease}
+.lesson-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(0,0,0,0.5)}
+.lesson-card .overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.4));color:#fff;padding:18px;opacity:0;transition:opacity .25s ease;display:flex;align-items:center;justify-content:center;text-align:center}
+.lesson-card:hover .overlay{opacity:1}
+.lesson-brief{min-height:46px}
 </style>
 </head>
 <body>
@@ -270,24 +295,30 @@ const RANGE_INSTRUCTORS = "Instructors!A2:D";
 const RANGE_DETAILS = "InstructorDetails!A2:B";
 const RANGE_SCHEDULE = "Sheet7!A2:E";
 const RANGE_LESSON_INFO = "LessonInfo!A2:C";
+
 let SCHEDULE = [];
 let INSTRUCTORS = [];
 let INSTRUCTOR_DETAILS = {};
 let LESSON_INFO = [];
+
 const PLANS = [
   {id:'trial', title:'Proef Les', desc:'1 les naar keuze (1ste keer gratis)', price:10, period:'eenmalig'},
   {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
   {id:'Maand', title:'Maan Abonnement', desc:'Maandelijks Abonnoment', price:40, period:'Maandelijks'}
 ];
+
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
+
 function formatDate(d=new Date()){
   return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
 }
 function formatTime(d=new Date()){
   return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':');
 }
+
 const DUTCH_TO_DAY = {'Maandag':1,'Dinsdag':2,'Woensdag':3,'Donderdag':4,'Vrijdag':5,'Zaterdag':6,'Zondag':0};
+
 function parseTimes(timeString){
   if(!timeString) return {start:{h:0,m:0},end:{h:0,m:0}};
   const [start,end]=timeString.split('-').map(t=>t.trim());
@@ -295,6 +326,7 @@ function parseTimes(timeString){
   const [eh,em=0]=end.split(':').map(Number);
   return{start:{h:sh,m:sm},end:{h:eh,m:em}};
 }
+
 function nextOccurrenceForItem(item,fromDate=new Date()){
   const targetDay=DUTCH_TO_DAY[item.day];
   if(targetDay===undefined) return null;
@@ -310,6 +342,7 @@ function nextOccurrenceForItem(item,fromDate=new Date()){
   if(candidateEnd <= now) candidate.setDate(candidate.getDate() + 7);
   return candidate;
 }
+
 function getNextLesson(fromDate=new Date()){
   let soonest = null;
   let soonestItem = null;
@@ -323,6 +356,7 @@ function getNextLesson(fromDate=new Date()){
   });
   return {item: soonestItem, date: soonest};
 }
+
 function timeUntilString(futureDate){
   if(!futureDate) return '';
   const diff = futureDate - new Date();
@@ -335,6 +369,27 @@ function timeUntilString(futureDate){
   if(hours>0) return `${hours}u ${minutes}m`;
   return `${minutes}m`;
 }
+
+const modal = $('#modal');
+const modalContent = $('#modal-content');
+let activeBooking = null;
+
+function showModal(){
+  if(!modal) return;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  if(!modal) return;
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+  activeBooking = null;
+}
+
+const modalCancel = $('#modal-cancel');
+if(modalCancel) modalCancel.addEventListener('click', closeModal);
+
 function renderLessonInfoCards(){
   const wrap = $('#lesson-info-cards');
   if(!wrap) return;
@@ -349,10 +404,27 @@ function renderLessonInfoCards(){
     div.innerHTML = `<h3>${l.title}</h3>
       <div class="lesson-brief small muted">${l.short}</div>
       <div class="overlay small" aria-hidden="true">${l.long}</div>`;
-    div.addEventListener('click', ()=> showPage('lessen'));
+    div.addEventListener('click', ()=>openLessonInfo(l));
     wrap.appendChild(div);
   });
 }
+
+function openLessonInfo(info){
+  modalContent.innerHTML = `
+    <div style="text-align:center">
+      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn" style="width:80px;height:80px;margin-bottom:12px">
+    </div>
+    <h3>${info.title}</h3>
+    <p class="muted">${info.short}</p>
+    <div style="white-space:pre-line;max-height:400px;overflow:auto;margin-top:8px">${info.long}</div>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px">
+      <button class="btn ghost" onclick="closeModal()">Sluiten</button>
+    </div>
+  `;
+  activeBooking = null;
+  showModal();
+}
+
 function renderSchedule(){
   const tbody = $('#schedule-body');
   if(!tbody) return;
@@ -379,6 +451,7 @@ function renderSchedule(){
     tbody.appendChild(dayCard);
   });
 }
+
 function renderInstructors(){
   const wrap = $('#instructors-list');
   if(!wrap) return;
@@ -393,6 +466,7 @@ function renderInstructors(){
     wrap.appendChild(div);
   });
 }
+
 function renderPlans(){
   const wrap = $('#plans-list');
   if(!wrap) return;
@@ -404,6 +478,7 @@ function renderPlans(){
     wrap.appendChild(div);
   });
 }
+
 function updateHomeSummary(){
   const next = getNextLesson();
   const summaryEl = $('#home-lesson-summary');
@@ -438,9 +513,7 @@ function updateHomeSummary(){
     newsEl.textContent = 'Geen nieuwe meldingen';
   }
 }
-const modal = $('#modal');
-const modalContent = $('#modal-content');
-let activeBooking = null;
+
 function openBook(opts={}){
   if(opts.type==='proefles'){
     modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
@@ -461,19 +534,7 @@ function openBook(opts={}){
   activeBooking = {type:'lesson', id: item.id};
   showModal();
 }
-function showModal(){
-  if(!modal) return;
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(){
-  if(!modal) return;
-  modal.style.display = 'none';
-  document.body.style.overflow = 'auto';
-  activeBooking = null;
-}
-const modalCancel = $('#modal-cancel');
-if(modalCancel) modalCancel.addEventListener('click', closeModal);
+
 const modalConfirm = $('#modal-confirm');
 if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   if(!activeBooking){ closeModal(); return; }
@@ -511,6 +572,7 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   }
   closeModal();
 });
+
 function showPage(page){
   $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
   $$('.nav-links a').forEach(a=>a.classList.remove('active'));
@@ -522,6 +584,7 @@ function showPage(page){
   history.pushState({page}, '', `#${page}`);
   window.scrollTo({top:0, behavior:'instant'});
 }
+
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
     const target = a.dataset.page;
@@ -531,122 +594,61 @@ $$('.nav-links a').forEach(a=>{
     }
   });
 });
+
 $('#mobile-toggle')?.addEventListener('click', ()=>{
   const nav = document.querySelector('nav');
   const expanded = nav.style.display === 'block';
   nav.style.display = expanded ? '' : 'block';
   $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
 });
+
 document.addEventListener('click', (e)=>{
-  const bookBtn = e.target.closest('[data-book]');
+  const bookBtn = e.target.closest('button[data-book]');
   if(bookBtn){
-    const id = Number(bookBtn.getAttribute('data-book'));
+    const id = bookBtn.dataset.book;
     openBook({id});
   }
-  const chooseBook = e.target.closest('#cta-book, #open-book');
-  if(chooseBook){
-    openBook({type:'proefles'});
-  }
-  const card = e.target.closest('.instructor');
-  if(card && card.dataset.instructor){
-    const instr = INSTRUCTORS.find(i => i.name === card.dataset.instructor);
-    if(instr){
-      const fullBio = INSTRUCTOR_DETAILS[instr.name] || instr.bio || 'Geen extra info beschikbaar.';
-      modalContent.innerHTML = `
-        <h2>${instr.name}</h2>
-        <p class="muted">${instr.role}</p>
-        <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
-        <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
-      `;
-      activeBooking = null;
-      showModal();
-    }
-  }
 });
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape') closeModal();
-});
-$('#contact-form')?.addEventListener('submit', e=>{
-  e.preventDefault();
-  const form = e.target;
-  const data = new FormData(form);
-  fetch(form.action, {method:'POST', body:data, headers:{'Accept':'application/json'}})
-    .then(async r=>{
-      if(r.ok){
-        alert('Bedankt! We nemen contact op.');
-        form.reset();
-      } else {
-        try{
-          const j = await r.json();
-          alert(j?.error || 'Er ging iets mis');
-        }catch{
-          alert('Er ging iets mis');
-        }
-      }
-    })
-    .catch(()=>alert('Er ging iets mis bij versturen'));
-});
-async function fetchSheetData(range){
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
-  try{
-    const res = await fetch(url);
-    if(!res.ok){
-      const text = await res.text().catch(()=>res.statusText);
-      throw new Error(`Google Sheets API fout ${res.status}: ${text}`);
-    }
-    const data = await res.json();
-    return data.values || [];
-  }catch(err){
-    console.error('fetchSheetData error', err);
-    return [];
-  }
-}
-async function loadData(){
-  const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
-  INSTRUCTORS = instructors.map(r => ({
-    name: r[0]||'',
-    bio: r[1]||'',
-    role: r[2]||'',
-    img: r[3]||''
-  }));
-  const details = await fetchSheetData(RANGE_DETAILS);
-  INSTRUCTOR_DETAILS = {};
-  details.forEach(r=>{
-    if(r[0]) INSTRUCTOR_DETAILS[r[0]] = r[1]||'';
-  });
-  const schedule = await fetchSheetData(RANGE_SCHEDULE);
-  let idCounter = 1;
-  SCHEDULE = schedule.map(r => ({
-    id: idCounter++,
-    day: r[0]||'',
-    time: r[1]||'',
-    class: r[2]||'',
-    trainer: r[3]||'',
-    spots: Number(r[4]||0)
-  }));
-  const lessonInfo = await fetchSheetData(RANGE_LESSON_INFO);
-  LESSON_INFO = lessonInfo.map(r=>({title:r[0]||'',short:r[1]||'',long:r[2]||''}));
-  const visible = document.querySelector('main > section:not([style*="display: none"])')?.id || 'home';
-  if(visible === 'home'){ renderLessonInfoCards(); updateHomeSummary(); }
-  if(visible === 'lessen'){ renderSchedule(); }
-  if(visible === 'instructeurs'){ renderInstructors(); }
-  renderPlans();
-}
-function init(){
-  const initial = (location.hash.replace('#','') || 'home');
-  $$('#app > section').forEach(s => s.style.display = 'none');
-  const targetEl = document.getElementById(initial) || document.getElementById('home');
-  targetEl.style.display = 'block';
-  $$('.nav-links a').forEach(a=>a.classList.remove('active'));
-  $$('.nav-links a').find(a=>a.dataset.page===targetEl.id)?.classList.add('active');
-  loadData();
-  setInterval(updateHomeSummary, 60000);
-}
+
 window.addEventListener('popstate', (e)=>{
-  const page = e.state?.page || 'home';
-  showPage(page);
+  if(e.state?.page) showPage(e.state.page);
+  else showPage('home');
 });
-document.addEventListener('DOMContentLoaded', init);
+
+async function fetchSheet(range){
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.values || [];
+}
+
+async function init(){
+  const scheduleData = await fetchSheet(RANGE_SCHEDULE);
+  const instructorsData = await fetchSheet(RANGE_INSTRUCTORS);
+  const lessonInfoData = await fetchSheet(RANGE_LESSON_INFO);
+
+  SCHEDULE = scheduleData.map(r=>({
+    id:r[0]||r[2]||Math.random().toString(36).substr(2,6),
+    day:r[0],
+    time:r[1],
+    class:r[2],
+    trainer:r[3],
+    spots:Number(r[4]||10)
+  }));
+
+  INSTRUCTORS = instructorsData.map(r=>({name:r[0], role:r[1], img:r[2], bio:r[3]}));
+
+  LESSON_INFO = lessonInfoData.map(r=>({title:r[0], short:r[1], long:r[2]}));
+
+  renderLessonInfoCards();
+  renderSchedule();
+  renderInstructors();
+  renderPlans();
+  updateHomeSummary();
+  showPage(location.hash?.substring(1)||'home');
+}
+
+init();
 </script>
 </body>
 </html>
