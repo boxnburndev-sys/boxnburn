@@ -1,255 +1,135 @@
 <!doctype html>
 <html lang="nl">
 <head>
-  <script src="favicon.js"></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Box N Burn</title>
-  <meta name="description" content="Box N Burn: Bokstraining, spinning en yoga. Boek lessen, beheer abonnementen en bekijk onze kalender." />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
-    --radius:14px; --max-w:1200px; --transition:250ms cubic-bezier(.2,.9,.3,1);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;font-family:Roboto,system-ui,Arial; background:linear-gradient(135deg,#071021 0%,#071833 60%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-  }
-  a{color:inherit}
-  .container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
-  header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200}
-  .brand{display:flex;gap:12px;align-items:center}
-  .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
-  .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
-  nav{display:flex;gap:8px}
-  .nav-links{display:flex;gap:6px;align-items:center}
-  .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none}
-  .nav-links a.active, .nav-links a:hover{background:var(--glass);color:#fff}
-  .actions{display:flex;gap:8px}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0}
-  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
-  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-  .hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
-  .hero{display:grid;grid-template-columns:1fr;gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
-  .hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
-  .kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
-  .hero p{color:var(--muted);margin-bottom:18px}
-  .lessons-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:22px}
-  .lesson-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);position:relative;overflow:hidden;transition:transform .3s ease, box-shadow .3s ease}
-  .lesson-card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,0.3)}
-  .lesson-card h3{margin:0 0 8px}
-  .lesson-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);color:#fff;padding:14px;opacity:0;transition:opacity .3s ease;display:flex;align-items:center;justify-content:center;text-align:center}
-  .lesson-card:hover .lesson-overlay{opacity:1}
-  .small{font-size:13px;color:var(--muted)}
-  .instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
-  .instructor{display:flex;gap:12px;align-items:center}
-  .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
-  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
-  .plan{padding:18px;border-radius:12px;text-align:center}
-  .plan .price{font-size:20px;font-weight:800;margin-top:8px}
-  .contact{margin-top:18px}
-  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  input,textarea,select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
-  textarea{min-height:120px}
-  select{background-color:#000033;color:white}
-  footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
-  @media (max-width:1000px){.instructors,.plans{grid-template-columns:1fr} }
-  @media (max-width:760px){header{padding:8px 12px}.hamburger{display:inline-flex}nav{display:none}.container{margin-top:86px;padding:12px}.hero{padding:18px}}
-  .muted{color:var(--muted)}
-  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
-  .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
-  .modal.show{display:flex}
-  img{max-width:100%;height:auto;display:block}
-</style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <style>
+    body {margin:0;font-family:Roboto,Arial,sans-serif;background:#0f1724;color:#e6eef8;}
+    header {display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#0b1220;position:sticky;top:0;z-index:100}
+    nav a {color:#94a3b8;margin:0 8px;text-decoration:none;padding:8px 12px;border-radius:8px;transition:0.2s}
+    nav a.active, nav a:hover {background:#1e293b;color:#fff}
+    .container {max-width:1000px;margin:20px auto;padding:20px}
+    section {display:none;}
+    section.active {display:block;}
+    h1,h2 {margin-top:0}
+    .btn {background:#ff6b6b;color:#021022;padding:10px 16px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+    .instructor {display:flex;gap:12px;margin:10px 0;background:#1e293b;padding:12px;border-radius:10px}
+    .instructor img {width:76px;height:76px;border-radius:10px;object-fit:cover}
+    .lesson {background:#1e293b;padding:12px;border-radius:8px;margin:8px 0}
+    .plan {background:#1e293b;padding:14px;border-radius:10px;margin:10px 0;text-align:center}
+    footer {margin-top:40px;padding:20px;text-align:center;color:#94a3b8;background:#0b1220}
+    form input, form textarea {width:100%;padding:10px;margin:6px 0;border-radius:6px;border:1px solid #334155;background:#0f1724;color:#e6eef8}
+    form button {margin-top:10px}
+  </style>
 </head>
 <body>
-  <header role="banner">
-    <div class="brand">
-      <img src="https://i.ibb.co/bj5mBF0t/Box-N-Burn-Algemeen.png" alt="Box N Burn logo">
-      <div>
-        <div class="title">Box N Burn</div>
-        <div class="small muted">Westerlo Nieuwe lessen elke week</div>
-      </div>
-    </div>
-    <nav aria-label="Hoofd navigatie">
-      <div class="nav-links" role="navigation">
-        <a href="#home" data-page="home" class="active">Home</a>
-        <a href="#lessen" data-page="lessen">Lessen</a>
-        <a href="#instructeurs" data-page="instructeurs">Instructeurs</a>
-        <a href="#abonnementen" data-page="abonnementen">Abonnementen</a>
-        <a href="#contact" data-page="contact">Contact</a>
-        <a href="/jobs">Jobs</a>
-        <a href="/login">Dashboard</a>
-      </div>
+  <header>
+    <div class="brand"><strong>Box N Burn</strong></div>
+    <nav>
+      <a href="#home" data-page="home" class="active">Home</a>
+      <a href="#lessen" data-page="lessen">Lessen</a>
+      <a href="#instructeurs" data-page="instructeurs">Instructeurs</a>
+      <a href="#abonnementen" data-page="abonnementen">Abonnementen</a>
+      <a href="#contact" data-page="contact">Contact</a>
     </nav>
-    <div class="actions">
-      <button class="btn primary" id="open-book">Boek Nu</button>
-      <button class="hamburger" id="mobile-toggle" aria-expanded="false">☰</button>
-    </div>
   </header>
 
-  <main class="container" id="app">
-    <section class="hero" id="home">
-      <div class="hero-left">
-        <span class="kicker">Word sterker. Voel je beter.</span>
-        <h1>Ontdek onze lessen bij Box N Burn</h1>
-        <p>Bekijk hieronder welke lessen we aanbieden. Zweef met je muis over een kaart voor meer informatie.</p>
-        <div class="lessons-info" id="lessons-info"></div>
-      </div>
+  <main class="container">
+    <!-- Home -->
+    <section id="home" class="active">
+      <h1>Welkom bij Box N Burn</h1>
+      <p>Word sterker. Voel je beter. Ontdek onze lessen!</p>
+      <button class="btn" onclick="showPage('lessen')">Bekijk Lessen</button>
     </section>
 
+    <!-- Lessen -->
     <section id="lessen">
-      <h2>Lessen & Agenda</h2>
-      <p class="muted">Klik op een les om te boeken.</p>
-      <div class="schedule" id="schedule-body" aria-live="polite"></div>
+      <h1>Lessen & Agenda</h1>
+      <p>Klik op een les om te boeken.</p>
+      <div id="schedule-body">Laden...</div>
     </section>
 
+    <!-- Instructeurs -->
     <section id="instructeurs">
-      <h2>Onze Instructeurs</h2>
-      <div class="instructors" id="instructors-list"></div>
+      <h1>Onze Instructeurs</h1>
+      <div id="instructors-list">Laden...</div>
     </section>
 
+    <!-- Abonnementen -->
     <section id="abonnementen">
-      <h2>Abonnementen</h2>
-      <p class="muted">Betaal ter plaatse via cash of Payqonic.</p>
-      <div class="plans" id="plans-list"></div>
-      <button class="btn primary" onclick="window.location.href='#contact';">Kies</button>
+      <h1>Abonnementen</h1>
+      <div id="plans-list"></div>
     </section>
 
+    <!-- Contact -->
     <section id="contact">
-      <h2>Neem contact op</h2>
-      <form id="contact-form" class="contact" action="https://api.web3forms.com/submit" method="POST">
+      <h1>Neem contact op</h1>
+      <form action="https://api.web3forms.com/submit" method="POST">
         <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
-        <input type="hidden" name="subject" value="Nieuwe contactaanvraag Box N Burn">
-        <div class="form-row">
-          <input name="name" placeholder="Je naam" required autocomplete="name">
-          <input name="email" type="email" placeholder="E-mail" required autocomplete="email">
-          <input name="telefoonnummer" type="Nummer" placeholder="+32 123 45 67 89" required autocomplete="email">
-        </div>
-        <div class="form-row" style="margin-top:8px">
-          <select name="plan" aria-label="Kies een plan">
-            <option value="">Kies een plan (optioneel)</option>
-            <option value="proefles">Proefles</option>
-            <option value="1 Keer">1 Keer</option>
-            <option value="Maand">Maandelijks</option>
-          </select>
-          <div></div>
-        </div>
-        <div style="margin-top:8px">
-          <textarea name="message" placeholder="Je bericht" required></textarea>
-        </div>
-        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-          <button type="submit" class="btn primary">Verstuur bericht</button>
-        </div>
-        <div class="muted" style="margin-top:8px">Alle betalingen gebeuren ter plaatse via Paqconiq of Cash.</div>
+        <input type="text" name="name" placeholder="Naam" required>
+        <input type="email" name="email" placeholder="E-mail" required>
+        <textarea name="message" placeholder="Je bericht" required></textarea>
+        <button type="submit" class="btn">Verstuur</button>
       </form>
     </section>
-
-    <footer>
-      <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
-      <a href="/privacy"><div class="muted">Privacy Beleid</div></a>
-    </footer>
   </main>
 
-  <div class="modal-backdrop" id="modal">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Boek les">
-      <div id="modal-content"></div>
-      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-        <button class="btn ghost" id="modal-cancel">Annuleer</button>
-        <button class="btn primary" id="modal-confirm">Bevestig boeking</button>
-      </div>
-    </div>
-  </div>
+  <footer>&copy; 2025 Box N Burn — Alle rechten voorbehouden</footer>
 
 <script>
 const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
 const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
-const RANGE_INSTRUCTORS = "Instructors!A2:D";
-const RANGE_DETAILS = "InstructorDetails!A2:B";
-const RANGE_SCHEDULE = "Shedule!A2:E";
-const RANGE_LESSON_INFO = "LessonInfo!A2:C";
 
-let SCHEDULE = [];
-let INSTRUCTORS = [];
-let INSTRUCTOR_DETAILS = {};
-let LESSON_INFO = [];
-const PLANS = [
-  {id:'trial', title:'Proef Les', desc:'1 les naar keuze (1ste keer gratis)', price:10, period:'eenmalig'},
-  {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
-  {id:'Maand', title:'Maan Abonnement', desc:'Maandelijks Abonnoment', price:40, period:'Maandelijks'}
-];
+async function fetchSheet(range){
+  const url=`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+  const res=await fetch(url); const data=await res.json(); return data.values||[];
+}
 
-const $ = sel => document.querySelector(sel);
+// Load data functions
+async function loadSchedule(){
+  const rows=await fetchSheet("Shedule!A2:E");
+  const body=document.getElementById("schedule-body");
+  body.innerHTML=rows.map(r=>`<div class="lesson"><strong>${r[2]}</strong> — ${r[0]} ${r[1]}<br>Trainer: ${r[3]} | Plaatsen: ${r[4]}</div>`).join("");
+}
+async function loadInstructors(){
+  const rows=await fetchSheet("Instructors!A2:D");
+  const list=document.getElementById("instructors-list");
+  list.innerHTML=rows.map(r=>`
+    <div class="instructor">
+      <img src="${r[3]||'https://via.placeholder.com/76'}" alt="${r[0]}">
+      <div><strong>${r[0]}</strong><br><small>${r[2]}</small><br>${r[1]}</div>
+    </div>`).join("");
+}
+function loadPlans(){
+  const plans=[
+    {title:"Proefles",price:"Gratis",desc:"Eerste les gratis"},
+    {title:"1 Keer",price:"€10",desc:"Betaal per losse les"},
+    {title:"Maandelijks",price:"€40",desc:"Onbeperkt per maand"}
+  ];
+  const list=document.getElementById("plans-list");
+  list.innerHTML=plans.map(p=>`<div class="plan"><h3>${p.title}</h3><p>${p.desc}</p><strong>${p.price}</strong></div>`).join("");
+}
 
-function renderInstructors(){
-  const wrap = $('#instructors-list');
-  if(!wrap) return;
-  wrap.innerHTML = '';
-  INSTRUCTORS.forEach(i=>{
-    const div = document.createElement('div');
-    div.className = 'instructor card';
-    div.innerHTML = `<img loading="lazy" src="${i.img || 'https://via.placeholder.com/76'}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;
-    wrap.appendChild(div);
+// Page switching
+function showPage(id){
+  document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelector(`nav a[data-page="${id}"]`).classList.add("active");
+  if(id==="lessen") loadSchedule();
+  if(id==="instructeurs") loadInstructors();
+  if(id==="abonnementen") loadPlans();
+}
+
+// Nav clicks
+document.querySelectorAll("nav a").forEach(a=>{
+  a.addEventListener("click",e=>{
+    e.preventDefault();
+    showPage(a.dataset.page);
   });
-}
-
-function renderPlans(){
-  const wrap = $('#plans-list');
-  if(!wrap) return;
-  wrap.innerHTML = '';
-  PLANS.forEach(p=>{
-    const div = document.createElement('div');
-    div.className = 'plan card';
-    div.innerHTML = `<h3>${p.title}</h3><div class="small muted">${p.desc}</div><div class="price">€${p.price}${p.period!=='eenmalig'?' / '+p.period:''}</div>`;
-    wrap.appendChild(div);
-  });
-}
-
-function renderLessonsInfo(){
-  const wrap = $('#lessons-info');
-  if(!wrap) return;
-  wrap.innerHTML = '';
-  LESSON_INFO.forEach(l=>{
-    const card = document.createElement('div');
-    card.className = 'lesson-card';
-    card.innerHTML = `<h3>${l.title}</h3><div class="small muted">${l.short}</div><div class="lesson-overlay">${l.long}</div>`;
-    wrap.appendChild(card);
-  });
-}
-
-async function fetchSheetData(range){
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
-  const res = await fetch(url);
-  if(!res.ok){throw new Error('API fout');}
-  const data = await res.json();
-  return data.values || [];
-}
-
-async function loadData(){
-  try{
-    const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
-    INSTRUCTORS = instructors.map(r => ({name:r[0]||'',bio:r[1]||'',role:r[2]||'',img:r[3]||''}));
-    const details = await fetchSheetData(RANGE_DETAILS);
-    INSTRUCTOR_DETAILS = {};
-    details.forEach(r=>{if(r[0]) INSTRUCTOR_DETAILS[r[0]] = r[1]||'';});
-    const schedule = await fetchSheetData(RANGE_SCHEDULE);
-    let idCounter = 1;
-    SCHEDULE = schedule.map(r => ({id:idCounter++,day:r[0]||'',time:r[1]||'',class:r[2]||'',trainer:r[3]||'',spots:Number(r[4]||0)}));
-    const lessonInfo = await fetchSheetData(RANGE_LESSON_INFO);
-    LESSON_INFO = lessonInfo.map(r=>({title:r[0]||'',short:r[1]||'',long:r[2]||''}));
-    renderInstructors();
-    renderPlans();
-    renderLessonsInfo();
-  }catch(e){console.error('LoadData error',e);}
-}
-
-function init(){
-  renderPlans();
-  loadData();
-}
-document.addEventListener('DOMContentLoaded', init);
+});
 </script>
 </body>
 </html>
