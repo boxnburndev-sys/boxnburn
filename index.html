@@ -8,16 +8,6 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
 (__) (__)     (__)  \_)  (__)     (_")  (_/     (__) (__)    (__)  (__)  (__)(_")  (_/  
 -->
 
-<!--
-   ____     U  ___ u __  __        _   _           ____     _   _    ____     _   _     
-U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \ |"|    
- \|  _ \/    | | | | /\  /\      <|  \| |>       \|  _ \/ \| |\| | \| |_) |/<|  \| |>   
-  | |_) |.-,_| |_| |U /  \ u     U| |\  |u        | |_) |  | |_| |  |  _ <  U| |\  |u   
-  |____/  \_)-\___/  /_/\_\       |_| \_|         |____/  <<\___/   |_| \_\  |_| \_|    
- _|| \\_       \\  ,-,>> \\_      ||   \\,-.     _|| \\_ (__) )(    //   \\_ ||   \\,-. 
-(__) (__)     (__)  \_)  (__)     (_")  (_/     (__) (__)    (__)  (__)  (__)(_")  (_/  
--->
-
 <!doctype html>
 <html lang="nl">
 <head>
@@ -55,7 +45,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   .hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
   .hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
   .kicker{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted);margin-bottom:12px}
-  .hero p{color:var(--muted);margin-bottom:18px}
+  .hero p{Color:var(--muted);margin-bottom:18px}
   .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
   .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
   .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
@@ -107,8 +97,9 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   .form-note{font-size:12px;color:var(--muted);margin-top:6px}
   img{max-width:100%;height:auto;display:block}
   .social-icons{display:flex;gap:12px;margin-top:16px}
-  .social-icons img{width:32px;height:32px;cursor:pointer;transition:opacity .2s}
-  .social-icons img:hover{opacity:0.8}
+  .social-icons a{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.02);transition:transform var(--transition)}
+  .social-icons img{width:22px;height:22px;display:block}
+  .social-icons a:hover{transform:translateY(-3px)}
 </style>
 </head>
 <body>
@@ -123,9 +114,11 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     <nav aria-label="Hoofd navigatie">
       <div class="nav-links" role="navigation">
         <a href="#home" data-page="home" class="active">Home</a>
-        <a href="https://www.google.com/" data-page="lessen">Lessen</a>
+        <!-- Redirected: Lessen now links externally -->
+        <a href="https://www.google.com/" target="_blank" rel="noopener">Lessen</a>
         <a href="#instructeurs" data-page="instructeurs">Instructeurs</a>
-        <a href="https://www.google.com/abon" data-page="abonnementen">Abonnementen</a>
+        <!-- Redirected: Abonnementen now links externally -->
+        <a href="https://www.google.com/abon" target="_blank" rel="noopener">Abonnementen</a>
         <a href="#contact" data-page="contact">Contact</a>
         <a href="/jobs">Jobs</a>
         <a href="/login">Dashboard</a>
@@ -145,16 +138,20 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <p>Mix van bokstraining, spinning en yoga voor beginners en gevorderden. Boek snel, bekijk instructeurs en kies een abonnement.</p>
         <div class="cta">
           <button class="btn primary" id="cta-book">Boek een proefles</button>
-          <a href="https://www.google.com/abon" class="btn ghost">Bekijk abonnementen</a>
+          <a href="https://www.google.com/abon" class="btn ghost" target="_blank" rel="noopener">Bekijk abonnementen</a>
         </div>
-        <div class="social-icons">
-          <a href="https://facebook.com" target="_blank" rel="noopener">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook">
+
+        <!-- Social icons (Facebook / Instagram) -->
+        <div class="social-icons" aria-hidden="false">
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+            <!-- using SVG icon data URI fallback from simple-icons CDN -->
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffffff' d='M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.325 24H12.82V14.708h-3.168v-3.62h3.168V8.413c0-3.136 1.913-4.846 4.705-4.846 1.338 0 2.487.099 2.82.144v3.27l-1.936.001c-1.518 0-1.813.72-1.813 1.777v2.332h3.626l-.473 3.62h-3.153V24h6.186C23.403 24 24 23.403 24 22.674V1.326C24 .597 23.403 0 22.675 0z'/></svg>" alt="Facebook">
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener">
-            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
+          <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ffffff' d='M12 2.163c3.204 0 3.584.012 4.85.07 1.17.056 1.97.24 2.427.403a4.92 4.92 0 0 1 1.675 1.09 4.92 4.92 0 0 1 1.09 1.675c.163.457.347 1.257.403 2.427.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.056 1.17-.24 1.97-.403 2.427a4.92 4.92 0 0 1-1.09 1.675 4.92 4.92 0 0 1-1.675 1.09c-.457.163-1.257.347-2.427.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.056-1.97-.24-2.427-.403a4.92 4.92 0 0 1-1.675-1.09 4.92 4.92 0 0 1-1.09-1.675c-.163-.457-.347-1.257-.403-2.427-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.056-1.17.24-1.97.403-2.427a4.92 4.92 0 0 1 1.09-1.675 4.92 4.92 0 0 1 1.675-1.09c.457-.163 1.257-.347 2.427-.403 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.332.013 7.053.072 5.773.13 4.678.357 3.757.733A7.125 7.125 0 0 0 1.64 1.64 7.125 7.125 0 0 0 .733 3.757c-.376.921-.603 2.016-.661 3.296C.013 8.332 0 8.741 0 12s.013 3.668.072 4.947c.058 1.28.285 2.375.661 3.296a7.125 7.125 0 0 0 .907 1.717 7.125 7.125 0 0 0 1.717.907c.921.376 2.016.603 3.296.661C8.332 23.987 8.741 24 12 24s3.668-.013 4.947-.072c1.28-.058 2.375-.285 3.296-.661a7.125 7.125 0 0 0 1.717-.907 7.125 7.125 0 0 0 .907-1.717c.376-.921.603-2.016.661-3.296.059-1.279.072-1.688.072-4.947s-.013-3.668-.072-4.947c-.058-1.28-.285-2.375-.661-3.296a7.125 7.125 0 0 0-.907-1.717 7.125 7.125 0 0 0-1.717-.907c-.921-.376-2.016-.603-3.296-.661C15.668.013 15.259 0 12 0z'/><path fill='%23ffffff' d='M12 5.838A6.162 6.162 0 1 0 18.162 12 6.169 6.169 0 0 0 12 5.838zm0 10.162A3.999 3.999 0 1 1 16 12a3.999 3.999 0 0 1-4 4zM18.406 4.594a1.44 1.44 0 1 0 1.44 1.44 1.441 1.441 0 0 0-1.44-1.44z'/></svg>" alt="Instagram">
           </a>
         </div>
+
         <div class="grid" style="margin-top:18px">
           <div class="card">
             <h3>Live planning</h3>
@@ -186,70 +183,503 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <div class="card" style="margin-top:12px">
           <h3>Zo vind je ons</h3>
           <div class="small muted">Adres: Sint-Lambertusstraat 33 B 2260 Westerlo</div>
-          <div style="margin-top:12px"><a class="btn ghost" href="https://www.google.com/maps/place/Sint-Lambertusstraat+33B,+2260+Westerlo/" target="_blank" rel="noopener">Open in Maps</a></div>
+          <div style="margin-top:12px"><a class="btn ghost" href="https://www.google.com/maps/place/Sint-Lambertusstraat+33B,+2260+Westerlo/@51.0900508,4.9163804,17z/data=!3m1!4b1!4m6!3m5!1s0x47c14f6e5a5445c7:0xd350a5fc4db12996!8m2!3d51.0900475!4d4.9189607!16s%2Fg%2F11v3pzzwy6?entry=ttu&g_ep=EgoyMDI1MDkxNC4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener">Open in Maps</a></div>
         </div>
       </aside>
     </section>
 
-    <!-- LESSONS REMOVED, REDIRECT LINK IN NAV -->
-    
-    <section id="instructeurs">
-      <h2>Onze Instructeurs</h2>
-      <div class="instructors" id="instructors-list">
-      </div>
-    </section>
+<!-- LESSONS PAGE REMOVED: link in nav redirects externally to https://www.google.com/ -->
 
-    <!-- ABONNEMENTEN REMOVED, REDIRECT IN NAV/CTA -->
+<section id="instructeurs">
+  <h2>Onze Instructeurs</h2>
+  <div class="instructors" id="instructors-list">
+  </div>
+</section>
 
-    <section id="contact">
-      <h2>Neem contact op</h2>
-      <form id="contact-form" class="contact" action="https://api.web3forms.com/submit" method="POST">
-        <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
-        <input type="hidden" name="subject" value="Nieuwe contactaanvraag Box N Burn">
-        <div class="form-row">
-          <input name="name" placeholder="Je naam" required autocomplete="name">
-          <input name="email" type="email" placeholder="E-mail" required autocomplete="email">
-          <input name="telefoonnummer" type="Nummer" placeholder="+32 123 45 67 89" required autocomplete="email">
-        </div>
-        <div class="form-row" style="margin-top:8px">
-          <select name="plan" aria-label="Kies een plan">
-            <option value="">Kies een plan (optioneel)</option>
-            <option value="proefles">Proefles</option>
-            <option value="1 Keer">1 Keer</option>
-            <option value="Maand">Maandelijks</option>
-          </select>
-          <div></div>
-        </div>
-        <div style="margin-top:8px">
-          <textarea name="message" placeholder="Je bericht" required></textarea>
-        </div>
-        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-          <button type="submit" class="btn primary">Verstuur bericht</button>
-        </div>
-        <div class="muted" style="margin-top:8px">Alle betalingen gebeuren ter plaatse via Paqconiq of Cash.</div>
-      </form>
-    </section>
+<!-- Abonnementen page removed from internal site; nav & CTA link to https://www.google.com/abon -->
 
-    <footer>
-      <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
-      <a href="/privacy">
-       <div class="muted">Privacy Beleid</div>
-      </a>
-    </footer>
-  </main>
+<section id="contact">
+  <h2>Neem contact op</h2>
+  <form id="contact-form" class="contact" action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
+    <input type="hidden" name="subject" value="Nieuwe contactaanvraag Box N Burn">
+    <div class="form-row">
+      <input name="name" placeholder="Je naam" required autocomplete="name">
+      <input name="email" type="email" placeholder="E-mail" required autocomplete="email">
+      <input name="telefoonnummer" type="Nummer" placeholder="+32 123 45 67 89" required autocomplete="email">
+    </div>
+    <div class="form-row" style="margin-top:8px">
+      <select name="plan" aria-label="Kies een plan">
+        <option value="">Kies een plan (optioneel)</option>
+        <option value="proefles">Proefles</option>
+        <option value="1 Keer">1 Keer</option>
+        <option value="Maand">Maandelijks</option>
+      </select>
+      <div></div>
+    </div>
+    <div style="margin-top:8px">
+      <textarea name="message" placeholder="Je bericht" required></textarea>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button type="submit" class="btn primary">Verstuur bericht</button>
+    </div>
+    <div class="muted" style="margin-top:8px">Alle betalingen gebeuren ter plaatse via Paqconiq of Cash.</div>
+  </form>
+</section>
 
-  <div class="modal-backdrop" id="modal">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Boek les">
-      <div id="modal-content"></div>
-      <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
-        <button class="btn ghost" id="modal-cancel">Annuleer</button>
-        <button class="btn primary" id="modal-confirm">Bevestig boeking</button>
-      </div>
+  <footer>
+    <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
+    <a href="/privacy">
+     <div class="muted">Privacy Beleid</div>
+    </a>
+  </footer>
+</main>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Boek les">
+    <div id="modal-content"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+      <button class="btn ghost" id="modal-cancel">Annuleer</button>
+      <button class="btn primary" id="modal-confirm">Bevestig boeking</button>
     </div>
   </div>
+</div>
 
 <script>
-/* original JavaScript stays unchanged, lesson rendering removed by redirect changes */
+const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
+const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
+const RANGE_INSTRUCTORS = "Instructors!A2:D";
+const RANGE_DETAILS = "InstructorDetails!A2:B";
+const RANGE_SCHEDULE = "Shedule!A2:E";
+
+let SCHEDULE = [];
+let INSTRUCTORS = [];
+let INSTRUCTOR_DETAILS = {};
+const PLANS = [
+  {id:'trial', title:'Proef Les', desc:'1 les naar keuze (1ste keer gratis)', price:10, period:'eenmalig'},
+  {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
+  {id:'Maand', title:'Maan Abonnement', desc:'Maandelijks Abonnoment', price:40, period:'Maandelijks'}
+];
+
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+function formatDate(d=new Date()){
+  return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
+}
+function formatTime(d=new Date()){
+  return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':');
+}
+
+const DUTCH_TO_DAY = {'Maandag':1,'Dinsdag':2,'Woensdag':3,'Donderdag':4,'Vrijdag':5,'Zaterdag':6,'Zondag':0};
+
+function parseTimes(timeString){
+  if(!timeString) return {start:{h:0,m:0},end:{h:0,m:0}};
+  const [start,end]=timeString.split('-').map(t=>t.trim());
+  const [sh,sm=0]=start.split(':').map(Number);
+  const [eh,em=0]=end.split(':').map(Number);
+  return{start:{h:sh,m:sm},end:{h:eh,m:em}};
+}
+
+function nextOccurrenceForItem(item,fromDate=new Date()){
+  const targetDay=DUTCH_TO_DAY[item.day];
+  if(targetDay===undefined) return null;
+  const now=new Date(fromDate);
+  const todayDay = now.getDay();
+  let delta = (targetDay - todayDay + 7) % 7;
+  const {start, end} = parseTimes(item.time);
+  const candidate = new Date(now);
+  candidate.setHours(start.h, start.m, 0, 0);
+  candidate.setDate(now.getDate() + delta);
+  const candidateEnd = new Date(candidate);
+  candidateEnd.setHours(end.h, end.m, 0, 0);
+  if(candidateEnd <= now) candidate.setDate(candidate.getDate() + 7);
+  return candidate;
+}
+
+function getNextLesson(fromDate=new Date()){
+  let soonest = null;
+  let soonestItem = null;
+  SCHEDULE.forEach(item=>{
+    const occ = nextOccurrenceForItem(item, fromDate);
+    if(!occ) return;
+    if(!soonest || occ < soonest){
+      soonest = occ;
+      soonestItem = item;
+    }
+  });
+  return {item: soonestItem, date: soonest};
+}
+
+function timeUntilString(futureDate){
+  if(!futureDate) return '';
+  const diff = futureDate - new Date();
+  if(diff <= 0) return 'nu';
+  const mins = Math.floor(diff/60000);
+  const days = Math.floor(mins/1440);
+  const hours = Math.floor((mins%1440)/60);
+  const minutes = mins%60;
+  if(days>0) return `${days}d ${hours}u`;
+  if(hours>0) return `${hours}u ${minutes}m`;
+  return `${minutes}m`;
+}
+
+function renderSchedule(){
+  const tbody = $('#schedule-body');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  const grouped = {};
+  SCHEDULE.forEach(item=>{
+    if(!grouped[item.day]) grouped[item.day]=[];
+    grouped[item.day].push(item);
+  });
+  Object.keys(DUTCH_TO_DAY).forEach(day=>{
+    if(!grouped[day]) return;
+    const dayCard = document.createElement('div');
+    dayCard.className = 'day-card';
+    dayCard.innerHTML = `<h3 class="day-title">${day}</h3>`;
+    grouped[day].forEach(item=>{
+      const div = document.createElement('div');
+      div.className = 'lesson-row';
+      div.innerHTML = `<div class="lesson-time">${item.time}</div>
+        <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
+        <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
+        <div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;
+      dayCard.appendChild(div);
+    });
+    tbody.appendChild(dayCard);
+  });
+  updateLiveInfo();
+}
+
+function renderInstructors(){
+  const wrap = $('#instructors-list');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  INSTRUCTORS.forEach(i=>{
+    const div = document.createElement('div');
+    div.className = 'instructor card';
+    const id = (i.name||'').toLowerCase().replace(/\s+/g,'-');
+    div.id = id;
+    div.dataset.instructor = i.name;
+    div.innerHTML = `<img loading="lazy" src="${i.img || 'https://via.placeholder.com/76'}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;
+    wrap.appendChild(div);
+  });
+}
+
+function renderPlans(){
+  const wrap = $('#plans-list');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  PLANS.forEach(p=>{
+    const div = document.createElement('div');
+    div.className = 'plan card';
+    div.innerHTML = `<h3>${p.title}</h3><div class="small muted">${p.desc}</div><div class="price">€${p.price}${p.period!=='eenmalig'?' / '+p.period:''}</div>`;
+    wrap.appendChild(div);
+  });
+}
+
+const modal = $('#modal');
+const modalContent = $('#modal-content');
+let activeBooking = null;
+
+function openBook(opts={}){
+  if(opts.type==='proefles'){
+    modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
+      <label style="display:block;margin-top:8px">Naam<input id="bk-name" autocomplete="name"></label>
+      <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
+      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>`;
+    activeBooking = {type:'proefles'};
+    showModal();
+    return;
+  }
+  const id = opts.id || null;
+  const item = SCHEDULE.find(s=>s.id===id);
+  if(!item){ alert('Les niet gevonden'); return; }
+  modalContent.innerHTML = `<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div>
+    <label style="display:block;margin-top:8px">Je naam<input id="bk-name" autocomplete="name"></label>
+    <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
+    <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;
+  activeBooking = {type:'lesson', id: item.id};
+  showModal();
+}
+
+function showModal(){
+  if(!modal) return;
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  if(!modal) return;
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
+  activeBooking = null;
+}
+const modalCancel = $('#modal-cancel');
+if(modalCancel) modalCancel.addEventListener('click', closeModal);
+const modalConfirm = $('#modal-confirm');
+if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
+  if(!activeBooking){ closeModal(); return; }
+  const name = $('#bk-name')?.value || 'Onbekend';
+  const email = $('#bk-email')?.value || '';
+  const qty = Number($('#bk-qty')?.value || 1);
+  const item = SCHEDULE.find(s=>s.id===activeBooking.id);
+  if(item && item.spots < qty){ alert('Niet genoeg plekken beschikbaar'); return; }
+  if(item) item.spots -= qty;
+  renderSchedule();
+  try{
+    const payload = {
+      access_key: "3287ed1d-2d60-4665-b739-2cf29b3de670",
+      name,
+      email,
+      class: item?.class || 'Proefles',
+      day: item?.day || '',
+      time: item?.time || '',
+      spots: qty,
+      subject: `Nieuwe boeking: ${item?.class || 'Proefles'}`
+    };
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if(res.ok){
+      alert('Boeking verstuurd!');
+    } else {
+      alert('Er ging iets mis bij het versturen.');
+    }
+  } catch(e){
+    console.error(e);
+    alert('Er ging iets mis bij het versturen.');
+  }
+  closeModal();
+});
+
+document.addEventListener('click', (e)=>{
+  const bookBtn = e.target.closest('[data-book]');
+  if(bookBtn){
+    const id = Number(bookBtn.getAttribute('data-book'));
+    openBook({id});
+  }
+  const chooseBook = e.target.closest('#cta-book, #open-book');
+  if(chooseBook){
+    openBook({type:'proefles'});
+  }
+  const card = e.target.closest('.instructor');
+  if(card && card.dataset.instructor){
+    const instr = INSTRUCTORS.find(i => i.name === card.dataset.instructor);
+    if(instr){
+      const fullBio = INSTRUCTOR_DETAILS[instr.name] || instr.bio || 'Geen extra info beschikbaar.';
+      modalContent.innerHTML = `
+        <h2>${instr.name}</h2>
+        <p class="muted">${instr.role}</p>
+        <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
+        <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
+      `;
+      activeBooking = null;
+      showModal();
+    }
+  }
+});
+
+$$('.nav-links a').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const target = a.getAttribute('data-page');
+    if(target){
+      e.preventDefault();
+      history.pushState({page:target}, '', `#${target}`);
+      showPage(target);
+    }
+  });
+});
+
+function showPage(page){
+  $$('.nav-links a').forEach(x=>x.classList.remove('active'));
+  $$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');
+  $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+window.addEventListener('popstate', ()=>{
+  const page = location.hash.replace('#','') || 'home';
+  showPage(page);
+});
+$('#mobile-toggle').addEventListener('click', ()=>{
+  const nav = document.querySelector('nav');
+  const expanded = nav.style.display === 'block';
+  nav.style.display = expanded ? '' : 'block';
+  $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
+});
+
+$('#contact-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+  const accessKey = form.querySelector('input[name="access_key"]')?.value;
+  fetch(form.action, {method:'POST', body:data, headers:{'Accept':'application/json'}})
+    .then(async r=>{
+      if(r.ok){
+        alert('Bedankt! We nemen contact op.');
+        form.reset();
+      } else {
+        try{
+          const j = await r.json();
+          alert(j?.error || 'Er ging iets mis');
+        }catch{
+          alert('Er ging iets mis');
+        }
+      }
+    })
+    .catch(()=>alert('Er ging iets mis bij versturen'));
+});
+
+function ensureOpenBar(){
+  if($('#open-bar')) return;
+  const bar = document.createElement('div');
+  bar.id = 'open-bar';
+  bar.style.cssText = 'margin-bottom:16px;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)';
+  bar.innerHTML = `<div id="open-bar-text" style="font-weight:700">Laden…</div><div class="small muted" id="open-bar-sub">Gebaseerd op onze agenda</div>`;
+  const container = document.querySelector('.container');
+  if(container) container.prepend(bar);
+}
+
+function updateLiveInfo(){
+  ensureOpenBar();
+  const next = getNextLesson();
+  const nextEl = $('#next-class');
+  if(next && next.item && next.date){
+    const when = formatDate(next.date) + ' — ' + formatTime(next.date);
+    nextEl.innerHTML = `${next.item.class} — ${next.item.trainer}<div class="small muted" style="margin-top:6px">${when} · over ${timeUntilString(next.date)}</div>`;
+  } else {
+    nextEl.innerHTML = `Geen komende lessen gevonden`;
+  }
+  const todayDateEl = $('#today-date');
+  const todayScheduleEl = $('#today-schedule');
+  const now = new Date();
+  todayDateEl.textContent = formatDate(now);
+  const todayDayNum = now.getDay();
+  let todaysItems = SCHEDULE.filter(s => DUTCH_TO_DAY[s.day] === todayDayNum);
+  todaysItems = todaysItems.filter(item=>{
+    const {end} = parseTimes(item.time);
+    const endTime = new Date(now);
+    endTime.setHours(end.h, end.m, 0, 0);
+    return endTime > now;
+  });
+  if(todaysItems.length === 0){
+    todayScheduleEl.innerHTML = `<div class="muted">Vandaag geen resterende lessen.</div>`;
+  } else {
+    const list = todaysItems.map(it=>`<div style="margin-bottom:8px"><strong>${it.time}</strong> — ${it.class}<div class="small muted">${it.trainer} · <span class="tag">${it.spots} plekken</span></div></div>`).join('');
+    todayScheduleEl.innerHTML = list;
+  }
+  const openBarText = $('#open-bar-text');
+  if(todaysItems.length > 0){
+    const anyOpen = todaysItems.some(it => it.spots > 0);
+    if(anyOpen){
+      openBarText.innerHTML = `We zijn open vandaag er zijn lessen gepland. <span class="small muted">Bekijk het schema</span>`;
+      openBarText.style.color = '';
+    } else {
+      openBarText.innerHTML = `We zijn open vandaag maar alle plekken zijn vol. <span class="small muted">Check andere dagen of meld je aan voor de wachtlijst</span>`;
+      openBarText.style.color = '';
+    }
+  } else {
+    openBarText.innerHTML = `Nu gesloten — er staan geen resterende lessen in de agenda.`;
+    openBarText.style.color = '';
+  }
+  const newsEl = $('#news');
+  if(next && next.item && next.date){
+    newsEl.textContent = `Volgende: ${next.item.class} op ${formatDate(next.date)} om ${formatTime(next.date)} (${timeUntilString(next.date)}).`;
+  } else {
+    newsEl.textContent = 'Geen nieuwe meldingen';
+  }
+}
+
+let liveInterval = null;
+function startLiveUpdater(){
+  if(liveInterval) clearInterval(liveInterval);
+  liveInterval = setInterval(updateLiveInfo, 30000);
+}
+
+async function fetchSheetData(range){
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
+  const res = await fetch(url);
+  if(!res.ok){
+    const text = await res.text().catch(()=>res.statusText);
+    throw new Error(`Google Sheets API fout ${res.status}: ${text}`);
+  }
+  const data = await res.json();
+  return data.values || [];
+}
+
+async function loadData(){
+  try{
+    const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
+    INSTRUCTORS = instructors.map(r => ({
+      name: r[0]||'',
+      bio: r[1]||'',
+      role: r[2]||'',
+      img: r[3]||''
+    }));
+    const details = await fetchSheetData(RANGE_DETAILS);
+    INSTRUCTOR_DETAILS = {};
+    details.forEach(r=>{
+      if(r[0]) INSTRUCTOR_DETAILS[r[0]] = r[1]||'';
+    });
+    const schedule = await fetchSheetData(RANGE_SCHEDULE);
+    let idCounter = 1;
+    SCHEDULE = schedule.map(r => ({
+      id: idCounter++,
+      day: r[0]||'',
+      time: r[1]||'',
+      class: r[2]||'',
+      trainer: r[3]||'',
+      spots: Number(r[4]||0)
+    }));
+    renderInstructors();
+    renderPlans();
+    renderSchedule();
+  } catch(e){
+    console.error('LoadData error: ', e);
+    const scheduleBody = $('#schedule-body');
+    if(scheduleBody) scheduleBody.innerHTML = `<div class="muted">Kon de agenda niet laden. Controleer dat het sheet publiek is en de API key correct is.</div>`;
+  }
+}
+
+function initLocalSave(){
+  const saveLocal = $('#save-local');
+  const form = document.getElementById('contact-form');
+  if(saveLocal){
+    saveLocal.addEventListener('click', ()=>{
+      const data = new FormData(form);
+      const obj = {};
+      for(const [k,v] of data.entries()) obj[k]=v;
+      localStorage.setItem('contactForm', JSON.stringify(obj));
+      alert('Contactgegevens lokaal opgeslagen!');
+    });
+  }
+  const stored = localStorage.getItem('contactForm');
+  if(stored){
+    try{
+      const obj = JSON.parse(stored);
+      for(const k in obj){
+        if(form.elements[k]) form.elements[k].value = obj[k];
+      }
+    } catch(e){}
+  }
+}
+
+function init(){
+  renderPlans();
+  showPage(location.hash.replace('#','') || 'home');
+  ensureOpenBar();
+  updateLiveInfo();
+  startLiveUpdater();
+  loadData();
+  initLocalSave();
+}
+document.addEventListener('DOMContentLoaded', init);
+
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') closeModal();
+});
 </script>
 </body>
 </html>
