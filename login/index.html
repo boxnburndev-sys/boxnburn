@@ -11,220 +11,144 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <script src="favicon.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Box N Burn</title>
+  <title>Box N Burn | Login</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
   <style>
-    * {margin: 0; padding: 0; box-sizing: border-box;}
+    * {margin:0;padding:0;box-sizing:border-box;}
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: url('https://i.ibb.co/5XkVnKjY/Boxing-Spinning-Yoga.png') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-      overflow-x: hidden;
-    }
-    body::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(10px);
-      z-index: 0;
-    }
-    .home-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      background: rgba(0,120,215,0.9);
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      z-index: 10;
-      transition: background 0.2s;
-    }
-    .home-btn:hover {background: #005a9e;}
-    .login-container {
-      position: relative;
-      z-index: 1;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      color: #fff;
-      animation: fadeIn 0.8s ease-out;
-      padding: 20px;
-    }
-    .login-container img {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      margin: 0 auto 15px;
-      border: 3px solid #fff;
-      display: none;
-      object-fit: cover;
-      animation: popIn 0.4s ease-in-out;
-    }
-    .welcome {
-      font-size: 18px;
-      margin-bottom: 15px;
-      display: none;
-    }
-    .input-group {margin-bottom: 15px; position: relative;}
-    .input-group input {
-      width: 100%;
-      height: 45px;
-      padding: 0 15px;
-      border: none;
-      border-radius: 6px;
-      font-size: 15px;
-      background: rgba(255,255,255,0.9);
-      color: #000;
-      text-align: center;
-    }
-    .input-group input::placeholder {color: #666;}
-    .input-group input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px #0078d7;
-      background: #fff;
-    }
-    .toggle-eye {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 16px;
-      color: #555;
-    }
-    button {
-      width: 100%;
-      padding: 14px;
-      background: #0078d7;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-      display: none;
-    }
-    button:hover {background: #005a9e;}
-    #error {
-      color: #ff4d4d;
-      margin-top: 10px;
-      display: none;
-      font-size: 14px;
-      text-align: center;
-    }
-    .welcome-screen {
-      position: fixed;
-      inset:0;
-      color:#fff;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      z-index:9999;
-      animation: fadeIn 0.5s ease-in-out;
-      padding:20px;
-      text-align:center;
-      background: url('https://i.ibb.co/5XkVnKjY/Boxing-Spinning-Yoga.png') no-repeat center center fixed;
-      background-size: cover;
-    }
-    .welcome-screen::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(10px);
-      z-index: -1;
-    }
-    .welcome-screen img {
-      width:90px; height:90px;
-      border-radius:50%;
-      margin-bottom:20px;
-      border:3px solid #fff;
-      object-fit:cover;
-    }
-    .welcome-screen h2 {
-      font-size:20px;
-      margin-bottom:20px;
-    }
-    .loading-bar {
-      width:70%;
-      max-width:200px;
-      height:8px;
-      background:rgba(255,255,255,0.3);
-      border-radius:5px;
-      overflow:hidden;
+      display:flex;justify-content:center;align-items:center;
+      min-height:100vh;
+      background:url('https://i.ibb.co/5XkVnKjY/Boxing-Spinning-Yoga.png') no-repeat center/cover;
       position:relative;
     }
-    .loading-fill {
-      height:100%;
-      width:0;
-      background:#fff;
-      animation: loadAnim 2.5s forwards;
+    body::before {
+      content:"";position:absolute;inset:0;
+      background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);
     }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+    .login-card {
+      position:relative;z-index:1;
+      width:95%;max-width:420px;
+      padding:30px;
+      background:rgba(255,255,255,0.1);
+      border-radius:18px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.4);
+      backdrop-filter:blur(18px);
+      text-align:center;
+      color:#fff;
+      animation:fadeIn 0.7s ease-out;
     }
-    @keyframes popIn {
-      0% {opacity: 0; transform: scale(0.7);}
-      100% {opacity: 1; transform: scale(1);}
+    .login-card img {
+      width:100px;height:100px;
+      border-radius:50%;border:3px solid #fff;
+      object-fit:cover;margin-bottom:15px;
+      display:none;
     }
-    @keyframes loadAnim {
-      from {width:0;}
-      to {width:100%;}
+    .login-card h2 {margin-bottom:20px;font-size:22px;}
+
+    .input-group {position:relative;margin-bottom:20px;}
+    .input-group input {
+      width:100%;padding:14px 45px 14px 14px;
+      border-radius:10px;border:none;
+      font-size:15px;
+      background:rgba(255,255,255,0.9);
+      outline:none;color:#000;
+      transition:0.3s;
     }
-    @media (max-width:768px){
-      .login-container {padding:16px}
-      .login-container img {width:90px;height:90px}
-      .welcome {font-size:16px}
-      button {font-size:15px;padding:12px}
+    .input-group label {
+      position:absolute;left:14px;top:50%;
+      transform:translateY(-50%);
+      font-size:15px;color:#555;
+      transition:0.2s;
+      pointer-events:none;
     }
-    @media (max-width:480px){
-      .home-btn {font-size:12px;padding:6px 10px}
-      .login-container img {width:75px;height:75px}
-      .welcome {font-size:14px}
-      input {font-size:14px}
-      button {font-size:14px}
+    .input-group input:focus + label,
+    .input-group input:not(:placeholder-shown) + label {
+      top:-8px;font-size:12px;color:#0078d7;
+      background:#fff;padding:0 5px;border-radius:3px;
     }
+    .toggle-eye {
+      position:absolute;right:14px;top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;font-size:18px;color:#555;
+    }
+
+    button {
+      width:100%;padding:14px;
+      border:none;border-radius:10px;
+      background:#0078d7;color:#fff;
+      font-size:16px;font-weight:600;
+      cursor:pointer;transition:0.3s;
+    }
+    button:disabled {background:#555;cursor:not-allowed;}
+    button:hover:not(:disabled) {background:#005a9e;}
+
+    .remember-me {display:flex;align-items:center;gap:8px;margin-bottom:15px;}
+    .remember-me input {accent-color:#0078d7;}
+
+    #error {
+      display:none;color:#ff4d4d;
+      margin-top:10px;font-size:14px;
+      animation:shake 0.4s;
+    }
+
+    .loading-spinner {
+      width:22px;height:22px;
+      border:3px solid rgba(255,255,255,0.3);
+      border-top:3px solid #fff;
+      border-radius:50%;
+      margin:0 auto 15px;
+      animation:spin 0.8s linear infinite;
+      display:none;
+    }
+
+    .dark-toggle {
+      position:absolute;top:15px;right:15px;
+      background:rgba(255,255,255,0.2);
+      border:none;padding:8px 12px;
+      border-radius:50%;cursor:pointer;
+      color:#fff;font-size:18px;
+      transition:0.3s;
+    }
+    .dark-mode body::before {background:rgba(0,0,0,0.8);}
+
+    @keyframes fadeIn {from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes spin {100%{transform:rotate(360deg);}}
+    @keyframes shake {0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
   </style>
 </head>
 <body>
-  <button class="home-btn" onclick="window.location.href='/'">🏠 Home</button>
-  <div class="login-container">
-    <img id="pfp" src="" alt="Profile Picture">
-    <div class="welcome" id="welcomeText"></div>
+  <button class="dark-toggle" onclick="toggleDarkMode()"><i class='bx bx-moon'></i></button>
+  <div class="login-card">
+    <img id="pfp" src="">
+    <h2 id="welcomeText">Aanmelden</h2>
+
     <div class="input-group">
-      <input type="text" id="username" placeholder="Gebruikersnaam">
+      <input type="text" id="username" placeholder=" " autocomplete="off">
+      <label for="username">Gebruikersnaam</label>
     </div>
     <div class="input-group" id="passwordGroup" style="display:none;">
-      <input type="password" id="password" placeholder="Wachtwoord">
-      <span class="toggle-eye" onclick="togglePassword()">👁️</span>
+      <input type="password" id="password" placeholder=" ">
+      <label for="password">Wachtwoord</label>
+      <i class='bx bx-hide toggle-eye' onclick="togglePassword()"></i>
     </div>
-    <button id="loginBtn" onclick="login()">Aanmelden</button>
+
+    <div class="remember-me" style="display:none;" id="rememberMe">
+      <input type="checkbox" id="remember"> <label for="remember">Onthoud mij</label>
+    </div>
+
+    <div class="loading-spinner" id="spinner"></div>
+    <button id="loginBtn" style="display:none;" onclick="login()">Aanmelden</button>
     <p id="error">❌ Ongeldige gebruikersnaam of wachtwoord!</p>
   </div>
-  <div class="welcome-screen" id="welcomeScreen" style="display:none;">
-    <img id="welcomePfp" src="">
-    <h2 id="welcomeMessage"></h2>
-    <div class="loading-bar"><div class="loading-fill"></div></div>
-  </div>
+
 <script>
-  const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo"; 
+  const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo";
   const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
   let users = {};
+
   async function fetchUsers() {
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${USER_SHEET_ID}/values/Users!A2:E?key=${API_KEY}`;
     const res = await fetch(url);
@@ -236,6 +160,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       users[username] = { password, role, bio, pfp };
     });
   }
+
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password");
   const passwordGroup = document.getElementById("passwordGroup");
@@ -243,54 +168,69 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   const pfp = document.getElementById("pfp");
   const welcomeText = document.getElementById("welcomeText");
   const error = document.getElementById("error");
+  const rememberMe = document.getElementById("rememberMe");
+  const spinner = document.getElementById("spinner");
+
   usernameInput.addEventListener("input", () => {
     const name = usernameInput.value.trim();
     if (users[name]) {
       pfp.src = users[name].pfp;
       pfp.style.display = "block";
       welcomeText.textContent = `Welkom, ${name}`;
-      welcomeText.style.display = "block";
       passwordGroup.style.display = "block";
       loginBtn.style.display = "block";
+      rememberMe.style.display = "flex";
     } else {
       pfp.style.display = "none";
-      welcomeText.style.display = "none";
+      welcomeText.textContent = "Aanmelden";
       passwordGroup.style.display = "none";
       loginBtn.style.display = "none";
+      rememberMe.style.display = "none";
     }
   });
+
   function login() {
     const user = usernameInput.value.trim();
     const pass = passwordInput.value.trim();
     if (users[user] && users[user].password === pass) {
+      spinner.style.display = "block";
+      loginBtn.disabled = true;
       localStorage.setItem("loggedInUser", user);
       localStorage.setItem("userRole", users[user].role);
       localStorage.setItem("userBio", users[user].bio);
       localStorage.setItem("userPfp", users[user].pfp);
-      document.querySelector(".login-container").style.display = "none";
-      const ws = document.getElementById("welcomeScreen");
-      document.getElementById("welcomePfp").src = users[user].pfp;
-      document.getElementById("welcomeMessage").textContent = `Welkom, ${user}`;
-      ws.style.display = "flex";
-      setTimeout(()=> window.location.href = "/dashboard", 2500);
+
+      setTimeout(() => {
+        const role = users[user].role.toLowerCase();
+        if (role.includes("admin")) window.location.href = "/dashboard/admin";
+        else if (role.includes("trainer")) window.location.href = "/dashboard/trainer";
+        else window.location.href = "/dashboard/member";
+      }, 2000);
     } else {
       error.style.display = "block";
       setTimeout(() => error.style.display = "none", 3000);
     }
   }
+
   function togglePassword() {
-    const passInput = document.getElementById("password");
-    passInput.type = passInput.type === "password" ? "text" : "password";
-  }
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
-        login();
-      }
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      document.querySelector(".toggle-eye").classList.replace("bx-hide", "bx-show");
+    } else {
+      passwordInput.type = "password";
+      document.querySelector(".toggle-eye").classList.replace("bx-show", "bx-hide");
     }
+  }
+
+  function toggleDarkMode(){
+    document.body.classList.toggle("dark-mode");
+  }
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Enter" && usernameInput.value && passwordInput.value) login();
   });
+
   fetchUsers();
 </script>
-   <script src="cookie.js"></script>
 </body>
 </html>
