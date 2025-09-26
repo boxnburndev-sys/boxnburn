@@ -15,7 +15,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   <title>Support - Box N Burn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <style>
-    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#233445;color:white;word-wrap:break-word}
+    body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#233445;color:white;word-wrap:break-word;text-align:center}
     .navbar{display:flex;align-items:center;justify-content:space-between;background:#0f2133;padding:12px 20px;box-shadow:0 4px 10px rgba(0,0,0,0.3);position:sticky;top:0;z-index:50}
     .brand{display:flex;align-items:center;gap:10px}
     .brand img{width:50px;height:50px;border-radius:50%;object-fit:cover}
@@ -27,11 +27,11 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     .option:hover{background:#2e4054;transform:translateY(-2px)}
     .option h2{margin:0;font-size:1.1rem;color:#0f93ff}
     .option p{margin:6px 0 0 0;font-size:14px;opacity:0.85}
-    .section{display:none;margin-top:24px;background:#384858;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
+    .section{display:none;margin-top:24px;background:#384858;padding:20px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.3);text-align:center}
     .section.active{display:block;animation:fadeIn 0.3s ease}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    form{display:flex;flex-direction:column;gap:12px;margin-top:12px}
-    input,textarea{padding:10px;border-radius:8px;border:1px solid #233445;background:#233445;color:white}
+    form{display:flex;flex-direction:column;gap:12px;margin-top:12px;align-items:center}
+    input,textarea{padding:10px;border-radius:8px;border:1px solid #233445;background:#233445;color:white;width:100%;max-width:400px}
     input:focus,textarea:focus{outline:2px solid #0f93ff}
     button{background:#0f93ff;border:none;padding:10px 14px;border-radius:8px;color:white;font-weight:700;cursor:pointer;transition:all 0.2s ease}
     button:hover{background:#0d7cd6}
@@ -76,7 +76,8 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
         <input type="hidden" name="formType" value="Technische Hulp">
         <input type="hidden" name="profilePic" value="">
-        <input type="text" name="name" placeholder="Naam" required onblur="checkUser(this)">
+        <input type="hidden" name="profilePicHTML" value="">
+        <input type="text" name="name" placeholder="Naam" required oninput="checkUser(this)">
         <textarea name="message" rows="5" placeholder="Beschrijf je probleem" required></textarea>
         <div class="pfp-preview"></div>
         <input type="checkbox" name="botcheck" class="hidden" style="display:none">
@@ -92,7 +93,8 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
         <input type="hidden" name="formType" value="Algemene Support">
         <input type="hidden" name="profilePic" value="">
-        <input type="text" name="name" placeholder="Naam" required onblur="checkUser(this)">
+        <input type="hidden" name="profilePicHTML" value="">
+        <input type="text" name="name" placeholder="Naam" required oninput="checkUser(this)">
         <textarea name="message" rows="5" placeholder="Beschrijf wat er kapot is" required></textarea>
         <div class="pfp-preview"></div>
         <input type="checkbox" name="botcheck" class="hidden" style="display:none">
@@ -108,7 +110,8 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
         <input type="hidden" name="formType" value="Overig">
         <input type="hidden" name="profilePic" value="">
-        <input type="text" name="name" placeholder="Naam" required onblur="checkUser(this)">
+        <input type="hidden" name="profilePicHTML" value="">
+        <input type="text" name="name" placeholder="Naam" required oninput="checkUser(this)">
         <textarea name="message" rows="5" placeholder="Schrijf hier je vraag of bericht" required></textarea>
         <div class="pfp-preview"></div>
         <input type="checkbox" name="botcheck" class="hidden" style="display:none">
@@ -133,24 +136,34 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     }
     async function checkUser(input){
       const name = input.value.trim();
-      if(!name) return;
       const form = input.closest("form");
       const preview = form.querySelector(".pfp-preview");
+      if(!name){
+        form.querySelector("input[name='profilePic']").value = "";
+        form.querySelector("input[name='profilePicHTML']").value = "";
+        preview.innerHTML = "";
+        return;
+      }
       preview.innerHTML = "Zoeken...";
       try {
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${USER_SHEET_ID}/values/Users!A:C?key=${API_KEY}`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${USER_SHEET_ID}/values/Sheet1!A:E?key=${API_KEY}`;
         const res = await fetch(url);
         const data = await res.json();
         if(!data.values) throw new Error("Geen data");
         let found = data.values.find(row => row[0] && row[0].toLowerCase() === name.toLowerCase());
         if(found){
-          const pfpUrl = found[2] || "";
+          const pfpUrl = found[4] || "";
           form.querySelector("input[name='profilePic']").value = pfpUrl;
-          preview.innerHTML = pfpUrl ? `<img src="${pfpUrl}" alt="PFP"><input type="hidden" name="profilePicHTML" value="<img src='${pfpUrl}' style='width:80px;height:80px;border-radius:50%'>">` : "Geen foto gevonden";
+          form.querySelector("input[name='profilePicHTML']").value = pfpUrl ? `<img src='${pfpUrl}' style='width:80px;height:80px;border-radius:50%'>` : "";
+          preview.innerHTML = pfpUrl ? `<img src="${pfpUrl}" alt="PFP">` : "Geen foto gevonden";
         } else {
+          form.querySelector("input[name='profilePic']").value = "";
+          form.querySelector("input[name='profilePicHTML']").value = "";
           preview.innerHTML = "Geen gebruiker gevonden";
         }
       } catch(err){
+        form.querySelector("input[name='profilePic']").value = "";
+        form.querySelector("input[name='profilePicHTML']").value = "";
         preview.innerHTML = "Fout bij ophalen data";
       }
     }
@@ -164,5 +177,6 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   </script>
 </body>
 </html>
+
 
 
