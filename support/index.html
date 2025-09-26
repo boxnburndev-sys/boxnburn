@@ -11,7 +11,6 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <script src="favicon.js"></script>
   <meta charset="UTF-8">
   <title>Support - Box N Burn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -39,6 +38,8 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     .phone{margin-top:10px;font-size:15px}
     .back-btn{margin-top:12px;background:transparent;border:2px solid rgba(255,255,255,0.2);padding:8px 12px;border-radius:8px;color:white;cursor:pointer}
     .back-btn:hover{background:rgba(255,255,255,0.1)}
+    .pfp-preview{margin-top:10px}
+    .pfp-preview img{width:70px;height:70px;border-radius:50%;object-fit:cover;border:2px solid #0f93ff}
   </style>
 </head>
 <body>
@@ -68,42 +69,48 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       </div>
     </div>
 
-    <!-- Tech Section -->
     <div id="tech" class="section">
       <h2>Technische Hulp</h2>
       <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor directe hulp.</p>
-      <form action="https://api.web3forms.com/submit" method="POST">
+      <form action="https://api.web3forms.com/submit" method="POST" onsubmit="return enrichForm(this)">
         <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
-        <input type="text" name="name" placeholder="Naam" required>
+        <input type="hidden" name="formType" value="Technische Hulp">
+        <input type="hidden" name="profilePic" value="">
+        <input type="text" name="name" placeholder="Naam" required onblur="checkUser(this)">
         <textarea name="message" rows="5" placeholder="Beschrijf je probleem" required></textarea>
+        <div class="pfp-preview"></div>
         <input type="checkbox" name="botcheck" class="hidden" style="display:none">
         <button type="submit">Verstuur</button>
       </form>
       <button class="back-btn" onclick="backToOptions()">← Terug</button>
     </div>
 
-    <!-- Repair Section -->
     <div id="repair" class="section">
       <h2>Algemene Support</h2>
       <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor urgente zaken.</p>
-      <form action="https://api.web3forms.com/submit" method="POST">
+      <form action="https://api.web3forms.com/submit" method="POST" onsubmit="return enrichForm(this)">
         <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
-        <input type="text" name="name" placeholder="Naam" required>
+        <input type="hidden" name="formType" value="Algemene Support">
+        <input type="hidden" name="profilePic" value="">
+        <input type="text" name="name" placeholder="Naam" required onblur="checkUser(this)">
         <textarea name="message" rows="5" placeholder="Beschrijf wat er kapot is" required></textarea>
+        <div class="pfp-preview"></div>
         <input type="checkbox" name="botcheck" class="hidden" style="display:none">
         <button type="submit">Verstuur</button>
       </form>
       <button class="back-btn" onclick="backToOptions()">← Terug</button>
     </div>
 
-    <!-- Other Section -->
     <div id="other" class="section">
       <h2>Overige Vragen</h2>
       <p class="phone">📞 Bel ons op <b>+32 468 00 30 97</b> voor andere vragen.</p>
-      <form action="https://api.web3forms.com/submit" method="POST">
+      <form action="https://api.web3forms.com/submit" method="POST" onsubmit="return enrichForm(this)">
         <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
-        <input type="text" name="name" placeholder="Naam" required>
+        <input type="hidden" name="formType" value="Overig">
+        <input type="hidden" name="profilePic" value="">
+        <input type="text" name="name" placeholder="Naam" required onblur="checkUser(this)">
         <textarea name="message" rows="5" placeholder="Schrijf hier je vraag of bericht" required></textarea>
+        <div class="pfp-preview"></div>
         <input type="checkbox" name="botcheck" class="hidden" style="display:none">
         <button type="submit">Verstuur</button>
       </form>
@@ -112,6 +119,9 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   </div>
 
   <script>
+    const USER_SHEET_ID = "13VmSUVWPTmlHNN8QREDodih8AKb56114FLQg5-1wyjo";
+    const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
+
     function openSection(id){
       document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
       document.querySelector(".options").style.display="none";
@@ -121,7 +131,38 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
       document.querySelector(".options").style.display="grid";
     }
+    async function checkUser(input){
+      const name = input.value.trim();
+      if(!name) return;
+      const form = input.closest("form");
+      const preview = form.querySelector(".pfp-preview");
+      preview.innerHTML = "Zoeken...";
+      try {
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${USER_SHEET_ID}/values/Users!A:C?key=${API_KEY}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if(!data.values) throw new Error("Geen data");
+        let found = data.values.find(row => row[0] && row[0].toLowerCase() === name.toLowerCase());
+        if(found){
+          const pfpUrl = found[2] || "";
+          form.querySelector("input[name='profilePic']").value = pfpUrl;
+          preview.innerHTML = pfpUrl ? `<img src="${pfpUrl}" alt="PFP"><input type="hidden" name="profilePicHTML" value="<img src='${pfpUrl}' style='width:80px;height:80px;border-radius:50%'>">` : "Geen foto gevonden";
+        } else {
+          preview.innerHTML = "Geen gebruiker gevonden";
+        }
+      } catch(err){
+        preview.innerHTML = "Fout bij ophalen data";
+      }
+    }
+    function enrichForm(form){
+      if(!form.name.value || !form.message.value){
+        alert("Alle velden zijn verplicht");
+        return false;
+      }
+      return true;
+    }
   </script>
 </body>
 </html>
+
 
