@@ -199,7 +199,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <a href="#home" data-page="home" class="active">Home</a>
         <a href="#lessen" data-page="lessen">Lessen</a>
         <a href="#instructeurs" data-page="instructeurs">Instructeurs</a>
-        <a href="#abonnementen" data-page="abonnementen">Abonnementen</a>
+        <a href="#winkel" data-page="winkel">Winkel</a>
         <a href="#contact" data-page="contact">Contact</a>
         <a href="/jobs">Jobs</a>
         <a href="/dashboard">Dashboard</a>
@@ -219,12 +219,12 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <p>Mix van bokstraining, spinning en yoga voor beginners en gevorderden. Boek snel, bekijk instructeurs en kies een abonnement.</p>
         <div class="cta">
           <button class="btn primary" id="cta-book">Boek een proefles</button>
-          <a href="#abonnementen" class="btn ghost">Bekijk abonnementen</a>
+          <a href="#winkel" class="btn ghost">Bekijk winkel</a>
         </div>
         <div class="grid" style="margin-top:18px">
           <div class="card">
             <h3>Live planning</h3>
-            <div class="small muted">Realtime beschikbaarheid & reminders</div>
+            <div class="small muted">Realtime vanuit Trainin</div>
             <div style="margin-top:12px">
               <strong id="next-class">Geen data geladen</strong>
               <div class="small muted">Volgende les</div>
@@ -259,23 +259,50 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
 
 <section id="lessen">
   <h2>Lessen & Agenda</h2>
-  <p class="muted">Klik op een les om te boeken.</p>
-  <div class="schedule" id="schedule-body" aria-live="polite">
+  <p class="muted">Klik op de planning om direct in Trainin te boeken.</p>
+  <div id="schedule-body" class="schedule" aria-live="polite">
+    <div style="width:100%" class="card">
+      <iframe src="https://boxnburn.trainin.app/widget/schedule" style="width:100%; height:650px; border: none"></iframe>
+    </div>
   </div>
 </section>
 
     <section id="instructeurs">
       <h2>Onze Instructeurs</h2>
       <div class="instructors" id="instructors-list">
+        <div class="instructor card">
+          <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 1">
+          <div>
+            <div style="font-weight:800">Sofie Janssens</div>
+            <div class="small muted">Hoofdtrainer Boksen</div>
+            <div class="small" style="margin-top:6px">Specialist in techniek, kracht en conditie. Werkt met alle niveau's.</div>
+          </div>
+        </div>
+        <div class="instructor card">
+          <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 2">
+          <div>
+            <div style="font-weight:800">Tom De Ridder</div>
+            <div class="small muted">Spinning Coach</div>
+            <div class="small" style="margin-top:6px">High-intensity trainingen met focus op uithouding.</div>
+          </div>
+        </div>
+        <div class="instructor card">
+          <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 3">
+          <div>
+            <div style="font-weight:800">Lotte Peeters</div>
+            <div class="small muted">Yoga & Mobiliteit</div>
+            <div class="small" style="margin-top:6px">Herstel en flexibiliteit, toegankelijk voor iedereen.</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="abonnementen">
-      <h2>Abonnementen</h2>
-      <p class="muted">Betaal ter plaatse via cash of Payqonic.</p>
-      <div class="plans" id="plans-list">
+    <section id="winkel">
+      <h2>Winkel</h2>
+      <p class="muted">Alle producten en abonnementen beheerd via Trainin.</p>
+      <div class="card" style="margin-top:12px">
+        <iframe src="https://boxnburn.trainin.app/widget/shop" style="width:100%; height:650px; border: none"></iframe>
       </div>
-      <button class="btn primary" onclick="window.location.href='#contact';">Kies</button>
     </section>
 
     <section id="contact">
@@ -286,7 +313,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <div class="form-row">
           <input name="name" placeholder="Je naam" required autocomplete="name">
           <input name="email" type="email" placeholder="E-mail" required autocomplete="email">
-          <input name="telefoonnummer" type="Nummer" placeholder="+32 123 45 67 89" required autocomplete="email">
+          <input name="telefoonnummer" type="tel" placeholder="+32 123 45 67 89" required autocomplete="tel">
         </div>
         <div class="form-row" style="margin-top:8px">
           <select name="plan" aria-label="Kies een plan">
@@ -326,21 +353,6 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   </div>
 
 <script>
-const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
-const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
-const RANGE_INSTRUCTORS = "Instructors!A2:D";
-const RANGE_DETAILS = "InstructorDetails!A2:B";
-const RANGE_SCHEDULE = "Shedule!A2:E";
-
-let SCHEDULE = [];
-let INSTRUCTORS = [];
-let INSTRUCTOR_DETAILS = {};
-const PLANS = [
-  {id:'trial', title:'Proef Les', desc:'1 les naar keuze (1ste keer gratis)', price:10, period:'eenmalig'},
-  {id:'1 Les', title:'1 Les', desc:'Normale betaling per les.', price:10, period:'Per les'},
-  {id:'Maand', title:'Maan Abonnement', desc:'Maandelijks Abonnoment', price:40, period:'Maandelijks'}
-];
-
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
@@ -351,112 +363,29 @@ function formatTime(d=new Date()){
   return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':');
 }
 
-const DUTCH_TO_DAY = {'Maandag':1,'Dinsdag':2,'Woensdag':3,'Donderdag':4,'Vrijdag':5,'Zaterdag':6,'Zondag':0};
-
-function parseTimes(timeString){
-  if(!timeString) return {start:{h:0,m:0},end:{h:0,m:0}};
-  const [start,end]=timeString.split('-').map(t=>t.trim());
-  const [sh,sm=0]=start.split(':').map(Number);
-  const [eh,em=0]=end.split(':').map(Number);
-  return{start:{h:sh,m:sm},end:{h:eh,m:em}};
+function ensureOpenBar(){
+  if($('#open-bar')) return;
+  const bar = document.createElement('div');
+  bar.id = 'open-bar';
+  bar.style.cssText = 'margin-bottom:16px;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)';
+  bar.innerHTML = `<div id="open-bar-text" style="font-weight:700">Laden…</div><div class="small muted" id="open-bar-sub">Gebaseerd op onze agenda</div>`;
+  const container = document.querySelector('.container');
+  if(container) container.prepend(bar);
 }
 
-function nextOccurrenceForItem(item,fromDate=new Date()){
-  const targetDay=DUTCH_TO_DAY[item.day];
-  if(targetDay===undefined) return null;
-  const now=new Date(fromDate);
-  const todayDay = now.getDay();
-  let delta = (targetDay - todayDay + 7) % 7;
-  const {start, end} = parseTimes(item.time);
-  const candidate = new Date(now);
-  candidate.setHours(start.h, start.m, 0, 0);
-  candidate.setDate(now.getDate() + delta);
-  const candidateEnd = new Date(candidate);
-  candidateEnd.setHours(end.h, end.m, 0, 0);
-  if(candidateEnd <= now) candidate.setDate(candidate.getDate() + 7);
-  return candidate;
-}
-
-function getNextLesson(fromDate=new Date()){
-  let soonest = null;
-  let soonestItem = null;
-  SCHEDULE.forEach(item=>{
-    const occ = nextOccurrenceForItem(item, fromDate);
-    if(!occ) return;
-    if(!soonest || occ < soonest){
-      soonest = occ;
-      soonestItem = item;
-    }
-  });
-  return {item: soonestItem, date: soonest};
-}
-
-function timeUntilString(futureDate){
-  if(!futureDate) return '';
-  const diff = futureDate - new Date();
-  if(diff <= 0) return 'nu';
-  const mins = Math.floor(diff/60000);
-  const days = Math.floor(mins/1440);
-  const hours = Math.floor((mins%1440)/60);
-  const minutes = mins%60;
-  if(days>0) return `${days}d ${hours}u`;
-  if(hours>0) return `${hours}u ${minutes}m`;
-  return `${minutes}m`;
-}
-
-function renderSchedule(){
-  const tbody = $('#schedule-body');
-  if(!tbody) return;
-  tbody.innerHTML = '';
-  const grouped = {};
-  SCHEDULE.forEach(item=>{
-    if(!grouped[item.day]) grouped[item.day]=[];
-    grouped[item.day].push(item);
-  });
-  Object.keys(DUTCH_TO_DAY).forEach(day=>{
-    if(!grouped[day]) return;
-    const dayCard = document.createElement('div');
-    dayCard.className = 'day-card';
-    dayCard.innerHTML = `<h3 class="day-title">${day}</h3>`;
-    grouped[day].forEach(item=>{
-      const div = document.createElement('div');
-      div.className = 'lesson-row';
-      div.innerHTML = `<div class="lesson-time">${item.time}</div>
-        <div class="lesson-info"><strong>${item.class}</strong><div class="small muted">${item.trainer}</div></div>
-        <div class="lesson-spots"><span class="tag">${item.spots} plekken</span></div>
-        <div><button class="btn primary click" data-book='${item.id}'>Boek</button></div>`;
-      dayCard.appendChild(div);
-    });
-    tbody.appendChild(dayCard);
-  });
-  updateLiveInfo();
-}
-
-function renderInstructors(){
-  const wrap = $('#instructors-list');
-  if(!wrap) return;
-  wrap.innerHTML = '';
-  INSTRUCTORS.forEach(i=>{
-    const div = document.createElement('div');
-    div.className = 'instructor card';
-    const id = (i.name||'').toLowerCase().replace(/\s+/g,'-');
-    div.id = id;
-    div.dataset.instructor = i.name;
-    div.innerHTML = `<img loading="lazy" src="${i.img || 'https://via.placeholder.com/76'}" alt="${i.name}"><div><div style="font-weight:800">${i.name}</div><div class="small muted">${i.role}</div><div class="small" style="margin-top:6px">${i.bio}</div></div>`;
-    wrap.appendChild(div);
-  });
-}
-
-function renderPlans(){
-  const wrap = $('#plans-list');
-  if(!wrap) return;
-  wrap.innerHTML = '';
-  PLANS.forEach(p=>{
-    const div = document.createElement('div');
-    div.className = 'plan card';
-    div.innerHTML = `<h3>${p.title}</h3><div class="small muted">${p.desc}</div><div class="price">€${p.price}${p.period!=='eenmalig'?' / '+p.period:''}</div>`;
-    wrap.appendChild(div);
-  });
+function updateLiveInfo(){
+  ensureOpenBar();
+  const nextEl = $('#next-class');
+  nextEl.innerHTML = `Planning via Trainin — klik op 'Lessen' om te boeken.`;
+  const todayDateEl = $('#today-date');
+  const todayScheduleEl = $('#today-schedule');
+  const now = new Date();
+  todayDateEl.textContent = formatDate(now);
+  todayScheduleEl.innerHTML = `<div class="muted">Bekijk de volledige planning in de agenda (Trainin).</div>`;
+  const openBarText = $('#open-bar-text');
+  openBarText.innerHTML = `Agenda: Trainin widget ingeladen. <span class="small muted">Boek direct in Trainin</span>`;
+  const newsEl = $('#news');
+  newsEl.textContent = 'Agenda en winkel via Trainin geladen.';
 }
 
 const modal = $('#modal');
@@ -468,19 +397,16 @@ function openBook(opts={}){
     modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
       <label style="display:block;margin-top:8px">Naam<input id="bk-name" autocomplete="name"></label>
       <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
-      <label style="display:block;margin-top:8px">Kies les<select id="bk-class">${SCHEDULE.map(s=>`<option value='${s.id}'>${s.day} • ${s.time} — ${s.class}</option>`).join('')}</select></label>`;
+      <label style="display:block;margin-top:8px">Voeg een opmerking<input id="bk-note"></label>`;
     activeBooking = {type:'proefles'};
     showModal();
     return;
   }
-  const id = opts.id || null;
-  const item = SCHEDULE.find(s=>s.id===id);
-  if(!item){ alert('Les niet gevonden'); return; }
-  modalContent.innerHTML = `<h3>Boek: ${item.class}</h3><div class="muted">${item.day} — ${item.time} — ${item.trainer}</div>
+  modalContent.innerHTML = `<h3>Boeking</h3><div class="muted">Selecteer je gegevens</div>
     <label style="display:block;margin-top:8px">Je naam<input id="bk-name" autocomplete="name"></label>
     <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
     <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;
-  activeBooking = {type:'lesson', id: item.id};
+  activeBooking = {type:'lesson'};
   showModal();
 }
 
@@ -503,20 +429,14 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   const name = $('#bk-name')?.value || 'Onbekend';
   const email = $('#bk-email')?.value || '';
   const qty = Number($('#bk-qty')?.value || 1);
-  const item = SCHEDULE.find(s=>s.id===activeBooking.id);
-  if(item && item.spots < qty){ alert('Niet genoeg plekken beschikbaar'); return; }
-  if(item) item.spots -= qty;
-  renderSchedule();
   try{
     const payload = {
       access_key: "3287ed1d-2d60-4665-b739-2cf29b3de670",
       name,
       email,
-      class: item?.class || 'Proefles',
-      day: item?.day || '',
-      time: item?.time || '',
+      class: activeBooking.type === 'proefles' ? 'Proefles' : 'Les',
       spots: qty,
-      subject: `Nieuwe boeking: ${item?.class || 'Proefles'}`
+      subject: `Nieuwe boeking: ${activeBooking.type === 'proefles' ? 'Proefles' : 'Les'}`
     };
     const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
@@ -536,29 +456,19 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
 });
 
 document.addEventListener('click', (e)=>{
-  const bookBtn = e.target.closest('[data-book]');
-  if(bookBtn){
-    const id = Number(bookBtn.getAttribute('data-book'));
-    openBook({id});
-  }
   const chooseBook = e.target.closest('#cta-book, #open-book');
   if(chooseBook){
     openBook({type:'proefles'});
   }
   const card = e.target.closest('.instructor');
   if(card && card.dataset.instructor){
-    const instr = INSTRUCTORS.find(i => i.name === card.dataset.instructor);
-    if(instr){
-      const fullBio = INSTRUCTOR_DETAILS[instr.name] || instr.bio || 'Geen extra info beschikbaar.';
-      modalContent.innerHTML = `
-        <h2>${instr.name}</h2>
-        <p class="muted">${instr.role}</p>
-        <img src="${instr.img}" alt="${instr.name}" style="width:120px;height:120px;border-radius:12px;margin:12px 0;object-fit:cover">
-        <div style="white-space:pre-line;max-height:400px;overflow:auto">${fullBio}</div>
-      `;
-      activeBooking = null;
-      showModal();
-    }
+    const name = card.dataset.instructor || card.querySelector('div')?.textContent?.trim() || 'Instructeur';
+    modalContent.innerHTML = `
+      <h2>${name}</h2>
+      <p class="muted">Bekijk bio en beschikbaarheid in Trainin</p>
+    `;
+    activeBooking = null;
+    showModal();
   }
 });
 
@@ -594,7 +504,6 @@ $('#contact-form').addEventListener('submit', e=>{
   e.preventDefault();
   const form = e.target;
   const data = new FormData(form);
-  const accessKey = form.querySelector('input[name="access_key"]')?.value;
   fetch(form.action, {method:'POST', body:data, headers:{'Accept':'application/json'}})
     .then(async r=>{
       if(r.ok){
@@ -612,129 +521,8 @@ $('#contact-form').addEventListener('submit', e=>{
     .catch(()=>alert('Er ging iets mis bij versturen'));
 });
 
-function ensureOpenBar(){
-  if($('#open-bar')) return;
-  const bar = document.createElement('div');
-  bar.id = 'open-bar';
-  bar.style.cssText = 'margin-bottom:16px;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)';
-  bar.innerHTML = `<div id="open-bar-text" style="font-weight:700">Laden…</div><div class="small muted" id="open-bar-sub">Gebaseerd op onze agenda</div>`;
-  const container = document.querySelector('.container');
-  if(container) container.prepend(bar);
-}
-
-function updateLiveInfo(){
-  ensureOpenBar();
-  const next = getNextLesson();
-  const nextEl = $('#next-class');
-  if(next && next.item && next.date){
-    const when = formatDate(next.date) + ' — ' + formatTime(next.date);
-    nextEl.innerHTML = `${next.item.class} — ${next.item.trainer}<div class="small muted" style="margin-top:6px">${when} · over ${timeUntilString(next.date)}</div>`;
-  } else {
-    nextEl.innerHTML = `Geen komende lessen gevonden`;
-  }
-  const todayDateEl = $('#today-date');
-  const todayScheduleEl = $('#today-schedule');
-  const now = new Date();
-  todayDateEl.textContent = formatDate(now);
-  const todayDayNum = now.getDay();
-  let todaysItems = SCHEDULE.filter(s => DUTCH_TO_DAY[s.day] === todayDayNum);
-  todaysItems = todaysItems.filter(item=>{
-    const {end} = parseTimes(item.time);
-    const endTime = new Date(now);
-    endTime.setHours(end.h, end.m, 0, 0);
-    return endTime > now;
-  });
-  if(todaysItems.length === 0){
-    todayScheduleEl.innerHTML = `<div class="muted">Vandaag geen resterende lessen.</div>`;
-  } else {
-    const list = todaysItems.map(it=>`<div style="margin-bottom:8px"><strong>${it.time}</strong> — ${it.class}<div class="small muted">${it.trainer} · <span class="tag">${it.spots} plekken</span></div></div>`).join('');
-    todayScheduleEl.innerHTML = list;
-  }
-  const openBarText = $('#open-bar-text');
-  if(todaysItems.length > 0){
-    const anyOpen = todaysItems.some(it => it.spots > 0);
-    if(anyOpen){
-      openBarText.innerHTML = `We zijn open vandaag er zijn lessen gepland. <span class="small muted">Bekijk het schema</span>`;
-      openBarText.style.color = '';
-    } else {
-      openBarText.innerHTML = `We zijn open vandaag maar alle plekken zijn vol. <span class="small muted">Check andere dagen of meld je aan voor de wachtlijst</span>`;
-      openBarText.style.color = '';
-    }
-  } else {
-    openBarText.innerHTML = `Nu gesloten — er staan geen resterende lessen in de agenda.`;
-    openBarText.style.color = '';
-  }
-  const newsEl = $('#news');
-  if(next && next.item && next.date){
-    newsEl.textContent = `Volgende: ${next.item.class} op ${formatDate(next.date)} om ${formatTime(next.date)} (${timeUntilString(next.date)}).`;
-  } else {
-    newsEl.textContent = 'Geen nieuwe meldingen';
-  }
-}
-
-let liveInterval = null;
-function startLiveUpdater(){
-  if(liveInterval) clearInterval(liveInterval);
-  liveInterval = setInterval(updateLiveInfo, 30000);
-}
-
-async function fetchSheetData(range){
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(range)}?key=${API_KEY}`;
-  const res = await fetch(url);
-  if(!res.ok){
-    const text = await res.text().catch(()=>res.statusText);
-    throw new Error(`Google Sheets API fout ${res.status}: ${text}`);
-  }
-  const data = await res.json();
-  return data.values || [];
-}
-
-async function loadData(){
-  try{
-    const instructors = await fetchSheetData(RANGE_INSTRUCTORS);
-    INSTRUCTORS = instructors.map(r => ({
-      name: r[0]||'',
-      bio: r[1]||'',
-      role: r[2]||'',
-      img: r[3]||''
-    }));
-    const details = await fetchSheetData(RANGE_DETAILS);
-    INSTRUCTOR_DETAILS = {};
-    details.forEach(r=>{
-      if(r[0]) INSTRUCTOR_DETAILS[r[0]] = r[1]||'';
-    });
-    const schedule = await fetchSheetData(RANGE_SCHEDULE);
-    let idCounter = 1;
-    SCHEDULE = schedule.map(r => ({
-      id: idCounter++,
-      day: r[0]||'',
-      time: r[1]||'',
-      class: r[2]||'',
-      trainer: r[3]||'',
-      spots: Number(r[4]||0)
-    }));
-    renderInstructors();
-    renderPlans();
-    renderSchedule();
-  } catch(e){
-    console.error('LoadData error: ', e);
-    const scheduleBody = $('#schedule-body');
-    if(scheduleBody) scheduleBody.innerHTML = `<div class="muted">Kon de agenda niet laden. Controleer dat het sheet publiek is en de API key correct is.</div>`;
-  }
-}
-
 function initLocalSave(){
-  const saveLocal = $('#save-local');
   const form = document.getElementById('contact-form');
-  if(saveLocal){
-    saveLocal.addEventListener('click', ()=>{
-      const data = new FormData(form);
-      const obj = {};
-      for(const [k,v] of data.entries()) obj[k]=v;
-      localStorage.setItem('contactForm', JSON.stringify(obj));
-      alert('Contactgegevens lokaal opgeslagen!');
-    });
-  }
   const stored = localStorage.getItem('contactForm');
   if(stored){
     try{
@@ -747,12 +535,9 @@ function initLocalSave(){
 }
 
 function init(){
-  renderPlans();
   showPage(location.hash.replace('#','') || 'home');
   ensureOpenBar();
   updateLiveInfo();
-  startLiveUpdater();
-  loadData();
   initLocalSave();
 }
 document.addEventListener('DOMContentLoaded', init);
