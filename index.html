@@ -51,21 +51,107 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
   .card h3{margin:0 0 8px}
   .small{font-size:13px;color:var(--muted)}
-  .schedule {display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px;margin-top:30px}
-  .day-card{border-radius:14px;padding:18px;background:linear-gradient(180deg,#0c1627,#0b1323);border:1px solid rgba(255,255,255,0.06);box-shadow:0 6px 14px rgba(0,0,0,0.3);display:flex;flex-direction:column;transition:transform 0.25s ease,border-color 0.25s ease}
-  .day-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.12)}
-  .day-title{font-size:1.25rem;font-weight:700;margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid rgba(255,255,255,0.08)}
-  .lessons{display:flex;flex-direction:column;gap:12px}
-  .lesson-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);padding:10px 12px;border-radius:10px;transition:background 0.2s ease}
-  .lesson-row:hover{background:rgba(255,255,255,0.05)}
-  .lesson-time{font-weight:600;min-width:70px;font-size:14px;color:var(--accent-2)}
-  .lesson-info{flex:1;min-width:0}
-  .lesson-info strong{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .lesson-info .small{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .lesson-spots{font-size:13px;color:var(--muted);white-space:nowrap}
-  .lesson-row button{flex-shrink:0;font-size:13px;padding:6px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022;transition:transform 0.2s ease}
-  .lesson-row button:hover{transform:scale(1.05)}
-  @media(max-width:768px){.lesson-row{flex-direction:column;align-items:flex-start;gap:6px}.lesson-time,.lesson-info,.lesson-spots,.lesson-row button{margin:0}}
+  .schedule {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .day-card {
+    border-radius: 14px;
+    padding: 18px;
+    background: linear-gradient(180deg, #0c1627, #0b1323);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+  .day-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,255,255,0.12);
+  }
+  .day-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid rgba(255,255,255,0.08);
+  }
+  .lessons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .lesson-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+  }
+  .lesson-row:hover {
+    background: rgba(255,255,255,0.05);
+  }
+  .lesson-time {
+    font-weight: 600;
+    min-width: 70px;
+    font-size: 14px;
+    color: var(--accent-2);
+  }
+  .lesson-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .lesson-info strong {
+    display: block;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lesson-info .small {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lesson-spots {
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .lesson-row button {
+    flex-shrink: 0;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 600;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: #021022;
+    transition: transform 0.2s ease;
+  }
+  .lesson-row button:hover {
+    transform: scale(1.05);
+  }
+  @media(max-width:768px) {
+    .lesson-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .lesson-time, .lesson-info, .lesson-spots, .lesson-row button {
+      margin: 0;
+    }
+  }
   .instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
   .instructor{display:flex;gap:12px;align-items:center}
   .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
@@ -79,7 +165,14 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   select{background-color:#000033;color:white}
   footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
   @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
-  @media (max-width:760px){header{padding:8px 12px}.hamburger{display:inline-flex}nav{display:none}.container{margin-top:86px;padding:12px}.grid,.instructors,.plans{grid-template-columns:1fr}.hero{padding:18px}}
+  @media (max-width:760px){
+    header{padding:8px 12px}
+    .hamburger{display:inline-flex}
+    nav{display:none}
+    .container{margin-top:86px;padding:12px}
+    .grid,.instructors,.plans{grid-template-columns:1fr}
+    .hero{padding:18px}
+  }
   .muted{color:var(--muted)}
   .center{display:flex;justify-content:center;align-items:center}
   .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
@@ -176,7 +269,30 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     <section id="instructeurs">
       <h2>Onze Instructeurs</h2>
       <div class="instructors" id="instructors-list">
-        <div class="muted">Laden…</div>
+        <div class="instructor card">
+          <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 1">
+          <div>
+            <div style="font-weight:800">Sofie Janssens</div>
+            <div class="small muted">Hoofdtrainer Boksen</div>
+            <div class="small" style="margin-top:6px">Specialist in techniek, kracht en conditie. Werkt met alle niveau's.</div>
+          </div>
+        </div>
+        <div class="instructor card">
+          <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 2">
+          <div>
+            <div style="font-weight:800">Tom De Ridder</div>
+            <div class="small muted">Spinning Coach</div>
+            <div class="small" style="margin-top:6px">High-intensity trainingen met focus op uithouding.</div>
+          </div>
+        </div>
+        <div class="instructor card">
+          <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 3">
+          <div>
+            <div style="font-weight:800">Lotte Peeters</div>
+            <div class="small muted">Yoga & Mobiliteit</div>
+            <div class="small" style="margin-top:6px">Herstel en flexibiliteit, toegankelijk voor iedereen.</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -417,49 +533,11 @@ function initLocalSave(){
   }
 }
 
-async function loadInstructors(){
-  const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
-  const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
-  const range = "Sheet1";
-  try{
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const values = data.values;
-    const container = document.getElementById('instructors-list');
-    container.innerHTML = '';
-    if(values && values.length>1){
-      const headers = values[0];
-      values.slice(1).forEach(row=>{
-        const obj = {};
-        headers.forEach((h,i)=>obj[h]=row[i]||'');
-        const card = document.createElement('div');
-        card.className = 'instructor card';
-        card.innerHTML = `
-          <img loading="lazy" src="${obj.Foto||'https://via.placeholder.com/76'}" alt="${obj.Naam||'Instructeur'}">
-          <div>
-            <div style="font-weight:800">${obj.Naam||''}</div>
-            <div class="small muted">${obj.Functie||''}</div>
-            <div class="small" style="margin-top:6px">${obj.Bio||''}</div>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    } else {
-      container.innerHTML = '<div class=\"muted\">Geen instructeurs gevonden</div>';
-    }
-  }catch(e){
-    console.error(e);
-    document.getElementById('instructors-list').innerHTML = '<div class=\"muted\">Kon instructeurs niet laden</div>';
-  }
-}
-
 function init(){
   showPage(location.hash.replace('#','') || 'home');
   ensureOpenBar();
   updateLiveInfo();
   initLocalSave();
-  loadInstructors();
 }
 document.addEventListener('DOMContentLoaded', init);
 
