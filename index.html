@@ -533,11 +533,49 @@ function initLocalSave(){
   }
 }
 
+async function loadInstructors(){
+  const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
+  const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
+  const range = "Sheet1";
+  try{
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const values = data.values;
+    const container = document.getElementById('instructors-list');
+    container.innerHTML = '';
+    if(values && values.length>1){
+      const headers = values[0];
+      values.slice(1).forEach(row=>{
+        const obj = {};
+        headers.forEach((h,i)=>obj[h]=row[i]||'');
+        const card = document.createElement('div');
+        card.className = 'instructor card';
+        card.innerHTML = `
+          <img loading="lazy" src="${obj.Foto||'https://via.placeholder.com/76'}" alt="${obj.Naam||'Instructeur'}">
+          <div>
+            <div style="font-weight:800">${obj.Naam||''}</div>
+            <div class="small muted">${obj.Functie||''}</div>
+            <div class="small" style="margin-top:6px">${obj.Bio||''}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    } else {
+      container.innerHTML = '<div class=\"muted\">Geen instructeurs gevonden</div>';
+    }
+  }catch(e){
+    console.error(e);
+    document.getElementById('instructors-list').innerHTML = '<div class=\"muted\">Kon instructeurs niet laden</div>';
+  }
+}
+
 function init(){
   showPage(location.hash.replace('#','') || 'home');
   ensureOpenBar();
   updateLiveInfo();
   initLocalSave();
+  loadInstructors();
 }
 document.addEventListener('DOMContentLoaded', init);
 
