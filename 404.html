@@ -2,32 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>404 – Page Not Found</title>
+  <title>Page Not Found</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
-      --radius:14px; --max-w:1200px; --transition:250ms cubic-bezier(.2,.9,.3,1);
+    :root {
+      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4;
+      --glass:rgba(255,255,255,0.03); --radius:14px; --max-w:1200px;
+      --transition:250ms cubic-bezier(.2,.9,.3,1);
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;font-family:Roboto,system-ui,Arial; background:linear-gradient(135deg,#071021 0%,#071833 60%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
-    a{color:inherit}
-    .container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
-    header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
-    .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
-    .nav-links{display:flex;gap:6px;align-items:center}
-    .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);text-decoration:none}
-    .nav-links a:hover{background:var(--glass);color:#fff}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;border:0;text-decoration:none;transition:transform var(--transition)}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .btn:hover{transform:scale(1.05)}
-    .muted{color:var(--muted)}
-    footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
-    .center{display:flex;justify-content:center;align-items:center}
+    * {box-sizing:border-box;margin:0;padding:0}
+    html,body {height:100%}
+    body {
+      font-family:Roboto,system-ui,Arial;
+      background:linear-gradient(135deg,#071021 0%,#071833 60%);
+      color:#e6eef8;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+      display:flex;flex-direction:column;
+    }
+    a {color:inherit;text-decoration:none}
+    .container {max-width:var(--max-w);margin:90px auto 60px;padding:20px;text-align:center}
+    header {
+      position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;
+      padding:12px 24px;backdrop-filter:blur(6px);
+      background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));
+      border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200
+    }
+    .brand {display:flex;gap:12px;align-items:center}
+    .brand img {width:48px;height:48px;border-radius:10px;object-fit:cover}
+    .brand .title {font-weight:700;font-size:18px;color:var(--accent)}
+    .nav-links {display:flex;gap:6px;align-items:center}
+    .nav-links a {
+      padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);
+      transition:background var(--transition),color var(--transition)
+    }
+    .nav-links a:hover {background:var(--glass);color:#fff}
+    .btn {
+      display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;
+      font-weight:700;cursor:pointer;border:0;text-decoration:none;
+      transition:transform var(--transition),background var(--transition)
+    }
+    .btn.primary {background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
+    .btn.ghost {background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .btn:hover {transform:scale(1.05)}
+    .muted {color:var(--muted)}
+    footer {
+      margin-top:auto;padding:28px;text-align:center;color:var(--muted);
+      background:rgba(0,0,0,0.25);width:100%
+    }
+    .error-box {
+      margin:20px auto;max-width:500px;padding:14px 20px;
+      background:var(--glass);border-radius:var(--radius);
+      font-family:monospace;font-size:15px;color:var(--accent-2);
+      border:1px solid rgba(255,255,255,0.06);
+      animation:fadeIn 0.6s ease forwards;
+    }
+    .suggestion {
+      margin-top:12px;color:var(--muted);font-size:15px;
+    }
+    .suggestion a {
+      color:var(--accent-2);font-weight:600
+    }
+    @keyframes fadeIn {
+      from {opacity:0;transform:translateY(6px)}
+      to {opacity:1;transform:translateY(0)}
+    }
   </style>
 </head>
 <body>
@@ -44,12 +81,17 @@
     </nav>
   </header>
 
-  <div class="container center" style="min-height:70vh;flex-direction:column;text-align:center">
+  <div class="container" style="min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center">
     <h1 style="font-size:clamp(32px,6vw,52px);color:var(--accent);margin-bottom:16px;">
-      404 – Page Doesn’t Exist
+      404 – Page Not Found
     </h1>
-    <p class="muted" style="max-width:460px;margin:0 auto 24px;">
-      Oops! The page you’re looking for doesn’t exist. Use the navigation below to get back on track.
+    <p class="muted" style="max-width:460px;margin:0 auto 16px;">
+      Oops! The page you’re looking for doesn’t exist.
+    </p>
+    <div class="error-box" id="missingPath"></div>
+    <div class="suggestion" id="suggestionBox"></div>
+    <p class="muted" style="margin:16px 0 24px;">
+      Use the navigation below to get back on track.
     </p>
     <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
       <a href="/" class="btn primary">Home</a>
@@ -60,7 +102,17 @@
   </div>
 
   <footer>
-    © 2025 My Website — All Rights Reserved
+    © 2025 Box N Burn — All Rights Reserved
   </footer>
+
+  <script>
+    const path=window.location.pathname+window.location.search+window.location.hash;
+    document.getElementById("missingPath").textContent=`Requested URL: "${path}" not found.`;
+    const routes=["/","/jobs/","/privacy/","/support/"];
+    function similarity(a,b){a=a.toLowerCase();b=b.toLowerCase();let matrix=[];let i;for(i=0;i<=b.length;i++){matrix[i]=[i]}let j;for(j=0;j<=a.length;j++){matrix[0][j]=j}for(i=1;i<=b.length;i++){for(j=1;j<=a.length;j++){if(b.charAt(i-1)==a.charAt(j-1)){matrix[i][j]=matrix[i-1][j-1]}else{matrix[i][j]=Math.min(matrix[i-1][j-1]+1,Math.min(matrix[i][j-1]+1,matrix[i-1][j]+1))}}}return 1-matrix[b.length][a.length]/Math.max(a.length,b.length)}
+    let best=null,score=0;
+    routes.forEach(r=>{const s=similarity(path,r);if(s>score){score=s;best=r}});
+    if(score>0.3&&best!="/"){document.getElementById("suggestionBox").innerHTML=`Did you mean <a href="${best}">${best}</a>?`;}
+  </script>
 </body>
 </html>
