@@ -6,65 +6,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4;
-      --glass:rgba(255,255,255,0.03); --radius:14px; --max-w:1200px;
+      --bg:#0d1220;--card:#0b1220;--muted:#94a3b8;--accent:#ff6b6b;--accent-2:#06b6d4;
+      --glass:rgba(255,255,255,0.05);--radius:16px;--max-w:1200px;
       --transition:250ms cubic-bezier(.2,.9,.3,1);
     }
-    * {box-sizing:border-box;margin:0;padding:0}
-    html,body {height:100%}
-    body {
-      font-family:Roboto,system-ui,Arial;
-      background:linear-gradient(135deg,#071021 0%,#071833 60%);
-      color:#e6eef8;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
-      display:flex;flex-direction:column;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:Inter,system-ui,Arial;
+      background:linear-gradient(135deg,#060d1a 0%,#071832 100%);
+      color:#e6eef8;display:flex;flex-direction:column;min-height:100vh;
     }
-    a {color:inherit;text-decoration:none}
-    .container {max-width:var(--max-w);margin:90px auto 60px;padding:20px;text-align:center}
-    header {
-      position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;
-      padding:12px 24px;backdrop-filter:blur(6px);
-      background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));
-      border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200
+    a{text-decoration:none;color:inherit}
+    header{
+      position:fixed;top:0;left:0;right:0;height:78px;display:flex;align-items:center;justify-content:space-between;
+      padding:14px 28px;background:rgba(10,16,30,0.65);backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,0.05);z-index:1200;
     }
-    .brand {display:flex;gap:12px;align-items:center}
-    .brand img {width:48px;height:48px;border-radius:10px;object-fit:cover}
-    .brand .title {font-weight:700;font-size:18px;color:var(--accent)}
-    .nav-links {display:flex;gap:6px;align-items:center}
-    .nav-links a {
-      padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted);
-      transition:background var(--transition),color var(--transition)
-    }
-    .nav-links a:hover {background:var(--glass);color:#fff}
-    .btn {
-      display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;
-      font-weight:700;cursor:pointer;border:0;text-decoration:none;
-      transition:transform var(--transition),background var(--transition)
-    }
-    .btn.primary {background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
-    .btn.ghost {background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .btn:hover {transform:scale(1.05)}
-    .muted {color:var(--muted)}
-    footer {
-      margin-top:auto;padding:28px;text-align:center;color:var(--muted);
-      background:rgba(0,0,0,0.25);width:100%
-    }
-    .error-box {
-      margin:20px auto;max-width:500px;padding:14px 20px;
-      background:var(--glass);border-radius:var(--radius);
-      font-family:monospace;font-size:15px;color:var(--accent-2);
-      border:1px solid rgba(255,255,255,0.06);
-      animation:fadeIn 0.6s ease forwards;
-    }
-    .suggestion {
-      margin-top:12px;color:var(--muted);font-size:15px;
-    }
-    .suggestion a {
-      color:var(--accent-2);font-weight:600
-    }
-    @keyframes fadeIn {
-      from {opacity:0;transform:translateY(6px)}
-      to {opacity:1;transform:translateY(0)}
-    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:46px;height:46px;border-radius:12px;object-fit:cover}
+    .brand .title{font-weight:700;font-size:18px;color:var(--accent)}
+    .nav-links{display:flex;gap:8px}
+    .nav-links a{padding:8px 14px;border-radius:10px;font-weight:500;color:var(--muted);transition:all var(--transition)}
+    .nav-links a:hover{background:var(--glass);color:#fff}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;font-weight:700;cursor:pointer;transition:all var(--transition)}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--muted)}
+    .btn:hover{transform:scale(1.06)}
+    .container{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:120px 20px 60px;text-align:center}
+    h1{font-size:clamp(34px,6vw,60px);background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:18px;font-weight:800}
+    .subtitle{color:var(--muted);font-size:17px;max-width:460px;margin:0 auto 20px}
+    .error-box{margin:20px auto;max-width:500px;padding:16px 20px;background:var(--glass);border-radius:var(--radius);font-family:monospace;font-size:15px;color:var(--accent-2);border:1px solid rgba(255,255,255,0.08);animation:fadeIn .7s ease forwards}
+    .suggestion{margin-top:16px;color:var(--muted);font-size:16px}
+    .suggestion a{color:var(--accent-2);font-weight:600}
+    .actions{margin-top:26px;display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+    footer{padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25)}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 <body>
@@ -81,20 +58,13 @@
     </nav>
   </header>
 
-  <div class="container" style="min-height:70vh;display:flex;flex-direction:column;justify-content:center;align-items:center">
-    <h1 style="font-size:clamp(32px,6vw,52px);color:var(--accent);margin-bottom:16px;">
-      404 – Page Not Found
-    </h1>
-    <p class="muted" style="max-width:460px;margin:0 auto 16px;">
-      Oops! The page you’re looking for doesn’t exist.
-    </p>
+  <div class="container">
+    <h1>404 – Not Found</h1>
+    <p class="subtitle">We couldn’t find the page you were looking for.</p>
     <div class="error-box" id="missingPath"></div>
     <div class="suggestion" id="suggestionBox"></div>
-    <p class="muted" style="margin:16px 0 24px;">
-      Use the navigation below to get back on track.
-    </p>
-    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
-      <a href="/" class="btn primary">Home</a>
+    <div class="actions">
+      <a href="/" class="btn primary">Go Home</a>
       <a href="/jobs/" class="btn ghost">Jobs</a>
       <a href="/privacy/" class="btn ghost">Privacy</a>
       <a href="/support/" class="btn ghost">Support</a>
@@ -109,10 +79,10 @@
     const path=window.location.pathname+window.location.search+window.location.hash;
     document.getElementById("missingPath").textContent=`Requested URL: "${path}" not found.`;
     const routes=["/","/jobs/","/privacy/","/support/"];
-    function similarity(a,b){a=a.toLowerCase();b=b.toLowerCase();let matrix=[];let i;for(i=0;i<=b.length;i++){matrix[i]=[i]}let j;for(j=0;j<=a.length;j++){matrix[0][j]=j}for(i=1;i<=b.length;i++){for(j=1;j<=a.length;j++){if(b.charAt(i-1)==a.charAt(j-1)){matrix[i][j]=matrix[i-1][j-1]}else{matrix[i][j]=Math.min(matrix[i-1][j-1]+1,Math.min(matrix[i][j-1]+1,matrix[i-1][j]+1))}}}return 1-matrix[b.length][a.length]/Math.max(a.length,b.length)}
-    let best=null,score=0;
-    routes.forEach(r=>{const s=similarity(path,r);if(s>score){score=s;best=r}});
-    if(score>0.3&&best!="/"){document.getElementById("suggestionBox").innerHTML=`Did you mean <a href="${best}">${best}</a>?`;}
+    function levenshtein(a,b){a=a.toLowerCase();b=b.toLowerCase();const m=[];for(let i=0;i<=b.length;i++){m[i]=[i]}for(let j=0;j<=a.length;j++){m[0][j]=j}for(let i=1;i<=b.length;i++){for(let j=1;j<=a.length;j++){m[i][j]=b.charAt(i-1)==a.charAt(j-1)?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1)}}return m[b.length][a.length]}
+    function bestMatch(p,arr){let best=null;let min=Infinity;arr.forEach(r=>{const d=levenshtein(p,r);if(d<min){min=d;best=r}});return best}
+    const suggestion=bestMatch(path,routes);
+    if(suggestion&&suggestion!=="/"&&levenshtein(path,suggestion)<path.length){document.getElementById("suggestionBox").innerHTML=`Did you mean <a href="${suggestion}">${suggestion}</a>?`;}
   </script>
 </body>
 </html>
