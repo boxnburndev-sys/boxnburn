@@ -75,7 +75,7 @@
     .lesson-time,.lesson-info,.lesson-spots,.lesson-row button{margin:0}
   }
   .instructors,
-  .sponsors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .sponsors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:18px}
   .instructor,
   .sponsor{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
   .instructor img,
@@ -117,6 +117,7 @@
   .social a{color:var(--muted);font-size:20px;transition:color .2s ease;text-decoration:none}
   .social a:hover{color:#fff}
 </style>
+
 
 
 </head>
@@ -478,15 +479,15 @@ async function loadSponsors() {
       data.values.forEach(row => {
         const [logo, name, title, bio, perks, link] = row;
         const div = document.createElement("div");
-        div.className = "instructor card";
+        div.className = "sponsor";
         div.innerHTML = `
           <img src="${logo}" alt="${name}" loading="lazy">
-          <div>
-            <div style="font-weight:800">${name}</div>
+          <div class="sponsor-content">
+            <h3>${name}</h3>
             <div class="small muted">${title || ""}</div>
-            <div class="small" style="margin-top:6px">${bio || ""}</div>
-            <div class="small muted" style="margin-top:6px"><strong>Perks:</strong> ${perks || ""}</div>
-            <div class="small muted" style="margin-top:6px"><a href="${link}" target="_blank" rel="noopener">${link || ""}</a></div>
+            <p>${bio || ""}</p>
+            <div class="sponsor-perks"><strong>Voordelen:</strong> ${perks || ""}</div>
+            ${link ? `<a href="${link}" target="_blank" rel="noopener">Bezoek website</a>` : ""}
           </div>
         `;
         sponsorsList.appendChild(div);
