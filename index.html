@@ -1,13 +1,3 @@
-<!--
-   ____     U  ___ u __  __        _   _           ____     _   _    ____     _   _     
-U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \ |"|    
- \|  _ \/    | | | | /\  /\      <|  \| |>       \|  _ \/ \| |\| | \| |_) |/<|  \| |>   
-  | |_) |.-,_| |_| |U /  \ u     U| |\  |u        | |_) |  | |_| |  |  _ <  U| |\  |u   
-  |____/  \_)-\___/  /_/\_\       |_| \_|         |____/  <<\___/   |_| \_\  |_| \_|    
- _|| \\_       \\  ,-,>> \\_      ||   \\,-.     _|| \\_ (__) )(    //   \\_ ||   \\,-. 
-(__) (__)     (__)  \_)  (__)     (_")  (_/     (__) (__)    (__)  (__)  (__)(_")  (_/  
--->
-
 <!doctype html>
 <html lang="nl">
 <head>
@@ -183,6 +173,10 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   input[type="tel"]{letter-spacing:0.5px}
   .form-note{font-size:12px;color:var(--muted);margin-top:6px}
   img{max-width:100%;height:auto;display:block}
+  /* footer social */
+  .social{margin-top:12px;display:flex;justify-content:center;gap:14px}
+  .social a{color:var(--muted);font-size:20px;transition:color .2s ease;text-decoration:none}
+  .social a:hover{color:#fff}
 </style>
 </head>
 <body>
@@ -223,10 +217,10 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
         <div class="grid" style="margin-top:18px">
           <div class="card">
             <h3>Live planning</h3>
-            <div class="small muted">Realtime vanuit Trainin</div>
+            <div class="small muted">Realtime via Trainin</div>
             <div style="margin-top:12px">
-              <strong id="next-class">Geen data geladen</strong>
-              <div class="small muted">Volgende les</div>
+              <strong>Bekijk de agenda</strong>
+              <div class="small muted">Klik op "Lessen" om te boeken</div>
             </div>
           </div>
           <div class="card">
@@ -269,7 +263,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
     <section id="instructeurs">
       <h2>Onze Instructeurs</h2>
       <div class="instructors" id="instructors-list">
-        <div class="instructor card">
+        <div class="instructor card" data-instructor="Sofie Janssens">
           <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 1">
           <div>
             <div style="font-weight:800">Sofie Janssens</div>
@@ -277,7 +271,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
             <div class="small" style="margin-top:6px">Specialist in techniek, kracht en conditie. Werkt met alle niveau's.</div>
           </div>
         </div>
-        <div class="instructor card">
+        <div class="instructor card" data-instructor="Tom De Ridder">
           <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 2">
           <div>
             <div style="font-weight:800">Tom De Ridder</div>
@@ -285,7 +279,7 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
             <div class="small" style="margin-top:6px">High-intensity trainingen met focus op uithouding.</div>
           </div>
         </div>
-        <div class="instructor card">
+        <div class="instructor card" data-instructor="Lotte Peeters">
           <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 3">
           <div>
             <div style="font-weight:800">Lotte Peeters</div>
@@ -338,6 +332,10 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
       <a href="/privacy">
        <div class="muted">Privacy Beleid</div>
       </a>
+      <div class="social" aria-hidden="false">
+        <a href="https://www.facebook.com/boxnburn" target="_blank" aria-label="Facebook">📘 Facebook</a>
+        <a href="https://www.instagram.com/boxnburn" target="_blank" aria-label="Instagram">📸 Instagram</a>
+      </div>
     </footer>
   </main>
 
@@ -352,9 +350,11 @@ U | __")u    \/"_ \/ \ \/"/       | \ |"|       U | __")uU |"|u| |U |  _"\ u | \
   </div>
 
 <script>
+/* Utility selectors */
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
+/* Formatting helpers */
 function formatDate(d=new Date()){
   return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
 }
@@ -362,38 +362,53 @@ function formatTime(d=new Date()){
   return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':');
 }
 
+/* Small "open bar" that sits under the header to guide users */
 function ensureOpenBar(){
   if($('#open-bar')) return;
   const bar = document.createElement('div');
   bar.id = 'open-bar';
   bar.style.cssText = 'margin-bottom:16px;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)';
-  bar.innerHTML = `<div id="open-bar-text" style="font-weight:700">Laden…</div><div class="small muted" id="open-bar-sub">Gebaseerd op onze agenda</div>`;
+  bar.innerHTML = `<div id="open-bar-text" style="font-weight:700">Agenda ingeladen</div><div class="small muted" id="open-bar-sub">Klik op "Lessen" voor details</div>`;
   const container = document.querySelector('.container');
   if(container) container.prepend(bar);
 }
 
+/* Update various bits of the UI (no live countdown) */
 function updateLiveInfo(){
   ensureOpenBar();
-  const nextEl = $('#next-class');
-  nextEl.innerHTML = `Planning via Trainin — klik op 'Lessen' om te boeken.`;
   const todayDateEl = $('#today-date');
   const todayScheduleEl = $('#today-schedule');
   const now = new Date();
-  todayDateEl.textContent = formatDate(now);
-  todayScheduleEl.innerHTML = `<div class="muted">Bekijk de volledige planning in de agenda (Trainin).</div>`;
+  if(todayDateEl) todayDateEl.textContent = formatDate(now);
+  if(todayScheduleEl) todayScheduleEl.innerHTML = `<div class="muted">Bekijk de volledige planning in de agenda (Trainin).</div>`;
   const openBarText = $('#open-bar-text');
-  openBarText.innerHTML = `Agenda: Trainin widget ingeladen. <span class="small muted">Boek direct in Trainin</span>`;
+  if(openBarText) openBarText.innerHTML = `Agenda ingeladen — klik op "Lessen"`;
   const newsEl = $('#news');
-  newsEl.textContent = 'Agenda en winkel via Trainin geladen.';
+  if(newsEl) newsEl.textContent = 'Agenda en winkel via Trainin geladen.';
 }
 
+/* Modal / booking logic */
 const modal = $('#modal');
 const modalContent = $('#modal-content');
 let activeBooking = null;
 
+function showModal(){
+  if(!modal) return;
+  modal.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  if(!modal) return;
+  modal.classList.remove('show');
+  document.body.style.overflow = 'auto';
+  activeBooking = null;
+}
+
 function openBook(opts={}){
-  if(opts.type==='proefles'){
-    modalContent.innerHTML = `<h3>Boek Proefles</h3><p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
+  // opts.type === 'proefles' or 'lesson' etc.
+  if(opts.type === 'proefles'){
+    modalContent.innerHTML = `<h3>Boek Proefles</h3>
+      <p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
       <label style="display:block;margin-top:8px">Naam<input id="bk-name" autocomplete="name"></label>
       <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
       <label style="display:block;margin-top:8px">Voeg een opmerking<input id="bk-note"></label>`;
@@ -401,7 +416,9 @@ function openBook(opts={}){
     showModal();
     return;
   }
-  modalContent.innerHTML = `<h3>Boeking</h3><div class="muted">Selecteer je gegevens</div>
+  // Default booking modal
+  modalContent.innerHTML = `<h3>Boeking</h3>
+    <div class="muted">Selecteer je gegevens</div>
     <label style="display:block;margin-top:8px">Je naam<input id="bk-name" autocomplete="name"></label>
     <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
     <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>`;
@@ -409,34 +426,45 @@ function openBook(opts={}){
   showModal();
 }
 
-function showModal(){
-  if(!modal) return;
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(){
-  if(!modal) return;
-  modal.style.display = 'none';
-  document.body.style.overflow = 'auto';
-  activeBooking = null;
-}
+/* Modal event wiring */
+document.addEventListener('click', (e)=>{
+  const chooseBook = e.target.closest('#cta-book, #open-book');
+  if(chooseBook){
+    openBook({type:'proefles'});
+  }
+  const card = e.target.closest('.instructor');
+  if(card){
+    const name = card.dataset.instructor || card.querySelector('div')?.textContent?.trim() || 'Instructeur';
+    modalContent.innerHTML = `
+      <h2>${name}</h2>
+      <p class="muted">Bekijk bio en beschikbaarheid in Trainin</p>
+    `;
+    activeBooking = null;
+    showModal();
+  }
+});
+
+/* Modal buttons */
 const modalCancel = $('#modal-cancel');
 if(modalCancel) modalCancel.addEventListener('click', closeModal);
 const modalConfirm = $('#modal-confirm');
 if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
-  if(!activeBooking){ closeModal(); return; }
+  if(!activeBooking){
+    closeModal(); return;
+  }
   const name = $('#bk-name')?.value || 'Onbekend';
   const email = $('#bk-email')?.value || '';
   const qty = Number($('#bk-qty')?.value || 1);
+  // Build payload for web3forms (same as contact form mechanism)
+  const payload = {
+    access_key: "3287ed1d-2d60-4665-b739-2cf29b3de670",
+    name,
+    email,
+    class: activeBooking.type === 'proefles' ? 'Proefles' : 'Les',
+    spots: qty,
+    subject: `Nieuwe boeking: ${activeBooking.type === 'proefles' ? 'Proefles' : 'Les'}`
+  };
   try{
-    const payload = {
-      access_key: "3287ed1d-2d60-4665-b739-2cf29b3de670",
-      name,
-      email,
-      class: activeBooking.type === 'proefles' ? 'Proefles' : 'Les',
-      spots: qty,
-      subject: `Nieuwe boeking: ${activeBooking.type === 'proefles' ? 'Proefles' : 'Les'}`
-    };
     const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
@@ -454,23 +482,7 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   closeModal();
 });
 
-document.addEventListener('click', (e)=>{
-  const chooseBook = e.target.closest('#cta-book, #open-book');
-  if(chooseBook){
-    openBook({type:'proefles'});
-  }
-  const card = e.target.closest('.instructor');
-  if(card && card.dataset.instructor){
-    const name = card.dataset.instructor || card.querySelector('div')?.textContent?.trim() || 'Instructeur';
-    modalContent.innerHTML = `
-      <h2>${name}</h2>
-      <p class="muted">Bekijk bio en beschikbaarheid in Trainin</p>
-    `;
-    activeBooking = null;
-    showModal();
-  }
-});
-
+/* Navigation and history handling */
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
     const target = a.getAttribute('data-page');
@@ -485,6 +497,7 @@ $$('.nav-links a').forEach(a=>{
 function showPage(page){
   $$('.nav-links a').forEach(x=>x.classList.remove('active'));
   $$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');
+  // Show/hide sections within #app
   $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -492,13 +505,16 @@ window.addEventListener('popstate', ()=>{
   const page = location.hash.replace('#','') || 'home';
   showPage(page);
 });
+
+/* Mobile toggle */
 $('#mobile-toggle').addEventListener('click', ()=>{
   const nav = document.querySelector('nav');
-  const expanded = nav.style.display === 'block';
-  nav.style.display = expanded ? '' : 'block';
+  const expanded = nav.style.display === 'block' || nav.style.display === 'flex';
+  nav.style.display = expanded ? '' : 'flex';
   $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
 });
 
+/* Contact form submit handler (web3forms) */
 $('#contact-form').addEventListener('submit', e=>{
   e.preventDefault();
   const form = e.target;
@@ -508,6 +524,7 @@ $('#contact-form').addEventListener('submit', e=>{
       if(r.ok){
         alert('Bedankt! We nemen contact op.');
         form.reset();
+        localStorage.removeItem('contactForm');
       } else {
         try{
           const j = await r.json();
@@ -520,8 +537,11 @@ $('#contact-form').addEventListener('submit', e=>{
     .catch(()=>alert('Er ging iets mis bij versturen'));
 });
 
+/* Autosave contact form to localStorage */
 function initLocalSave(){
   const form = document.getElementById('contact-form');
+  if(!form) return;
+  // Restore saved
   const stored = localStorage.getItem('contactForm');
   if(stored){
     try{
@@ -531,8 +551,17 @@ function initLocalSave(){
       }
     } catch(e){}
   }
+  // Save on change
+  form.addEventListener('input', ()=>{
+    const payload = {};
+    Array.from(form.elements).forEach(el=>{
+      if(el.name) payload[el.name] = el.value;
+    });
+    localStorage.setItem('contactForm', JSON.stringify(payload));
+  });
 }
 
+/* Small init */
 function init(){
   showPage(location.hash.replace('#','') || 'home');
   ensureOpenBar();
@@ -541,6 +570,7 @@ function init(){
 }
 document.addEventListener('DOMContentLoaded', init);
 
+/* Close modal on Escape */
 document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape') closeModal();
 });
