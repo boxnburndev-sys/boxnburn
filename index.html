@@ -8,16 +8,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#ff6b6b; --accent-2:#06b6d4; --glass:rgba(255,255,255,0.03);
-      --radius:14px; --max-w:1200px; --transition:250ms cubic-bezier(.2,.9,.3,1);
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#94a3b8;
+      --accent:#ff6b6b;
+      --accent-2:#06b6d4;
+      --glass:rgba(255,255,255,0.03);
+      --radius:14px;
+      --max-w:1200px;
+      --transition:250ms cubic-bezier(.2,.9,.3,1);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;font-family:Roboto,system-ui,Arial; background:linear-gradient(135deg,#071021 0%,#071833 60%); color:#e6eef8; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      margin:0;
+      font-family:Roboto,system-ui,Arial;
+      background:linear-gradient(135deg,#071021 0%,#071833 60%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
     a{color:inherit;text-decoration:none}
-    .container{max-width:var(--max-w);margin:90px auto 60px;padding:20px}
+    .container{max-width:var(--max-w);margin:120px auto 60px;padding:20px}
     header{position:fixed;inset:0 0 auto 0;height:78px;display:flex;align-items:center;justify-content:space-between;padding:12px 24px;backdrop-filter:blur(6px);background:linear-gradient(180deg,rgba(6,10,17,0.55),rgba(6,10,17,0.3));border-bottom:1px solid rgba(255,255,255,0.03);z-index:1200}
     .brand{display:flex;gap:12px;align-items:center}
     .brand img{width:48px;height:48px;border-radius:10px;object-fit:cover}
@@ -27,10 +39,10 @@
     .nav-links a{padding:8px 12px;border-radius:10px;font-weight:500;color:var(--muted)}
     .nav-links a.active, .nav-links a:hover{background:var(--glass);color:#fff}
     .actions{display:flex;gap:8px}
-    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0;transition:all .2s ease}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;border:0;transition:all .18s ease}
     .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022}
     .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .btn.ghost:hover{border-color:rgba(255,255,255,0.2);color:#fff}
+    .btn.ghost:hover{border-color:rgba(255,255,255,0.18);color:#fff}
     .hamburger{display:none;border:0;background:transparent;color:var(--muted);font-size:20px}
     .hero{display:grid;grid-template-columns:1fr minmax(280px,420px);gap:24px;align-items:start;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:22px;border-radius:18px;border:1px solid rgba(255,255,255,0.02)}
     .hero-left h1{font-size:clamp(24px,4vw,36px);margin:0 0 10px}
@@ -43,11 +55,12 @@
     .feature p{font-size:14px;color:var(--muted)}
     .schedule iframe, .shop iframe{border:none;width:100%;height:650px}
     .instructors{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:18px}
-    .instructor{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04)}
-    .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
+    .instructor{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+    .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover;flex-shrink:0}
     .instructor .info{min-width:0}
     .instructor .info strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .instructor .info .role{font-size:13px;color:var(--muted);margin-top:4px}
+    .instructor .info .bio{margin-top:8px;color:var(--muted);font-size:13px}
     .contact{margin-top:18px}
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
     input,textarea,select{width:100%;padding:10px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#e6eef8}
@@ -60,9 +73,13 @@
     @media (max-width:1000px){.hero{grid-template-columns:1fr}}
     @media (max-width:760px){header{padding:8px 12px}.hamburger{display:inline-flex}nav{display:none}.container{margin-top:86px;padding:12px}}
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000}
-    .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:520px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
+    .modal{background:linear-gradient(180deg,#071226,#081426);padding:18px;border-radius:12px;max-width:720px;width:100%;box-shadow:0 20px 40px rgba(2,6,23,0.7)}
     .muted{color:var(--muted)}
     .open-bar{margin-bottom:16px;padding:10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .center{display:flex;justify-content:center;align-items:center}
+    .hidden{display:none}
+    .lead{font-size:15px;color:var(--muted)}
   </style>
 </head>
 <body>
@@ -74,7 +91,6 @@
         <div class="small muted">Westerlo — Nieuwe lessen elke week</div>
       </div>
     </div>
-
     <nav aria-label="Hoofd navigatie">
       <div class="nav-links" role="navigation">
         <a href="#home" data-page="home" class="active">Home</a>
@@ -85,7 +101,6 @@
         <a href="/jobs">Jobs</a>
       </div>
     </nav>
-
     <div class="actions">
       <button class="btn primary" id="open-book">Boek Nu</button>
       <button class="hamburger" id="mobile-toggle" aria-expanded="false">☰</button>
@@ -93,8 +108,7 @@
   </header>
 
   <main class="container" id="app">
-    <!-- small guide bar under header -->
-    <div id="open-bar" class="open-bar" style="display:none;">
+    <div id="open-bar" class="open-bar hidden">
       <div id="open-bar-text" style="font-weight:700">Agenda ingeladen</div>
       <div class="small muted" id="open-bar-sub">Klik op "Lessen" voor details</div>
     </div>
@@ -103,14 +117,12 @@
       <div class="hero-left">
         <span class="kicker">Word sterker. Voel je beter.</span>
         <h1>Ontdek jouw Energie & Kracht — Box N Burn</h1>
-        <p>Mix van bokstraining, spinning en yoga voor beginners en gevorderden. Boek snel, bekijk instructeurs en kies een abonnement.</p>
-
-        <div class="cta">
+        <p class="lead">Mix van bokstraining, spinning en yoga voor beginners en gevorderden. Boek snel, bekijk instructeurs en kies een abonnement.</p>
+        <div class="cta" style="margin-top:12px">
           <button class="btn primary" id="cta-book">Boek een proefles</button>
           <a href="#winkel" class="btn ghost">Bekijk winkel</a>
         </div>
-
-        <div class="features" aria-hidden="false">
+        <div class="features" aria-hidden="false" style="margin-top:22px">
           <div class="feature">
             <h3>🥊 Boksen</h3>
             <p>Techniek, kracht en conditie — voor elk niveau.</p>
@@ -124,59 +136,65 @@
             <p>Herstel, mobiliteit en rust.</p>
           </div>
         </div>
-
-        <div class="socials" style="margin-top:14px;">
-          <a href="https://www.facebook.com/boxnburn" target="_blank" rel="noopener" aria-label="Facebook">📘 Facebook</a>
-          <a href="https://www.instagram.com/boxnburn" target="_blank" rel="noopener" aria-label="Instagram">📸 Instagram</a>
+        <div style="margin-top:18px" class="card">
+          <h3>Proefles</h3>
+          <div class="small muted">€10 — direct online boeken</div>
+          <div style="margin-top:12px"><button class="btn primary" onclick="openBook({type:'proefles'})">Boek proefles</button></div>
+        </div>
+        <div style="margin-top:14px" class="card">
+          <h3>Nieuws & Meldingen</h3>
+          <div class="small muted" id="news">Geen nieuwe meldingen</div>
+        </div>
+        <div class="socials" style="margin-top:14px">
+          <a href="https://www.facebook.com/boxnburn" target="_blank" rel="noopener">📘 Facebook</a>
+          <a href="https://www.instagram.com/boxnburn" target="_blank" rel="noopener">📸 Instagram</a>
         </div>
       </div>
 
       <aside style="padding:12px">
-        <div class="feature">
+        <div class="card">
           <h3>📍 Locatie</h3>
-          <p>Sint Lambertusstraat 33 B, 2260 Westerlo</p>
-          <div style="margin-top:8px"><a class="btn ghost" href="https://www.google.com/maps/place/Sint+Lambertusstraat+33B,+2260+Westerlo" target="_blank" rel="noopener">Open in Maps</a></div>
+          <div class="small muted">Sint Lambertusstraat 33 B, 2260 Westerlo</div>
+          <div style="margin-top:12px"><a class="btn ghost" href="https://www.google.com/maps/place/Sint+Lambertusstraat+33B,+2260+Westerlo" target="_blank" rel="noopener">Open in Maps</a></div>
         </div>
       </aside>
     </section>
 
-    <section id="lessen">
+    <section id="lessen" style="margin-top:22px">
       <h2>Lessen & Agenda</h2>
       <p class="muted">Klik op de planning om direct in Trainin te boeken.</p>
-      <div class="schedule card" style="margin-top:12px;">
-        <iframe src="https://boxnburn.trainin.app/widget/schedule" title="Trainin planning"></iframe>
+      <div class="card" style="margin-top:12px">
+        <iframe src="https://boxnburn.trainin.app/widget/schedule" style="width:100%;height:650px;border:0" title="Trainin schedule"></iframe>
       </div>
     </section>
 
-    <section id="instructeurs" style="margin-top:18px">
+    <section id="instructeurs" style="margin-top:26px">
       <h2>Onze Instructeurs</h2>
-      <p class="muted">Lessen, expertise en korte bio — direct uit je Google Sheet.</p>
-      <div class="instructors" id="instructors-list" aria-live="polite">
-        <!-- JS will populate this -->
+      <p class="muted">Lessen, expertise en korte bio — direct uit Google Sheets.</p>
+      <div class="instructors card" id="instructors-list" aria-live="polite" style="margin-top:12px;padding:14px">
         <div class="muted">Laden…</div>
       </div>
     </section>
 
-    <section id="winkel" style="margin-top:18px;">
+    <section id="winkel" style="margin-top:26px">
       <h2>Winkel</h2>
       <p class="muted">Alle producten en abonnementen beheerd via Trainin.</p>
-      <div class="shop card" style="margin-top:12px;">
-        <iframe src="https://boxnburn.trainin.app/widget/shop" title="Trainin shop"></iframe>
+      <div class="card" style="margin-top:12px">
+        <iframe src="https://boxnburn.trainin.app/widget/shop" style="width:100%;height:650px;border:0" title="Trainin shop"></iframe>
       </div>
     </section>
 
-    <section id="contact" style="margin-top:18px;">
+    <section id="contact" style="margin-top:26px">
       <h2>Neem contact op</h2>
-      <form id="contact-form" class="contact" action="https://api.web3forms.com/submit" method="POST">
+      <form id="contact-form" class="contact card" action="https://api.web3forms.com/submit" method="POST" style="padding:16px">
         <input type="hidden" name="access_key" value="3287ed1d-2d60-4665-b739-2cf29b3de670">
         <input type="hidden" name="subject" value="Nieuwe contactaanvraag Box N Burn">
         <div class="form-row">
           <input name="name" placeholder="Je naam" required autocomplete="name">
           <input name="email" type="email" placeholder="E-mail" required autocomplete="email">
-          <input name="telefoonnummer" type="tel" placeholder="+32 123 45 67 89" required autocomplete="tel">
         </div>
-
-        <div style="margin-top:8px;">
+        <div class="form-row" style="margin-top:8px">
+          <input name="telefoonnummer" type="tel" placeholder="+32 123 45 67 89" required autocomplete="tel">
           <select name="plan" aria-label="Kies een plan">
             <option value="">Kies een plan (optioneel)</option>
             <option value="proefles">Proefles</option>
@@ -184,31 +202,27 @@
             <option value="Maand">Maandelijks</option>
           </select>
         </div>
-
         <div style="margin-top:8px">
           <textarea name="message" placeholder="Je bericht" required></textarea>
         </div>
-
         <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
           <button type="submit" class="btn primary">Verstuur bericht</button>
         </div>
-
         <div class="muted" style="margin-top:8px">Alle betalingen gebeuren ter plaatse via Paqconiq of Cash.</div>
       </form>
     </section>
 
-    <footer style="margin-top:28px;">
+    <footer style="margin-top:28px">
       <div>&copy; 2025 Box N Burn — Alle rechten voorbehouden</div>
       <a href="/privacy"><div class="muted">Privacy Beleid</div></a>
-      <div class="socials" style="margin-top:12px;">
+      <div class="socials" style="margin-top:12px">
         <a href="https://www.facebook.com/boxnburn" target="_blank" rel="noopener">📘</a>
         <a href="https://www.instagram.com/boxnburn" target="_blank" rel="noopener">📸</a>
       </div>
     </footer>
   </main>
 
-  <!-- modal -->
-  <div class="modal-backdrop" id="modal" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal-backdrop" id="modal" style="display:none;align-items:center;justify-content:center">
     <div class="modal" role="dialog" aria-modal="true" aria-label="Boek les">
       <div id="modal-content"></div>
       <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
@@ -218,311 +232,186 @@
     </div>
   </div>
 
-<script>
-/* -------------------------
-   Configuration
-   -------------------------
-   Instructors come from a Google Sheet. To use:
-   1. Create a Google Sheet with columns: Name, Role, Bio, Photo
-   2. Publish the sheet to the web OR use opensheet.elk.sh service.
-   3. Replace SHEET_ID below with your Google Sheet ID.
-   Example opensheet URL used in code:
-     https://opensheet.elk.sh/SHEET_ID/Sheet1
-   If the fetch fails, the script uses local sample data as fallback.
-*/
-const SHEET_ID = 'YOUR_SHEET_ID'; // <-- REPLACE this with your Google Sheet ID or leave empty to use sample data
-const SHEET_NAME = 'Sheet1'; // name of the sheet tab (case-sensitive) if using opensheet.elk.sh
+  <script>
+    const SHEET_ID = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
+    const API_KEY = "AIzaSyDCIoC-dzEh-ptJVTEfhLH7FgrUWYcqKL4";
 
-/* Simple helpers */
-const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
+    function $(s){return document.querySelector(s)}
+    function $all(s){return Array.from(document.querySelectorAll(s))}
+    function escapeHtml(t){if(!t) return ''; return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+    function clampText(s,n=140){if(!s) return ''; return s.length>n? s.slice(0,n-1)+'…':s}
 
-/* Utilities */
-function clampText(s, n=140){
-  if(!s) return '';
-  return s.length>n ? s.slice(0,n-1)+'…' : s;
-}
-function formatDate(d=new Date()){
-  return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
-}
-
-/* Open-bar under header */
-function ensureOpenBar(){
-  const bar = document.getElementById('open-bar');
-  if(!bar) return;
-  bar.style.display = 'flex';
-}
-
-/* Modal / booking */
-const modal = document.getElementById('modal');
-const modalContent = document.getElementById('modal-content');
-let activeBooking = null;
-
-function showModal(){
-  if(!modal) return;
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(){
-  if(!modal) return;
-  modal.style.display = 'none';
-  document.body.style.overflow = 'auto';
-  activeBooking = null;
-}
-
-function openBook(opts={}){
-  // opts: {type:'proefles'|'lesson', meta: {...}}
-  if(opts.type === 'proefles'){
-    modalContent.innerHTML = `
-      <h3>Boek Proefles</h3>
-      <p class="muted">Voer je gegevens in om je proefles te reserveren.</p>
-      <label style="display:block;margin-top:8px">Naam<input id="bk-name" autocomplete="name"></label>
-      <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
-      <label style="display:block;margin-top:8px">Opmerking<input id="bk-note"></label>
-    `;
-    activeBooking = {type:'proefles'};
-    showModal();
-    return;
-  }
-
-  modalContent.innerHTML = `
-    <h3>Boeking</h3>
-    <div class="muted">Selecteer je gegevens</div>
-    <label style="display:block;margin-top:8px">Je naam<input id="bk-name" autocomplete="name"></label>
-    <label style="display:block;margin-top:8px">E-mail<input id="bk-email" type="email" autocomplete="email"></label>
-    <label style="display:block;margin-top:8px">Aantal plekken<select id="bk-qty">${[1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label>
-  `;
-  activeBooking = {type:'lesson'};
-  showModal();
-}
-
-/* Modal event wiring */
-document.getElementById('cta-book').addEventListener('click', ()=>openBook({type:'proefles'}));
-document.getElementById('open-book').addEventListener('click', ()=>openBook({type:'proefles'}));
-document.getElementById('modal-cancel').addEventListener('click', closeModal);
-document.getElementById('modal-confirm').addEventListener('click', async ()=>{
-  if(!activeBooking){ closeModal(); return; }
-  const name = document.getElementById('bk-name')?.value || 'Onbekend';
-  const email = document.getElementById('bk-email')?.value || '';
-  const qty = Number(document.getElementById('bk-qty')?.value || 1);
-  // Prepare payload for web3forms (mirrors the contact form)
-  const payload = {
-    access_key: "3287ed1d-2d60-4665-b739-2cf29b3de670",
-    name,
-    email,
-    class: activeBooking.type === 'proefles' ? 'Proefles' : 'Les',
-    spots: qty,
-    subject: `Nieuwe boeking: ${activeBooking.type === 'proefles' ? 'Proefles' : 'Les'}`
-  };
-  try{
-    const res = await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: {'Accept':'application/json','Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    if(res.ok){
-      alert('Boeking verstuurd! Dankjewel.');
-    } else {
-      alert('Er ging iets mis bij het versturen. Probeer later opnieuw.');
+    function ensureOpenBar(){
+      const bar = document.getElementById('open-bar')
+      if(bar) bar.classList.remove('hidden')
     }
-  } catch(e){
-    console.error(e);
-    alert('Er ging iets mis bij het versturen (netwerkfout).');
-  }
-  closeModal();
-});
 
-/* Contact form handler (Web3Forms) */
-const contactForm = document.getElementById('contact-form');
-contactForm.addEventListener('submit', e=>{
-  e.preventDefault();
-  const form = e.target;
-  const data = new FormData(form);
-  fetch(form.action, {method:'POST', body:data, headers:{'Accept':'application/json'}})
-    .then(async r=>{
-      if(r.ok){
-        alert('Bedankt! We nemen contact op.');
-        form.reset();
-        localStorage.removeItem('contactForm');
-      } else {
-        try{
-          const j = await r.json();
-          alert(j?.error || 'Er ging iets mis bij het versturen.');
-        }catch{
-          alert('Er ging iets mis bij het versturen.');
-        }
+    const modal = document.getElementById('modal')
+    const modalContent = document.getElementById('modal-content')
+    let activeBooking = null
+
+    function showModal(){ if(!modal) return; modal.style.display='flex'; document.body.style.overflow='hidden' }
+    function closeModal(){ if(!modal) return; modal.style.display='none'; document.body.style.overflow='auto'; activeBooking=null }
+
+    function openBook(opts={}){
+      if(opts.type==='proefles'){
+        modalContent.innerHTML = '<h3>Boek Proefles</h3><p class=\"muted\">Voer je gegevens in om je proefles te reserveren.</p><label style=\"display:block;margin-top:8px\">Naam<input id=\"bk-name\"></label><label style=\"display:block;margin-top:8px\">E-mail<input id=\"bk-email\" type=\"email\"></label><label style=\"display:block;margin-top:8px\">Opmerking<input id=\"bk-note\"></label>'
+        activeBooking = {type:'proefles'}
+        showModal()
+        return
       }
+      modalContent.innerHTML = '<h3>Boeking</h3><div class=\"muted\">Selecteer je gegevens</div><label style=\"display:block;margin-top:8px\">Je naam<input id=\"bk-name\"></label><label style=\"display:block;margin-top:8px\">E-mail<input id=\"bk-email\" type=\"email\"></label><label style=\"display:block;margin-top:8px\">Aantal plekken<select id=\"bk-qty\">'+[1,2,3].map(n=>'<option>'+n+'</option>').join('')+'</select></label>'
+      activeBooking = {type:'lesson'}
+      showModal()
+    }
+
+    document.getElementById('cta-book').addEventListener('click', ()=>openBook({type:'proefles'}))
+    document.getElementById('open-book').addEventListener('click', ()=>openBook({type:'proefles'}))
+    document.getElementById('modal-cancel').addEventListener('click', closeModal)
+    document.getElementById('modal-confirm').addEventListener('click', async ()=>{
+      if(!activeBooking){ closeModal(); return }
+      const name = document.getElementById('bk-name')?.value || 'Onbekend'
+      const email = document.getElementById('bk-email')?.value || ''
+      const qty = Number(document.getElementById('bk-qty')?.value || 1)
+      const payload = {
+        access_key: "3287ed1d-2d60-4665-b739-2cf29b3de670",
+        name,
+        email,
+        class: activeBooking.type === 'proefles' ? 'Proefles' : 'Les',
+        spots: qty,
+        subject: `Nieuwe boeking: ${activeBooking.type === 'proefles' ? 'Proefles' : 'Les'}`
+      }
+      try{
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method:'POST',
+          headers:{'Accept':'application/json','Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        })
+        if(res.ok){ alert('Boeking verstuurd! Dankjewel.') }
+        else { alert('Er ging iets mis bij het versturen. Probeer later opnieuw.') }
+      }catch(e){ console.error(e); alert('Er ging iets mis bij het versturen (netwerkfout).') }
+      closeModal()
     })
-    .catch(()=>alert('Er ging iets mis bij het versturen (netwerkfout).'));
-});
 
-/* Autosave contact form to localStorage */
-function initLocalSave(){
-  const form = document.getElementById('contact-form');
-  if(!form) return;
-  const stored = localStorage.getItem('contactForm');
-  if(stored){
-    try{
-      const obj = JSON.parse(stored);
-      for(const k in obj){
-        if(form.elements[k]) form.elements[k].value = obj[k];
+    const contactForm = document.getElementById('contact-form')
+    contactForm.addEventListener('submit', e=>{
+      e.preventDefault()
+      const form = e.target
+      const data = new FormData(form)
+      fetch(form.action, {method:'POST', body:data, headers:{'Accept':'application/json'}})
+        .then(async r=>{
+          if(r.ok){ alert('Bedankt! We nemen contact op.'); form.reset(); localStorage.removeItem('contactForm') }
+          else {
+            try{ const j = await r.json(); alert(j?.error || 'Er ging iets mis bij het versturen.') } catch{ alert('Er ging iets mis bij het versturen.') }
+          }
+        }).catch(()=>alert('Er ging iets mis bij het versturen (netwerkfout).'))
+    })
+
+    function initLocalSave(){
+      const form = document.getElementById('contact-form')
+      if(!form) return
+      const stored = localStorage.getItem('contactForm')
+      if(stored){
+        try{ const obj = JSON.parse(stored); for(const k in obj){ if(form.elements[k]) form.elements[k].value = obj[k] } }catch(e){}
       }
-    } catch(e){}
-  }
-  form.addEventListener('input', ()=>{
-    const payload = {};
-    Array.from(form.elements).forEach(el=>{
-      if(el.name) payload[el.name] = el.value;
-    });
-    localStorage.setItem('contactForm', JSON.stringify(payload));
-  });
-}
-
-/* Navigation (simple hash-based sections) */
-function showPage(page){
-  $$('.nav-links a').forEach(a=>a.classList.remove('active'));
-  const link = $$('.nav-links a').find(a=>a.getAttribute('data-page')===page);
-  if(link) link.classList.add('active');
-  $$('#app > section').forEach(s=>s.style.display = (s.id===page)?'block':'none');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-window.addEventListener('popstate', ()=> {
-  const page = location.hash.replace('#','') || 'home';
-  showPage(page);
-});
-document.addEventListener('DOMContentLoaded', ()=>{
-  showPage(location.hash.replace('#','') || 'home');
-  ensureOpenBar();
-  initLocalSave();
-  loadInstructors();
-});
-
-/* Mobile nav toggle */
-document.getElementById('mobile-toggle').addEventListener('click', ()=>{
-  const nav = document.querySelector('nav');
-  const expanded = nav.style.display === 'flex' || nav.style.display === 'block';
-  nav.style.display = expanded ? '' : 'flex';
-  document.getElementById('mobile-toggle').setAttribute('aria-expanded', String(!expanded));
-});
-
-/* Close modal on ESC */
-document.addEventListener('keydown', e=>{
-  if(e.key === 'Escape') closeModal();
-});
-
-/* -------------------------
-   Instructors loader (Google Sheets)
-   -------------------------
-   This attempts to load instructors from:
-     https://opensheet.elk.sh/SHEET_ID/SHEETNAME
-   If SHEET_ID is empty or fetch fails, sample data is used.
-*/
-async function loadInstructors(){
-  const container = document.getElementById('instructors-list');
-  if(!container) return;
-  container.innerHTML = '<div class="muted">Laden…</div>';
-
-  // Sample fallback data
-  const sample = [
-    {Name: 'Sofie Janssens', Role: 'Hoofdtrainer Boksen', Bio: 'Specialist in techniek, kracht en conditie. Werkt met alle niveau\\'s.', Photo: 'https://via.placeholder.com/160?text=Sofie'},
-    {Name: 'Tom De Ridder', Role: 'Spinning Coach', Bio: 'High-intensity trainingen met focus op uithouding.', Photo: 'https://via.placeholder.com/160?text=Tom'},
-    {Name: 'Lotte Peeters', Role: 'Yoga & Mobiliteit', Bio: 'Herstel en flexibiliteit, toegankelijk voor iedereen.', Photo: 'https://via.placeholder.com/160?text=Lotte'}
-  ];
-
-  // If SHEET_ID not provided, use sample immediately
-  if(!SHEET_ID || SHEET_ID.trim()==='YOUR_SHEET_ID'){
-    renderInstructors(sample);
-    return;
-  }
-
-  // Build opensheet URL
-  const url = `https://opensheet.elk.sh/${encodeURIComponent(SHEET_ID)}/${encodeURIComponent(SHEET_NAME)}`;
-  try{
-    const res = await fetch(url, {cache: 'no-store'});
-    if(!res.ok) throw new Error('Sheet fetch failed');
-    const data = await res.json();
-    // Expect rows with fields: Name, Role, Bio, Photo
-    if(!Array.isArray(data) || data.length === 0){
-      renderInstructors(sample);
-      return;
+      form.addEventListener('input', ()=>{
+        const payload = {}
+        Array.from(form.elements).forEach(el=>{ if(el.name) payload[el.name] = el.value })
+        localStorage.setItem('contactForm', JSON.stringify(payload))
+      })
     }
-    // Normalize keys (in case sheet headers differ slightly)
-    const normalized = data.map(r=>{
-      // prefer common keys
-      return {
-        Name: r.Name || r.Naam || r.name || r.Naam || '',
-        Role: r.Role || r.Rol || r.Role || r.rol || '',
-        Bio: r.Bio || r.Biografie || r.BIO || r.bio || '',
-        Photo: r.Photo || r.Foto || r.photo || r.foto || ''
-      };
-    });
-    renderInstructors(normalized);
-  } catch(err){
-    console.error('Instructors load error:', err);
-    renderInstructors(sample);
-  }
-}
 
-function renderInstructors(list){
-  const container = document.getElementById('instructors-list');
-  if(!container) return;
-  container.innerHTML = '';
-  if(!Array.isArray(list) || list.length === 0){
-    container.innerHTML = '<div class="muted">Geen instructeurs gevonden.</div>';
-    return;
-  }
-  list.forEach(row => {
-    const name = row.Name || 'Instructeur';
-    const role = row.Role || '';
-    const bio = row.Bio || '';
-    let photo = row.Photo || '';
-    // if empty photo, use placeholder with initials
-    if(!photo) {
-      const initials = name.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
-      photo = `https://via.placeholder.com/160?text=${encodeURIComponent(initials)}`;
+    function showPage(page){
+      $all('.nav-links a').forEach(a=>a.classList.remove('active'))
+      const link = $all('.nav-links a').find(a=>a.getAttribute('data-page')===page)
+      if(link) link.classList.add('active')
+      $all('#app > section').forEach(s=>s.style.display = (s.id===page)?'block':'none')
+      window.scrollTo({top:0,behavior:'smooth'})
     }
-    const card = document.createElement('div');
-    card.className = 'instructor card';
-    card.tabIndex = 0;
-    card.innerHTML = `
-      <img loading="lazy" src="${escapeHtml(photo)}" alt="${escapeHtml(name)}">
-      <div class="info">
-        <strong>${escapeHtml(name)}</strong>
-        <div class="role">${escapeHtml(role)}</div>
-        <div class="muted" style="margin-top:8px">${escapeHtml(clampText(bio, 140))}</div>
-      </div>
-    `;
-    // store dataset for click action
-    card.dataset.instructor = name;
-    card.addEventListener('click', ()=>{
-      modalContent.innerHTML = `
-        <h2>${escapeHtml(name)}</h2>
-        <div class="muted">${escapeHtml(role)}</div>
-        <p style="margin-top:8px">${escapeHtml(bio)}</p>
-        <div style="margin-top:10px"><button class="btn primary" onclick="openBook({type:'lesson'})">Boek les bij ${escapeHtml(name)}</button></div>
-      `;
-      activeBooking = null;
-      showModal();
-    });
-    container.appendChild(card);
-  });
-}
 
-/* small helper to escape HTML when injecting user content */
-function escapeHtml(str){
-  if(!str) return '';
-  return String(str)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
-}
+    window.addEventListener('popstate', ()=>{ const page = location.hash.replace('#','') || 'home'; showPage(page) })
 
-/* Initial UI updates */
-document.addEventListener('DOMContentLoaded', ()=>{
-  ensureOpenBar();
-});
-</script>
+    document.addEventListener('DOMContentLoaded', ()=>{
+      showPage(location.hash.replace('#','') || 'home')
+      ensureOpenBar()
+      initLocalSave()
+      loadInstructors()
+    })
+
+    document.getElementById('mobile-toggle').addEventListener('click', ()=>{
+      const nav = document.querySelector('nav')
+      const expanded = nav.style.display === 'flex' || nav.style.display === 'block'
+      nav.style.display = expanded ? '' : 'flex'
+      document.getElementById('mobile-toggle').setAttribute('aria-expanded', String(!expanded))
+    })
+
+    document.addEventListener('keydown', e=>{ if(e.key === 'Escape') closeModal() })
+
+    async function loadInstructors(){
+      const container = document.getElementById('instructors-list')
+      if(!container) return
+      container.innerHTML = '<div class="muted">Laden…</div>'
+      const sample = [
+        {Name:'Sofie Janssens', Role:'Hoofdtrainer Boksen', Bio:"Specialist in techniek, kracht en conditie. Werkt met alle niveau's.", Photo:'https://via.placeholder.com/160?text=Sofie'},
+        {Name:'Tom De Ridder', Role:'Spinning Coach', Bio:'High-intensity trainingen met focus op uithouding.', Photo:'https://via.placeholder.com/160?text=Tom'},
+        {Name:'Lotte Peeters', Role:'Yoga & Mobiliteit', Bio:'Herstel en flexibiliteit, toegankelijk voor iedereen.', Photo:'https://via.placeholder.com/160?text=Lotte'}
+      ]
+      if(!SHEET_ID || SHEET_ID.trim()===''){
+        renderInstructors(sample); return
+      }
+      const range = 'Sheet1'
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(SHEET_ID)}/values/${encodeURIComponent(range)}?key=${encodeURIComponent(API_KEY)}`
+      try{
+        const res = await fetch(url, {cache:'no-store'})
+        if(!res.ok) throw new Error('sheet fetch failed')
+        const payload = await res.json()
+        const rows = payload.values || []
+        if(rows.length < 1){ renderInstructors(sample); return }
+        const headers = rows[0].map(h=>String(h).trim())
+        const data = rows.slice(1).map(r=>{
+          const obj = {}
+          headers.forEach((h,i)=>{ obj[h] = r[i] !== undefined ? r[i] : '' })
+          return obj
+        })
+        const normalized = data.map(r=>{
+          return {
+            Name: r.Naam || r.Name || r.name || r.Naam || '',
+            Role: r.Rol || r.Role || r.role || '',
+            Bio: r.Bio || r.BIO || r.Bio || r.bio || '',
+            Photo: r.Foto || r.Photo || r.photo || r.foto || ''
+          }
+        })
+        renderInstructors(normalized.length?normalized:sample)
+      }catch(err){ console.error(err); renderInstructors(sample) }
+    }
+
+    function renderInstructors(list){
+      const container = document.getElementById('instructors-list')
+      if(!container) return
+      container.innerHTML = ''
+      if(!Array.isArray(list) || list.length === 0){ container.innerHTML = '<div class="muted">Geen instructeurs gevonden.</div>'; return }
+      list.forEach(row=>{
+        const name = row.Name || 'Instructeur'
+        const role = row.Role || ''
+        const bio = row.Bio || ''
+        let photo = row.Photo || ''
+        if(!photo) {
+          const initials = name.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase()
+          photo = `https://via.placeholder.com/160?text=${encodeURIComponent(initials)}`
+        }
+        const card = document.createElement('div')
+        card.className = 'instructor'
+        card.tabIndex = 0
+        card.innerHTML = '<img loading="lazy" src="'+escapeHtml(photo)+'" alt="'+escapeHtml(name)+'"><div class="info"><strong>'+escapeHtml(name)+'</strong><div class="role">'+escapeHtml(role)+'</div><div class="bio">'+escapeHtml(clampText(bio,160))+'</div></div>'
+        card.dataset.instructor = name
+        card.addEventListener('click', ()=>{
+          modalContent.innerHTML = '<div style="display:flex;gap:12px;align-items:flex-start"><img src="'+escapeHtml(photo)+'" alt="'+escapeHtml(name)+'" style="width:120px;height:120px;border-radius:12px;object-fit:cover;flex-shrink:0"><div><h2 style="margin:0">'+escapeHtml(name)+'</h2><div class="muted" style="margin-top:6px">'+escapeHtml(role)+'</div><p style="margin-top:10px">'+escapeHtml(bio)+'</p><div style="margin-top:12px"><button class="btn primary" onclick="openBook({type:\\'lesson\\'})">Boek les bij '+escapeHtml(name)+'</button></div></div></div>'
+          activeBooking = null
+          showModal()
+        })
+        container.appendChild(card)
+      })
+    }
+  </script>
 </body>
 </html>
