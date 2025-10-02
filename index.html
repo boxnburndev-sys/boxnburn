@@ -43,109 +43,48 @@
   .card h3{margin:0 0 8px}
   .small{font-size:13px;color:var(--muted)}
   .schedule {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 30px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+    margin-top:30px;
   }
   .day-card {
-    border-radius: 14px;
-    padding: 18px;
-    background: linear-gradient(180deg, #0c1627, #0b1323);
-    border: 1px solid rgba(255,255,255,0.06);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.3);
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.25s ease, border-color 0.25s ease;
+    border-radius:14px;
+    padding:18px;
+    background:linear-gradient(180deg,#0c1627,#0b1323);
+    border:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 6px 14px rgba(0,0,0,0.3);
+    display:flex;
+    flex-direction:column;
+    transition:transform 0.25s ease,border-color 0.25s ease;
   }
-  .day-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255,255,255,0.12);
+  .day-card:hover {transform:translateY(-4px);border-color:rgba(255,255,255,0.12)}
+  .day-title {font-size:1.25rem;font-weight:700;margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid rgba(255,255,255,0.08)}
+  .lessons{display:flex;flex-direction:column;gap:12px}
+  .lesson-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);padding:10px 12px;border-radius:10px;transition:background 0.2s ease}
+  .lesson-row:hover{background:rgba(255,255,255,0.05)}
+  .lesson-time{font-weight:600;min-width:70px;font-size:14px;color:var(--accent-2)}
+  .lesson-info{flex:1;min-width:0}
+  .lesson-info strong{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lesson-info .small{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lesson-spots{font-size:13px;color:var(--muted);white-space:nowrap}
+  .lesson-row button{flex-shrink:0;font-size:13px;padding:6px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:600;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021022;transition:transform 0.2s ease}
+  .lesson-row button:hover{transform:scale(1.05)}
+  @media(max-width:768px){
+    .lesson-row{flex-direction:column;align-items:flex-start;gap:6px}
+    .lesson-time,.lesson-info,.lesson-spots,.lesson-row button{margin:0}
   }
-  .day-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 14px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid rgba(255,255,255,0.08);
-  }
-  .lessons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .lesson-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
-    padding: 10px 12px;
-    border-radius: 10px;
-    transition: background 0.2s ease;
-  }
-  .lesson-row:hover {
-    background: rgba(255,255,255,0.05);
-  }
-  .lesson-time {
-    font-weight: 600;
-    min-width: 70px;
-    font-size: 14px;
-    color: var(--accent-2);
-  }
-  .lesson-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .lesson-info strong {
-    display: block;
-    font-size: 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .lesson-info .small {
-    display: block;
-    font-size: 13px;
-    color: var(--muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .lesson-spots {
-    font-size: 13px;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-  .lesson-row button {
-    flex-shrink: 0;
-    font-size: 13px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 0;
-    cursor: pointer;
-    font-weight: 600;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    color: #021022;
-    transition: transform 0.2s ease;
-  }
-  .lesson-row button:hover {
-    transform: scale(1.05);
-  }
-  @media(max-width:768px) {
-    .lesson-row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 6px;
-    }
-    .lesson-time, .lesson-info, .lesson-spots, .lesson-row button {
-      margin: 0;
-    }
-  }
-  .instructors{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
-  .instructor{display:flex;gap:12px;align-items:center}
-  .instructor img{width:76px;height:76px;border-radius:12px;object-fit:cover}
+  .instructors,
+  .sponsors-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .instructor,
+  .sponsor{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+  .instructor img,
+  .sponsor img{width:80px;height:80px;border-radius:12px;object-fit:contain;background:#fff;padding:6px}
+  .sponsor-content{flex:1;min-width:0}
+  .sponsor-content h3{margin:0;font-size:16px;font-weight:700}
+  .sponsor-content p{margin:6px 0;font-size:14px;color:var(--muted);line-height:1.4;word-wrap:break-word;overflow-wrap:break-word}
+  .sponsor-perks{font-size:13px;color:#e6eef8;margin-top:6px;white-space:pre-wrap;line-height:1.4}
+  .sponsor a{font-size:13px;color:var(--accent-2);text-decoration:none;margin-top:8px;display:inline-block}
   .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
   .plan{padding:18px;border-radius:12px;text-align:center}
   .plan .price{font-size:20px;font-weight:800;margin-top:8px}
@@ -155,13 +94,13 @@
   textarea{min-height:120px}
   select{background-color:#000033;color:white}
   footer{margin-top:28px;padding:28px;text-align:center;color:var(--muted);background:rgba(0,0,0,0.25);width:100%}
-  @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
-  @media (max-width:760px){
+  @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}; .hero{grid-template-columns:1fr} }
+  @media(max-width:760px){
     header{padding:8px 12px}
     .hamburger{display:inline-flex}
     nav{display:none}
     .container{margin-top:86px;padding:12px}
-    .grid,.instructors,.plans{grid-template-columns:1fr}
+    .grid,.instructors,.plans,.sponsors-grid{grid-template-columns:1fr}
     .hero{padding:18px}
   }
   .muted{color:var(--muted)}
@@ -174,11 +113,12 @@
   input[type="tel"]{letter-spacing:0.5px}
   .form-note{font-size:12px;color:var(--muted);margin-top:6px}
   img{max-width:100%;height:auto;display:block}
-  /* footer social */
   .social{margin-top:12px;display:flex;justify-content:center;gap:14px}
   .social a{color:var(--muted);font-size:20px;transition:color .2s ease;text-decoration:none}
   .social a:hover{color:#fff}
 </style>
+
+
 </head>
 <body>
   <header role="banner">
@@ -193,10 +133,10 @@
       <div class="nav-links" role="navigation">
         <a href="#home" data-page="home" class="active">Home</a>
         <a href="#lessen" data-page="lessen">Lessen</a>
-        <a href="#instructeurs" data-page="instructeurs">Instructeurs</a>
         <a href="#winkel" data-page="winkel">Winkel</a>
         <a href="#contact" data-page="contact">Contact</a>
         <a href="/jobs">Jobs</a>
+        <a href="#sponsors" data-page="sponsors">Sponsors</a>
       </div>
     </nav>
     <div class="actions">
@@ -261,21 +201,13 @@
   </div>
 </section>
 
-    <section id="instructeurs">
-      <h2>Onze Instructeurs</h2>
-      <div class="instructors" id="instructors-list">
-        <div class="instructor card" data-instructor="Sofie Janssens">
-          <img loading="lazy" src="https://via.placeholder.com/76" alt="Instructeur 1">
-          <div>
-            <div style="font-weight:800">Katrien Boeckx</div>
-            <div class="small muted">CEO/FOUNDER</div>
-            <div class="small" style="margin-top:6px"></div>
-          </div>
-        </div>
-          </div>
-        </div>
-      </div>
+    <section id="sponsors">
+     <h2>Onze Sponsors</h2>
+     <p class="muted">Trots gesteund door onze partners</p>
+     <div class="instructors" id="sponsors-list">
+     </div>
     </section>
+
 
     <section id="winkel">
       <h2>Winkel</h2>
@@ -337,11 +269,9 @@
   </div>
 
 <script>
-/* Utility selectors */
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-/* Formatting helpers */
 function formatDate(d=new Date()){
   return d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'short'});
 }
@@ -349,7 +279,6 @@ function formatTime(d=new Date()){
   return d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'}).replace('.',':');
 }
 
-/* Small "open bar" that sits under the header to guide users */
 function ensureOpenBar(){
   if($('#open-bar')) return;
   const bar = document.createElement('div');
@@ -360,7 +289,6 @@ function ensureOpenBar(){
   if(container) container.prepend(bar);
 }
 
-/* Update various bits of the UI (no live countdown) */
 function updateLiveInfo(){
   ensureOpenBar();
   const todayDateEl = $('#today-date');
@@ -374,7 +302,6 @@ function updateLiveInfo(){
   if(newsEl) newsEl.textContent = 'Agenda en winkel via Trainin geladen.';
 }
 
-/* Modal / booking logic */
 const modal = $('#modal');
 const modalContent = $('#modal-content');
 let activeBooking = null;
@@ -392,7 +319,6 @@ function closeModal(){
 }
 
 function openBook(opts={}){
-  // opts.type === 'proefles' or 'lesson' etc.
   if(opts.type === 'proefles'){
     modalContent.innerHTML = `<h3>Boek Proefles</h3>
       <p class="muted">Kies datum en gegevens om je proefles te reserveren.</p>
@@ -403,7 +329,6 @@ function openBook(opts={}){
     showModal();
     return;
   }
-  // Default booking modal
   modalContent.innerHTML = `<h3>Boeking</h3>
     <div class="muted">Selecteer je gegevens</div>
     <label style="display:block;margin-top:8px">Je naam<input id="bk-name" autocomplete="name"></label>
@@ -413,7 +338,6 @@ function openBook(opts={}){
   showModal();
 }
 
-/* Modal event wiring */
 document.addEventListener('click', (e)=>{
   const chooseBook = e.target.closest('#cta-book, #open-book');
   if(chooseBook){
@@ -431,7 +355,6 @@ document.addEventListener('click', (e)=>{
   }
 });
 
-/* Modal buttons */
 const modalCancel = $('#modal-cancel');
 if(modalCancel) modalCancel.addEventListener('click', closeModal);
 const modalConfirm = $('#modal-confirm');
@@ -442,7 +365,6 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   const name = $('#bk-name')?.value || 'Onbekend';
   const email = $('#bk-email')?.value || '';
   const qty = Number($('#bk-qty')?.value || 1);
-  // Build payload for web3forms (same as contact form mechanism)
   const payload = {
     access_key: "3287ed1d-2d60-4665-b739-2cf29b3de670",
     name,
@@ -469,7 +391,6 @@ if(modalConfirm) modalConfirm.addEventListener('click', async ()=>{
   closeModal();
 });
 
-/* Navigation and history handling */
 $$('.nav-links a').forEach(a=>{
   a.addEventListener('click', e=>{
     const target = a.getAttribute('data-page');
@@ -484,7 +405,6 @@ $$('.nav-links a').forEach(a=>{
 function showPage(page){
   $$('.nav-links a').forEach(x=>x.classList.remove('active'));
   $$('.nav-links a').find(a=>a.getAttribute('data-page')===page)?.classList.add('active');
-  // Show/hide sections within #app
   $$('#app > section').forEach(s => s.style.display = (s.id === page) ? 'block' : 'none');
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -493,7 +413,6 @@ window.addEventListener('popstate', ()=>{
   showPage(page);
 });
 
-/* Mobile toggle */
 $('#mobile-toggle').addEventListener('click', ()=>{
   const nav = document.querySelector('nav');
   const expanded = nav.style.display === 'block' || nav.style.display === 'flex';
@@ -501,7 +420,6 @@ $('#mobile-toggle').addEventListener('click', ()=>{
   $('#mobile-toggle').setAttribute('aria-expanded', String(!expanded));
 });
 
-/* Contact form submit handler (web3forms) */
 $('#contact-form').addEventListener('submit', e=>{
   e.preventDefault();
   const form = e.target;
@@ -524,11 +442,9 @@ $('#contact-form').addEventListener('submit', e=>{
     .catch(()=>alert('Er ging iets mis bij versturen'));
 });
 
-/* Autosave contact form to localStorage */
 function initLocalSave(){
   const form = document.getElementById('contact-form');
   if(!form) return;
-  // Restore saved
   const stored = localStorage.getItem('contactForm');
   if(stored){
     try{
@@ -538,7 +454,6 @@ function initLocalSave(){
       }
     } catch(e){}
   }
-  // Save on change
   form.addEventListener('input', ()=>{
     const payload = {};
     Array.from(form.elements).forEach(el=>{
@@ -548,16 +463,53 @@ function initLocalSave(){
   });
 }
 
-/* Small init */
+async function loadSponsors() {
+  const sheetId = "1ysGbVJJ5LO5d4vF3K-Prc-PtO9OMSe0xmL3EfvpNU48";
+  const apiKey = "YOUR_API_KEY";
+  const range = "Sponsors!A2:F";
+  try {
+    const res = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
+    );
+    const data = await res.json();
+    const sponsorsList = document.getElementById("sponsors-list");
+    sponsorsList.innerHTML = "";
+    if (data.values && data.values.length > 0) {
+      data.values.forEach(row => {
+        const [logo, name, title, bio, perks, link] = row;
+        const div = document.createElement("div");
+        div.className = "instructor card";
+        div.innerHTML = `
+          <img src="${logo}" alt="${name}" loading="lazy">
+          <div>
+            <div style="font-weight:800">${name}</div>
+            <div class="small muted">${title || ""}</div>
+            <div class="small" style="margin-top:6px">${bio || ""}</div>
+            <div class="small muted" style="margin-top:6px"><strong>Perks:</strong> ${perks || ""}</div>
+            <div class="small muted" style="margin-top:6px"><a href="${link}" target="_blank" rel="noopener">${link || ""}</a></div>
+          </div>
+        `;
+        sponsorsList.appendChild(div);
+      });
+    } else {
+      sponsorsList.innerHTML = "<p class='muted'>Geen sponsors gevonden.</p>";
+    }
+  } catch (err) {
+    console.error("Fout bij laden sponsors:", err);
+    document.getElementById("sponsors-list").innerHTML =
+      "<p class='muted'>Kan sponsors niet laden.</p>";
+  }
+}
+
 function init(){
   showPage(location.hash.replace('#','') || 'home');
   ensureOpenBar();
   updateLiveInfo();
   initLocalSave();
+  loadSponsors();
 }
 document.addEventListener('DOMContentLoaded', init);
 
-/* Close modal on Escape */
 document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape') closeModal();
 });
